@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-const API_URL = "http://10.126.15.27:5000/api";
+const API_URL = "https://news-11-production.up.railway.app";
 
 function Notifications() {
   const [notifications, setNotifications] = useState([]);

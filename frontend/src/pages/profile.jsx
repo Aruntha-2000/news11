@@ -19,7 +19,7 @@ function Profile() {
 
       try {
         const response = await fetch(
-          "http://10.126.15.27:5000/api/users/profile",
+          "https://news-11-production.up.railway.app/api/users/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -56,7 +56,7 @@ function Profile() {
     const getFollowCounts = async () => {
       try {
         const response = await fetch(
-          `http://10.126.15.27:5000/api/follows/${user.id}/counts`
+          `https://news-11-production.up.railway.app/api/follows/${user.id}/counts`
         );
 
         const data = await response.json();

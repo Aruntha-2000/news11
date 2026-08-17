@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 function CreatePost() {
-  const API_URL = "http://10.126.15.27:5000";
+  const API_URL = "https://news-11-production.up.railway.app/api/posts";
 
   const [categories, setCategories] = useState([]);
 

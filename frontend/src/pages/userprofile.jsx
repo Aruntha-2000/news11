@@ -28,7 +28,7 @@ function UserProfile() {
 
       try {
         const response = await fetch(
-          "http://10.126.15.27:5000/api/users/profile",
+          "https://news-11-production.up.railway.app/api/users/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`
@@ -59,7 +59,7 @@ function UserProfile() {
 
       try {
         const response = await fetch(
-          `http://10.126.15.27:5000/api/users/${id}`
+          `https://news-11-production.up.railway.app/api/users/${id}`
         );
 
         const data = await response.json();
@@ -95,7 +95,7 @@ function UserProfile() {
         // FOLLOW COUNTS
 
         const countResponse = await fetch(
-          `http://10.126.15.27:5000/api/follows/${id}/counts`
+          `https://news-11-production.up.railway.app/api/follows/${id}/counts`
         );
 
         const countData = await countResponse.json();
@@ -111,7 +111,7 @@ function UserProfile() {
 
         if (token) {
           const statusResponse = await fetch(
-            `http://10.126.15.27:5000/api/follows/status/${id}`,
+            `https://news-11-production.up.railway.app/api/follows/status/${id}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`
@@ -165,7 +165,7 @@ function UserProfile() {
 
     try {
       const response = await fetch(
-        `http://10.126.15.27:5000/api/follows/${id}`,
+        `https://news-11-production.up.railway.app/api/follows/${id}`,
         {
           method: isFollowing
             ? "DELETE"

@@ -25,7 +25,7 @@ function Register() {
 
     try {
       const response = await fetch(
-        "http://10.126.15.27:5000/api/auth/register",
+        "https://news-11-production.up.railway.app/api/auth/register",
         {
           method: "POST",
           headers: {

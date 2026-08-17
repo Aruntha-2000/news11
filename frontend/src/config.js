@@ -1,1 +1,1 @@
-export const API_URL = "http://10.126.15.27:5000";
+export const API_URL = "https://news-11-production.up.railway.app";

@@ -15,7 +15,7 @@ import "./newdetails.css";
 // We will configure this properly later.
 // =====================================================
 
-const API_BASE_URL = "http://10.126.15.27:5000";
+const API_BASE_URL = "https://news-11-production.up.railway.app";
 
 
 // =====================================================

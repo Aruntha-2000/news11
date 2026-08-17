@@ -24,7 +24,7 @@ function Reports() {
       setError("");
 
       const response = await fetch(
-        "http://10.126.15.27:5000/api/reports",
+        "https://news-11-production.up.railway.app/api/reports",
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -74,7 +74,7 @@ function Reports() {
 
     try {
       const response = await fetch(
-        `http://10.126.15.27/api/reports/${reportId}/status`,
+        `https://news-11-production.up.railway.app/api/reports/${reportId}/status`,
         {
           method: "PUT",
 

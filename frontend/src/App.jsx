@@ -47,7 +47,7 @@ function App() {
       try {
 
         const response = await fetch(
-          "http://10.126.15.27:5000/api/notifications/unread-count",
+         "https://news-11-production.up.railway.app/api/notifications/unread-count",
           {
             headers: {
               Authorization: `Bearer ${token}`

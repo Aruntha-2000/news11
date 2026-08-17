@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function Feedback() {
-  const API_URL = "http://10.126.15.27:5000";
+  const API_URL = "https://news-11-production.up.railway.app";
 
   const [message, setMessage] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
