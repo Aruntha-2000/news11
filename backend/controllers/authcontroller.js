@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../config/database");
 
-const JWT_SECRET = "news_social_secret_key";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // =========================
 // REGISTER

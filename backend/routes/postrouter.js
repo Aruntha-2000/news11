@@ -2,7 +2,7 @@ const express = require("express");
 
 const {
   createPost
-} = require("../controllers/postController");
+} = require("../controllers/postcontroller");
 
 const authenticateToken = require("../middleware/authMiddleware");
 

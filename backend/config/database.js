@@ -1,11 +1,11 @@
 const mysql = require("mysql2");
 
 const db = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "new-folder-flatform",
-  port: 3306
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: Number(process.env.MYSQLPORT)
 });
 
 db.getConnection((err, connection) => {
