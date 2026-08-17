@@ -4,13 +4,14 @@ const getPublishedNews = async (req, res) => {
   try {
     const [posts] = await db.promise().query(
       `SELECT
-        posts.id,
-        posts.title,
-        posts.content,
-        posts.image_url,
-        posts.created_at,
-        users.name AS author,
-        categories.name AS category,
+          posts.id,
+          posts.user_id,
+          posts.title,
+          posts.content,
+          posts.image_url,
+          posts.created_at,
+          users.name AS author,
+          categories.name AS category,
 
         (SELECT COUNT(*)
          FROM likes

@@ -261,7 +261,7 @@ function NewsFeed() {
                   </span>
 
                   <strong>
-                    <Link to={`/user/${post.id}`}>
+                    <Link to={`/user/${post.user_id}`}>
                       {post.author || "Unknown"}
                     </Link>
                   </strong>
