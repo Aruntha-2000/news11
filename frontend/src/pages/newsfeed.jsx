@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./newsfeed.css";
 
-const API_URL = "https://news-11-production.up.railway.app";
+const API_URL ="https://news-11-production.up.railway.app";
 
 function NewsFeed() {
   const [posts, setPosts] = useState([]);
