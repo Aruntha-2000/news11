@@ -28,7 +28,7 @@ function Notifications() {
 
       try {
         const response = await fetch(
-          `${API_URL}/notifications`,
+          `${API_URL}/api/notifications`,
           {
             headers: {
               Authorization: `Bearer ${token}`
