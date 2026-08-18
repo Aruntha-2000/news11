@@ -1,5 +1,5 @@
 {
   "appId": "com.News11.app",
   "appName": "News11",
-  "webDir": "dist"
+  "webDir": "frontend/dist"
 }
