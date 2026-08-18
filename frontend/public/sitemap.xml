@@ -9,12 +9,4 @@
     <loc>https://news-11-two.vercel.app/news</loc>
   </url>
 
-  <url>
-    <loc>https://news-11-two.vercel.app/register</loc>
-  </url>
-
-  <url>
-    <loc>https://news-11-two.vercel.app/login</loc>
-  </url>
-
-</urlset>
+  </urlset>
