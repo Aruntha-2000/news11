@@ -21,8 +21,7 @@ import Reports from "./pages/report";
 import Feedback from "./pages/feedback";
 import FeedbackAdmin from "./pages/feedbackadmin";
 
-import ProtectedRoute from "./component/protectedroutes";
-
+import Protectedroute from "./component/protectedroutes";
 
 function App() {
 
