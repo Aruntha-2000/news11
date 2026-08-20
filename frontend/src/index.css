@@ -109,3 +109,70 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* ========================================= */
+/* Floating Navigation Drawer Styles         */
+/* ========================================= */
+
+.floating-sidebar {
+  position: fixed;
+  top: 15%;
+  right: 0;
+  width: 140px;
+  background-color: var(--bg); /* Adapts to your light/dark mode */
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 20px 0 0 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 10px;
+  gap: 22px;
+  z-index: 999;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-h); /* Adapts to your light/dark mode */
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.nav-item:hover {
+  transform: translateY(-2px);
+  color: var(--accent); /* Uses your custom purple/pink accent color */
+}
+
+.nav-icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 6px;
+}
+
+.apply-btn {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.apply-tag {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.apply-badge {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 3px 8px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+}
