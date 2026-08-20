@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://news-11-two.vercel.app/sitemap.xml
+
