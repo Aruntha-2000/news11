@@ -1,7 +1,25 @@
 /* =========================================================
    GLOBAL
-========================================================= */
+    ========================================================= */
+    /* =========================================================
+      LOGIN & REGISTER INPUT TEXT
+    ========================================================= */
 
+    .login-field input,
+    .register-field input,
+    .login-page input,
+    .register-page input {
+      color: #111827 !important;
+      background: #ffffff;
+    }
+
+    .login-field input::placeholder,
+    .register-field input::placeholder,
+    .login-page input::placeholder,
+    .register-page input::placeholder {
+      color: #6b7280 !important;
+      opacity: 1;
+    }
 * {
   box-sizing: border-box;
 }
