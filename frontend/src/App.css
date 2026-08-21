@@ -1467,13 +1467,11 @@ a {
 
   font-size: 30px;
 }
-
 .register-header h1 {
   margin: 0 0 8px;
-
-  color: #0d0d0e;
-
+  color: #000000;
   font-size: 28px;
+  font-weight: 700;
 }
 
 .register-header p {
