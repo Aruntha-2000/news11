@@ -5,9 +5,7 @@ const router = express.Router();
 const {
   createReport,
   getReports,
-  updateReportStatus,
-  forgotPassword,
-  resetPassword
+  updateReportStatus
 } = require("../controllers/reportcontroller");
 
 const authenticateToken = require("../middleware/authmiddleware");
@@ -25,7 +23,7 @@ router.post(
 router.get(
   "/",
   authenticateToken,
-    getReports
+  getReports
 );
 
 
@@ -33,19 +31,8 @@ router.get(
 router.put(
   "/:id/status",
   authenticateToken,
-    updateReportStatus
-);
-
-// FORGOT PASSWORD
-router.post(
-  "/forgot-password",
-  forgotPassword
+  updateReportStatus
 );
 
 
-// RESET PASSWORD
-router.post(
-  "/reset-password/:token",
-  resetPassword
-);
 module.exports = router;
