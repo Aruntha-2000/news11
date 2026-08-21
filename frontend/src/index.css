@@ -164,9 +164,9 @@ code {
   height: 26px;
   margin-bottom: 6px;
 }
-
 .apply-btn {
   margin-top: 5px;
+  margin-bottom: 15px; /* Adds extra space at the bottom so it doesn't get cut off */
   text-align: center;
 }
 
@@ -178,11 +178,12 @@ code {
 
 .apply-badge {
   display: inline-block;
-  margin-top: 4px;
-  padding: 4px 10px;
+  margin-top: 6px; /* Slightly increased for better breathing room */
+  padding: 5px 12px; /* Made the button a little wider and taller */
   color: #ffffff;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.5px;
   border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Added a subtle shadow to make it pop */
 }
