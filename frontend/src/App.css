@@ -1,58 +1,187 @@
 /* =========================================================
-   GLOBAL
-    ========================================================= */
-    /* =========================================================
-      LOGIN & REGISTER INPUT TEXT
-    ========================================================= */
+   NEWS11 - COMPLETE APP CSS
+   ========================================================= */
 
-    .login-field input,
-    .register-field input,
-    .login-page input,
-    .register-page input {
-      color: #111827 !important;
-      background: #ffffff;
-    }
 
-    .login-field input::placeholder,
-    .register-field input::placeholder,
-    .login-page input::placeholder,
-    .register-page input::placeholder {
-      color: #6b7280 !important;
-      opacity: 1;
-    }
+/* =========================================================
+   GLOBAL RESET
+   ========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
 }
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #6ed9ec;
+  padding: 0;
+
+  min-height: 100vh;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
   color: #1f2937;
+
+  background: #111827;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================================
+   PAGE BACKGROUND
+   ========================================================= */
+
+.page-background {
+  position: relative;
+
+  min-height: 100vh;
+  width: 100%;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  padding-top: 1px;
+}
+
+
+/* =========================================================
+   DARK OVERLAY
+   ========================================================= */
+
+.page-background::before {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.48),
+      rgba(0, 0, 0, 0.62)
+    );
+
+  z-index: 0;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   BACKGROUND IMAGES
+   ========================================================= */
+
+.news-background {
+  background-image:
+    url("/images/news-bg.jpg");
+}
+
+.login-background {
+  background-image:
+    url("/images/login-bg.jpg");
+}
+
+.register-background {
+  background-image:
+    url("/images/register-bg.jpg");
+}
+
+.profile-background {
+  background-image:
+    url("/images/profile-bg.jpg");
+}
+
+.create-news-background {
+  background-image:
+    url("/images/create-news-bg.jpg");
+}
+
+.notifications-background {
+  background-image:
+    url("/images/notifications-bg.jpg");
+}
+
+.reports-background {
+  background-image:
+    url("/images/reports-bg.jpg");
+}
+
+.feedback-background {
+  background-image:
+    url("/images/feedback-bg.jpg");
+}
+
+.admin-background {
+  background-image:
+    url("/images/admin-bg.jpg");
+}
+
+.forgot-password-background {
+  background-image:
+    url("/images/forgot-password-bg.jpg");
+}
+
+.reset-password-background {
+  background-image:
+    url("/images/reset-password-bg.jpg");
+}
+
+
+/* =========================================================
+   CONTENT ABOVE OVERLAY
+   ========================================================= */
+
+.page-background > * {
+  position: relative;
+  z-index: 1;
 }
 
 
 /* =========================================================
    PAGE CONTAINER
-========================================================= */
+   ========================================================= */
 
 .page-container {
+  position: relative;
+
+  z-index: 1;
+
   width: 100%;
-  max-width: 1100px;
+  max-width: 1200px;
 
-  margin: 35px auto 50px;
+  margin: 0 auto;
 
-  padding: 0 20px;
+  padding:
+    90px
+    25px
+    60px;
 }
 
 
 /* =========================================================
    MENU BUTTON
-========================================================= */
+   ========================================================= */
 
 .menu-button {
   position: fixed;
@@ -60,28 +189,31 @@ body {
   top: 20px;
   left: 20px;
 
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
 
   border: none;
-  border-radius: 10px;
 
-  background: #1f2937;
+  border-radius: 12px;
+
+  background:
+    rgba(17, 24, 39, 0.95);
+
   color: white;
 
   font-size: 25px;
-  line-height: 48px;
 
   cursor: pointer;
 
   z-index: 10001;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
   box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.2);
+    0 8px 25px rgba(0, 0, 0, 0.35);
 
   transition:
     transform 0.2s ease,
@@ -89,46 +221,39 @@ body {
 }
 
 .menu-button:hover {
-  transform: scale(1.05);
+  transform: scale(1.06);
 
-  background: #111827;
+  background: #2563eb;
 }
 
 .menu-button:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
 }
 
 
 /* =========================================================
    MENU OVERLAY
-========================================================= */
+   ========================================================= */
 
 .menu-overlay {
   position: fixed;
 
   inset: 0;
 
-  background: rgba(0, 0, 0, 0.45);
+  background:
+    rgba(0, 0, 0, 0.55);
+
+  backdrop-filter: blur(2px);
 
   z-index: 9998;
 
-  animation: overlayFade 0.25s ease;
-}
-
-@keyframes overlayFade {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  cursor: pointer;
 }
 
 
 /* =========================================================
    FLOATING SIDEBAR
-========================================================= */
+   ========================================================= */
 
 .floating-sidebar {
   position: fixed;
@@ -136,15 +261,18 @@ body {
   top: 0;
   left: 0;
 
-  width: 280px;
+  width: 290px;
+
   height: 100vh;
 
-  background: #ffffff;
+  background:
+    rgba(255, 255, 255, 0.98);
 
   box-shadow:
-    5px 0 25px rgba(0, 0, 0, 0.2);
+    8px 0 35px rgba(0, 0, 0, 0.30);
 
-  transform: translateX(-100%);
+  transform:
+    translateX(-105%);
 
   transition:
     transform 0.3s ease;
@@ -153,78 +281,64 @@ body {
 
   overflow-y: auto;
 
-  overscroll-behavior: contain;
+  border-right:
+    1px solid rgba(0, 0, 0, 0.08);
 }
 
 
 /* =========================================================
    SIDEBAR OPEN
-========================================================= */
+   ========================================================= */
 
 .floating-sidebar.sidebar-open {
-  transform: translateX(0);
-}
-
-
-/* =========================================================
-   SIDEBAR SCROLLBAR
-========================================================= */
-
-.floating-sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.floating-sidebar::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-.floating-sidebar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 10px;
-}
-
-.floating-sidebar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  transform:
+    translateX(0);
 }
 
 
 /* =========================================================
    SIDEBAR HEADER
-========================================================= */
+   ========================================================= */
 
 .sidebar-header {
+  height: 80px;
+
   display: flex;
 
   align-items: center;
+
   justify-content: space-between;
 
-  padding: 20px;
+  padding:
+    0 20px;
 
-  border-bottom: 1px solid #e5e7eb;
+  background:
+    linear-gradient(
+      135deg,
+      #111827,
+      #1e3a8a
+    );
 
-  background: #8a5e5e;
+  color: white;
 
-  position: sticky;
-
-  top: 0;
-
-  z-index: 2;
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar-header h3 {
   margin: 0;
 
-  font-size: 22px;
-
-  color: #111827;
+  font-size: 23px;
 
   font-weight: 700;
+
+  letter-spacing: 0.5px;
 }
 
 
 /* =========================================================
    SIDEBAR CLOSE BUTTON
-========================================================= */
+   ========================================================= */
 
 .sidebar-close {
   width: 38px;
@@ -234,52 +348,46 @@ body {
 
   border-radius: 8px;
 
-  background: transparent;
+  background:
+    rgba(255, 255, 255, 0.12);
 
-  color: #374151;
+  color: white;
 
-  font-size: 22px;
+  font-size: 20px;
 
   cursor: pointer;
 
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
+  transition: 0.2s;
 }
 
 .sidebar-close:hover {
-  background: #487baf;
+  background:
+    rgba(255, 255, 255, 0.25);
 
-  color: #111827;
+  transform: rotate(90deg);
 }
 
 
 /* =========================================================
    SIDEBAR MENU
-========================================================= */
+   ========================================================= */
 
 .sidebar-menu {
   display: flex;
 
   flex-direction: column;
 
-  padding: 15px;
+  gap: 7px;
 
-  gap: 8px;
+  padding: 18px 14px;
 }
 
 
 /* =========================================================
-   SIDEBAR NAV ITEMS
-========================================================= */
+   SIDEBAR NAV ITEM
+   ========================================================= */
 
-.floating-sidebar .nav-item {
+.nav-item {
   display: flex;
 
   align-items: center;
@@ -288,72 +396,23 @@ body {
 
   min-height: 48px;
 
-  padding: 13px 15px;
+  padding:
+    12px 15px;
 
-  border-radius: 8px;
+  border-radius: 10px;
 
   text-decoration: none;
 
-  color: #abb2bb;
-
-  font-weight: 600;
-
-  font-size: 15px;
-
-  background: transparent;
-
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-.floating-sidebar .nav-item:hover {
-  background: #385470;
-
-  color: #111827;
-
-  transform: translateX(3px);
-}
-
-
-/* =========================================================
-   ACTIVE MENU ITEM
-========================================================= */
-
-.floating-sidebar .nav-item.active {
-  background: #1d2d38;
-
-  color: #0369a1;
-}
-
-
-/* =========================================================
-   LOGOUT BUTTON
-========================================================= */
-
-.floating-sidebar .logout-button {
-  width: 100%;
-
-  min-height: 48px;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background: transparent;
-
   color: #1f2937;
 
-  text-align: left;
+  background:
+    transparent;
 
   font-size: 15px;
 
   font-weight: 600;
 
-  font-family: Arial, Helvetica, sans-serif;
-
-  padding: 13px 15px;
+  border: none;
 
   cursor: pointer;
 
@@ -361,22 +420,81 @@ body {
     background 0.2s ease,
     color 0.2s ease,
     transform 0.2s ease;
+
+  text-align: left;
 }
 
-.floating-sidebar .logout-button:hover {
-  background: #814b4b;
+.nav-item:hover {
+  background:
+    #eff6ff;
 
-  color: #dc2626;
+  color:
+    #2563eb;
 
-  transform: translateX(3px);
+  transform:
+    translateX(4px);
 }
 
 
 /* =========================================================
-   LOGIN / AUTH PAGE
-========================================================= */
+   LOGOUT
+   ========================================================= */
+
+.logout-button {
+  margin-top: 10px;
+
+  border-top:
+    1px solid #e5e7eb;
+
+  border-radius: 0;
+
+  padding-top: 18px;
+
+  color: #dc2626;
+}
+
+.logout-button:hover {
+  background:
+    #fef2f2;
+
+  color:
+    #b91c1c;
+}
+
+
+/* =========================================================
+   GENERAL WHITE CARD
+   ========================================================= */
+
+.content-card {
+  position: relative;
+
+  z-index: 1;
+
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  border-radius: 18px;
+
+  padding: 30px;
+
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.25);
+
+  backdrop-filter:
+    blur(8px);
+}
+
+
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
 
 .login-page {
+  position: relative;
+
+  z-index: 1;
+
   min-height: 100vh;
 
   display: flex;
@@ -385,33 +503,25 @@ body {
 
   justify-content: center;
 
-  padding: 80px 20px 40px;
+  padding:
+    90px 20px 40px;
 }
-
-
-/* =========================================================
-   LOGIN CARD
-========================================================= */
 
 .login-card {
   width: 100%;
 
-  max-width: 430px;
+  max-width: 440px;
 
-  background: #ffffff;
+  background:
+    rgba(255, 255, 255, 0.98);
 
-  border-radius: 16px;
+  border-radius: 20px;
 
   padding: 35px;
 
   box-shadow:
-    0 15px 40px rgba(165, 156, 156, 0.15);
+    0 20px 60px rgba(0, 0, 0, 0.35);
 }
-
-
-/* =========================================================
-   LOGIN HEADER
-========================================================= */
 
 .login-header {
   text-align: center;
@@ -420,27 +530,30 @@ body {
 }
 
 .login-icon {
-  width: 60px;
-  height: 60px;
+  width: 65px;
+  height: 65px;
 
   margin: 0 auto 15px;
 
   border-radius: 50%;
-
-  background: #eff6ff;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  font-size: 28px;
+  background:
+    #eff6ff;
+
+  font-size: 30px;
 }
 
 .login-header h1 {
-  margin: 0 0 8px;
+  margin:
+    0 0 8px;
 
-  color: #111827;
+  color:
+    #111827;
 
   font-size: 28px;
 }
@@ -448,82 +561,97 @@ body {
 .login-header p {
   margin: 0;
 
-  color: #6b7280;
+  color:
+    #6b7280;
 
   font-size: 14px;
 }
 
 
 /* =========================================================
-   LOGIN FORM
-========================================================= */
+   LOGIN / REGISTER FIELDS
+   ========================================================= */
 
-.login-field {
+.login-field,
+.register-field {
   margin-bottom: 18px;
 }
 
-.login-field label {
+.login-field label,
+.register-field label {
   display: block;
 
   margin-bottom: 7px;
 
-  color: #d6dfec;
+  color:
+    #374151;
 
   font-size: 14px;
 
   font-weight: 600;
 }
 
-.login-field input {
+.login-field input,
+.register-field input,
+.login-page input,
+.register-page input {
   width: 100%;
 
-  padding: 12px 14px;
+  padding:
+    13px 14px;
 
-  border: 1px solid #d1d5db;
+  border:
+    1px solid #d1d5db;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
-  background: #292424;
+  background:
+    #ffffff;
 
-  color: #111827;
+  color:
+    #111827 !important;
 
   font-size: 15px;
 
   outline: none;
 
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
-.login-field input:focus {
-  border-color: #2563eb;
+.login-field input:focus,
+.register-field input:focus {
+  border-color:
+    #2563eb;
 
   box-shadow:
     0 0 0 3px rgba(37, 99, 235, 0.12);
 }
 
-.login-field input:disabled {
-  background: #3e578a;
+.login-field input::placeholder,
+.register-field input::placeholder {
+  color:
+    #9ca3af !important;
 
-  cursor: not-allowed;
+  opacity: 1;
 }
 
 
 /* =========================================================
    FORGOT PASSWORD
-========================================================= */
+   ========================================================= */
 
 .forgot-password {
   text-align: right;
 
-  margin-top: -8px;
-
-  margin-bottom: 18px;
+  margin:
+    -5px 0 20px;
 }
 
 .forgot-password a {
-  color: #2563eb;
+  color:
+    #2563eb;
 
   text-decoration: none;
 
@@ -539,7 +667,7 @@ body {
 
 /* =========================================================
    LOGIN BUTTON
-========================================================= */
+   ========================================================= */
 
 .login-button {
   width: 100%;
@@ -548,68 +676,67 @@ body {
 
   border: none;
 
-  border-radius: 8px;
+  border-radius: 10px;
 
-  background: #2563eb;
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #1d4ed8
+    );
 
-  color: rgb(37, 24, 24);
+  color: white;
 
-  font-size: 15px;
+  font-size: 16px;
 
   font-weight: 700;
 
   cursor: pointer;
 
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 8px;
-
   transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
-.login-button:hover:not(:disabled) {
-  background: #1d4ed8;
+.login-button:hover {
+  transform:
+    translateY(-2px);
 
-  transform: translateY(-1px);
-}
-
-.login-button:active:not(:disabled) {
-  transform: translateY(0);
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
 .login-button:disabled {
-  opacity: 0.65;
+  opacity: 0.7;
 
   cursor: not-allowed;
+
+  transform: none;
 }
 
 
 /* =========================================================
-   LOGIN REGISTER AREA
-========================================================= */
+   LOGIN REGISTER LINK
+   ========================================================= */
 
 .login-register {
   margin-top: 22px;
 
   text-align: center;
 
-  font-size: 14px;
+  color:
+    #6b7280;
 
-  color: #6b7280;
+  font-size: 14px;
 }
 
 .login-register a {
   margin-left: 5px;
 
-  color: #2563eb;
+  color:
+    #2563eb;
 
-  font-weight: 600;
+  font-weight: 700;
 
   text-decoration: none;
 }
@@ -621,7 +748,7 @@ body {
 
 /* =========================================================
    LOGIN MESSAGE
-========================================================= */
+   ========================================================= */
 
 .login-message {
   display: flex;
@@ -630,738 +757,658 @@ body {
 
   gap: 8px;
 
-  margin-bottom: 18px;
+  padding:
+    12px 14px;
 
-  padding: 12px 14px;
+  margin-bottom: 16px;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
   font-size: 14px;
 }
 
-.login-message.success {
-  background: #509474;
+.login-message.error {
+  background:
+    #fef2f2;
 
-  color: #047857;
-
-  border: 1px solid #a7f3d0;
+  color:
+    #b91c1c;
 }
 
-.login-message.error {
-  background: #9b5a5a;
+.login-message.success {
+  background:
+    #ecfdf5;
 
-  color: #b91c1c;
-
-  border: 1px solid #0c0c0c;
+  color:
+    #047857;
 }
 
 .login-message.loading {
-  background: hsl(214, 50%, 43%);
+  background:
+    #eff6ff;
 
-  color: #1d4ed8;
-
-  border: 1px solid #000000;
+  color:
+    #1d4ed8;
 }
 
 
 /* =========================================================
-   SPINNERS
-========================================================= */
+   REGISTER PAGE
+   ========================================================= */
 
-.message-spinner,
-.button-spinner {
-  display: inline-block;
+.register-page {
+  position: relative;
 
-  width: 15px;
-  height: 15px;
+  z-index: 1;
 
-  border: 2px solid currentColor;
+  min-height: 100vh;
 
-  border-right-color: transparent;
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    90px 20px 40px;
+}
+
+.register-card {
+  width: 100%;
+
+  max-width: 480px;
+
+  background:
+    rgba(255, 255, 255, 0.98);
+
+  border-radius: 20px;
+
+  padding: 35px;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+
+/* =========================================================
+   GENERAL HEADINGS
+   ========================================================= */
+
+.page-title {
+  color: white;
+
+  text-align: center;
+
+  margin-bottom: 25px;
+
+  font-size: 30px;
+
+  font-weight: 700;
+}
+
+.page-subtitle {
+  color:
+    rgba(255, 255, 255, 0.85);
+
+  text-align: center;
+
+  margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.form-card {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+
+  max-width: 700px;
+
+  margin:
+    0 auto;
+
+  padding: 30px;
+
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================================
+   TEXTAREA
+   ========================================================= */
+
+textarea {
+  width: 100%;
+
+  min-height: 130px;
+
+  padding: 13px;
+
+  border:
+    1px solid #d1d5db;
+
+  border-radius: 9px;
+
+  resize: vertical;
+
+  background: white;
+
+  color: #111827;
+
+  outline: none;
+}
+
+textarea:focus {
+  border-color:
+    #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+select {
+  width: 100%;
+
+  padding: 13px;
+
+  border:
+    1px solid #d1d5db;
+
+  border-radius: 9px;
+
+  background: white;
+
+  color: #111827;
+
+  outline: none;
+}
+
+
+/* =========================================================
+   GENERAL BUTTON
+   ========================================================= */
+
+.primary-button {
+  border: none;
+
+  border-radius: 9px;
+
+  padding:
+    12px 20px;
+
+  background:
+    #2563eb;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.primary-button:hover {
+  background:
+    #1d4ed8;
+
+  transform:
+    translateY(-1px);
+}
+
+
+/* =========================================================
+   NEWS PAGE
+   ========================================================= */
+
+.news-feed,
+.news-page {
+  position: relative;
+
+  z-index: 1;
+}
+
+.news-card {
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  border-radius: 16px;
+
+  padding: 20px;
+
+  margin-bottom: 20px;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.22);
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.news-card:hover {
+  transform:
+    translateY(-3px);
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.28);
+}
+
+.news-card img {
+  width: 100%;
+
+  max-height: 400px;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+}
+
+
+/* =========================================================
+   NEWS TITLE
+   ========================================================= */
+
+.news-title {
+  color:
+    #111827;
+
+  font-size: 23px;
+
+  margin:
+    12px 0;
+}
+
+.news-description {
+  color:
+    #4b5563;
+
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+.profile-card {
+  position: relative;
+
+  z-index: 1;
+
+  max-width: 800px;
+
+  margin: 0 auto;
+
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  border-radius: 20px;
+
+  padding: 30px;
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.25);
+
+  text-align: center;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
 
   border-radius: 50%;
 
-  animation: spin 0.7s linear infinite;
+  object-fit: cover;
+
+  border:
+    5px solid white;
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-.button-spinner {
+
+/* =========================================================
+   NOTIFICATIONS
+   ========================================================= */
+
+.notification-card {
+  position: relative;
+
+  z-index: 1;
+
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  border-radius: 12px;
+
+  padding: 18px;
+
+  margin-bottom: 12px;
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.18);
+}
+
+
+/* =========================================================
+   REPORTS
+   ========================================================= */
+
+.report-card {
+  position: relative;
+
+  z-index: 1;
+
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  margin-bottom: 15px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+
+/* =========================================================
+   FEEDBACK
+   ========================================================= */
+
+.feedback-card {
+  position: relative;
+
+  z-index: 1;
+
+  max-width: 700px;
+
+  margin:
+    0 auto;
+
+  padding: 30px;
+
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+.admin-card {
+  position: relative;
+
+  z-index: 1;
+
+  background:
+    rgba(255, 255, 255, 0.97);
+
+  border-radius: 16px;
+
+  padding: 25px;
+
+  margin-bottom: 20px;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.22);
+}
+
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.badge {
+  display: inline-block;
+
+  padding:
+    5px 10px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.badge-success {
+  background:
+    #dcfce7;
+
+  color:
+    #166534;
+}
+
+.badge-warning {
+  background:
+    #fef3c7;
+
+  color:
+    #92400e;
+}
+
+.badge-danger {
+  background:
+    #fee2e2;
+
+  color:
+    #991b1b;
+}
+
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+.button-spinner,
+.message-spinner {
+  display: inline-block;
+
   width: 16px;
   height: 16px;
+
+  border:
+    2px solid rgba(255, 255, 255, 0.4);
+
+  border-top-color:
+    white;
+
+  border-radius: 50%;
+
+  animation:
+    spin 0.7s linear infinite;
+}
+
+.message-spinner {
+  border-color:
+    rgba(37, 99, 235, 0.25);
+
+  border-top-color:
+    #2563eb;
 }
 
 @keyframes spin {
   to {
-    transform: rotate(360deg);
+    transform:
+      rotate(360deg);
   }
 }
 
 
 /* =========================================================
-   COUNTER
-========================================================= */
+   LINKS
+   ========================================================= */
 
-.counter {
-  font-size: 16px;
-
-  padding: 5px 10px;
-
-  border-radius: 5px;
-
-  color: var(--accent);
-
-  background: var(--accent-bg);
-
-  border: 2px solid transparent;
-
-  transition: border-color 0.3s;
-
-  margin-bottom: 24px;
-}
-
-.counter:hover {
-  border-color: var(--accent-border);
-}
-
-.counter:focus-visible {
-  outline: 2px solid var(--accent);
-
-  outline-offset: 2px;
+a {
+  color:
+    #2563eb;
 }
 
 
 /* =========================================================
-   HERO
-========================================================= */
+   SCROLLBAR
+   ========================================================= */
 
-.hero {
-  position: relative;
+.floating-sidebar::-webkit-scrollbar {
+  width: 6px;
 }
 
-.hero .base,
-.hero .framework,
-.hero .vite {
-  inset-inline: 0;
-
-  margin: 0 auto;
+.floating-sidebar::-webkit-scrollbar-track {
+  background:
+    #f3f4f6;
 }
 
-.hero .base {
-  width: 170px;
+.floating-sidebar::-webkit-scrollbar-thumb {
+  background:
+    #9ca3af;
 
-  position: relative;
-
-  z-index: 0;
+  border-radius:
+    10px;
 }
 
-.hero .framework,
-.hero .vite {
-  position: absolute;
-}
-
-.hero .framework {
-  z-index: 1;
-
-  top: 34px;
-
-  height: 28px;
-
-  transform:
-    perspective(2000px)
-    rotateZ(300deg)
-    rotateX(44deg)
-    rotateY(39deg)
-    scale(1.4);
-}
-
-.hero .vite {
-  z-index: 0;
-
-  top: 107px;
-
-  height: 26px;
-
-  width: auto;
-
-  transform:
-    perspective(2000px)
-    rotateZ(300deg)
-    rotateX(40deg)
-    rotateY(39deg)
-    scale(0.8);
+.floating-sidebar::-webkit-scrollbar-thumb:hover {
+  background:
+    #6b7280;
 }
 
 
 /* =========================================================
-   CENTER
-========================================================= */
+   MOBILE
+   ========================================================= */
 
-#center {
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 25px;
-
-  place-content: center;
-
-  place-items: center;
-
-  flex-grow: 1;
-}
-
-
-/* =========================================================
-   NEXT STEPS
-========================================================= */
-
-#next-steps {
-  display: flex;
-
-  border-top: 1px solid var(--border);
-
-  text-align: left;
-}
-
-#next-steps > div {
-  flex: 1 1 0;
-
-  padding: 32px;
-}
-
-#next-steps .icon {
-  margin-bottom: 16px;
-
-  width: 22px;
-
-  height: 22px;
-}
-
-
-/* =========================================================
-   DOCS
-========================================================= */
-
-#docs {
-  border-right: 1px solid var(--border);
-}
-
-
-/* =========================================================
-   NEXT STEPS LIST
-========================================================= */
-
-#next-steps ul {
-  list-style: none;
-
-  padding: 0;
-
-  display: flex;
-
-  gap: 8px;
-
-  margin: 32px 0 0;
-}
-
-#next-steps ul .logo {
-  height: 18px;
-}
-
-#next-steps ul a {
-  color: var(--text-h);
-
-  font-size: 16px;
-
-  border-radius: 6px;
-
-  background: var(--social-bg);
-
-  display: flex;
-
-  padding: 6px 12px;
-
-  align-items: center;
-
-  gap: 8px;
-
-  text-decoration: none;
-
-  transition: box-shadow 0.3s;
-}
-
-#next-steps ul a:hover {
-  box-shadow: var(--shadow);
-}
-
-#next-steps ul a .button-icon {
-  height: 18px;
-
-  width: 18px;
-}
-
-
-/* =========================================================
-   SPACER
-========================================================= */
-
-#spacer {
-  height: 88px;
-
-  border-top: 1px solid var(--border);
-}
-
-
-/* =========================================================
-   TICKS
-========================================================= */
-
-.ticks {
-  position: relative;
-
-  width: 100%;
-}
-
-.ticks::before,
-.ticks::after {
-  content: '';
-
-  position: absolute;
-
-  top: -4.5px;
-
-  border: 5px solid transparent;
-}
-
-.ticks::before {
-  left: 0;
-
-  border-left-color: var(--border);
-}
-
-.ticks::after {
-  right: 0;
-
-  border-right-color: var(--border);
-}
-
-
-/* =========================================================
-   OLD NAVBAR SUPPORT
-   Keep these if other components still use navbar.
-========================================================= */
-
-.navbar {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-}
-
-.nav-logo {
-  font-weight: 700;
-}
-
-.nav-links {
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-}
-
-.nav-link {
-  text-decoration: none;
-
-  color: inherit;
-}
-
-.notification-badge {
-  display: inline-flex;
-
-  align-items: center;
-  justify-content: center;
-
-  min-width: 20px;
-
-  height: 20px;
-
-  border-radius: 50%;
-
-  font-size: 11px;
-}
-
-
-/* =========================================================
-   MOBILE - 900px
-========================================================= */
-
-@media (max-width: 900px) {
-
-  .page-container {
-    width: 100%;
-
-    margin: 20px auto;
-
-    padding: 0 10px;
-  }
-
-  #center {
-    padding: 32px 20px 24px;
-
-    gap: 18px;
-  }
-
-  #next-steps {
-    flex-direction: column;
-
-    text-align: center;
-  }
-
-  #next-steps > div {
-    padding: 24px 20px;
-  }
-
-  #docs {
-    border-right: none;
-
-    border-bottom: 1px solid var(--border);
-  }
-
-  #next-steps ul {
-    margin-top: 20px;
-
-    flex-wrap: wrap;
-
-    justify-content: center;
-  }
-
-}
-
-
-/* =========================================================
-   MOBILE - 600px
-========================================================= */
-
-@media (max-width: 600px) {
-
-  body {
-    font-size: 14px;
-  }
+@media (max-width: 768px) {
 
   .menu-button {
     top: 15px;
-
     left: 15px;
 
-    width: 44px;
-
-    height: 44px;
-
-    font-size: 22px;
-
-    line-height: 44px;
+    width: 46px;
+    height: 46px;
   }
 
   .floating-sidebar {
-    width: 260px;
+    width: 280px;
   }
 
-  .sidebar-header {
-    padding: 17px;
+  .page-container {
+    padding:
+      80px 15px 40px;
   }
 
-  .sidebar-header h3 {
-    font-size: 20px;
+  .login-page,
+  .register-page {
+    padding:
+      80px 15px 30px;
+
+    align-items:
+      flex-start;
   }
 
-  .sidebar-menu {
-    padding: 12px;
-  }
+  .login-card,
+  .register-card {
+    margin-top: 20px;
 
-  .floating-sidebar .nav-item {
-    min-height: 45px;
-
-    padding: 11px 13px;
-
-    font-size: 14px;
-  }
-
-  .login-page {
-    padding: 75px 15px 30px;
-  }
-
-  .login-card {
     padding: 25px 20px;
 
-    border-radius: 14px;
+    border-radius: 16px;
   }
 
   .login-header h1 {
     font-size: 24px;
   }
 
-  .page-container {
-    margin: 15px auto;
-
-    padding: 0 10px;
+  .content-card,
+  .form-card,
+  .profile-card,
+  .feedback-card {
+    padding: 20px;
   }
 
-  #next-steps ul {
-    flex-wrap: wrap;
-
-    justify-content: center;
+  .news-title {
+    font-size: 20px;
   }
-
-  #next-steps ul li {
-    flex: 1 1 calc(50% - 8px);
-  }
-
-  #next-steps ul a {
-    width: 100%;
-
-    justify-content: center;
-
-    box-sizing: border-box;
-  }
-
 }
 
 
 /* =========================================================
-   MOBILE - 400px
-========================================================= */
+   SMALL MOBILE
+   ========================================================= */
 
-@media (max-width: 400px) {
-
-  .floating-sidebar {
-    width: 240px;
-  }
+@media (max-width: 480px) {
 
   .menu-button {
-    top: 12px;
+    width: 44px;
+    height: 44px;
 
-    left: 12px;
+    font-size: 22px;
+  }
 
-    width: 42px;
+  .floating-sidebar {
+    width: 85vw;
 
-    height: 42px;
-
-    font-size: 20px;
-
-    line-height: 42px;
+    max-width: 290px;
   }
 
   .page-container {
-    max-width: 1100px;
-
-    margin: 15px auto 40px;
-
-    padding: 0 10px;
+    padding:
+      75px 10px 30px;
   }
 
-  .login-card {
-    padding: 22px 16px;
+  .login-card,
+  .register-card {
+    padding:
+      22px 16px;
   }
 
   .login-header h1 {
     font-size: 22px;
   }
 
-  #next-steps ul {
-    display: flex;
+  .nav-item {
+    min-height: 46px;
 
-    flex-direction: column;
-  }
-
-  #next-steps ul li {
-    width: 100%;
-  }
-
-  /* =========================================================
-   CONTENT BOX FIT WITH MENU
-========================================================= */
-
-.page-container {
-  width: 100%;
-  max-width: 1100px;
-  margin: 35px auto 50px;
-  padding: 0 20px;
-  transition: none;
-}
-
-/* Keep content centered when sidebar opens */
-.floating-sidebar.sidebar-open ~ .page-container {
-  width: 100%;
-  max-width: 1100px;
-}
-
-
-/* =========================================================
-   ALL COMMON CONTENT BOXES
-========================================================= */
-
-.page-container > * {
-  max-width: 100%;
-}
-
-
-/* Cards should never overflow */
-.login-card,
-.register-card,
-.news-card,
-.profile-card,
-.feedback-card,
-.report-card,
-.admin-card,
-.notification-card,
-.article-card {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-
-/* Images fit inside boxes */
-.page-container img {
-  max-width: 100%;
-  height: auto;
-}
-
-
-/* Tables fit screen */
-.page-container table {
-  width: 100%;
-  max-width: 100%;
-  border-collapse: collapse;
-}
-
-
-/* Long text doesn't push boxes outside */
-.page-container {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-}
-
-
-/* =========================================================
-   MOBILE BOX FIT
-========================================================= */
-
-@media (max-width: 600px) {
-
-  .page-container {
-    width: 100%;
-    max-width: 100%;
-    padding: 0 10px;
-    margin: 15px auto 35px;
-  }
-
-  .page-container > * {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .login-card,
-  .register-card,
-  .news-card,
-  .profile-card,
-  .feedback-card,
-  .report-card,
-  .admin-card,
-  .notification-card,
-  .article-card {
-    width: 100%;
-    max-width: 100%;
+    font-size: 14px;
   }
 }
 
 
 /* =========================================================
-   VERY SMALL SCREEN
-========================================================= */
+   REDUCE MOTION
+   ========================================================= */
 
-@media (max-width: 400px) {
+@media (prefers-reduced-motion: reduce) {
 
-  .page-container {
-    padding: 0 8px;
-  }
+  * {
+    scroll-behavior: auto !important;
 
-  .login-card,
-  .register-card,
-  .news-card,
-  .profile-card,
-  .feedback-card,
-  .report-card,
-  .admin-card,
-  .notification-card,
-  .article-card {
-    border-radius: 10px;
+    transition: none !important;
+
+    animation: none !important;
   }
 }
-}
-/* =====================================================
-   PAGE BACKGROUND IMAGES
-===================================================== */
-
-.page-background {
-  min-height: 100vh;
-  width: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-    /* NEWS */
-    .news-background {
-      background-image: url("/images/news-bg.jpg");
-    }
-
-    /* LOGIN */
-    .login-background {
-      background-image: url("/images/login-bg.jpg");
-    }
-
-    /* REGISTER */
-    .register-background {
-      background-image: url("/images/register-bg.jpg");
-    }
-
-    /* PROFILE */
-    .profile-background {
-      background-image: url("/images/profile-bg.jpg");
-    }
-
-    /* CREATE NEWS */
-    .create-news-background {
-      background-image: url("/images/create-news-bg.jpg");
-    }
-
-    /* NOTIFICATIONS */
-    .notifications-background {
-      background-image: url("/images/notifications-bg.jpg");
-    }
-
-    /* REPORTS */
-    .reports-background {
-      background-image: url("/images/reports-bg.jpg");
-    }
-
-    /* FEEDBACK */
-    .feedback-background {
-      background-image: url("/images/feedback-bg.jpg");
-    }
-
-    /* ADMIN */
-    .admin-background {
-      background-image: url("/images/admin-bg.jpg");
-    }
-
-    /* RESET PASSWORD */
-    .reset-password-background {
-      background-image: url("/images/reset-password-bg.jpg");
-    }
-
-    /* FORGOT PASSWORD */
-    .forgot-password-background {
-      background-image: url("/images/forgot-password-bg.jpg");
-    }

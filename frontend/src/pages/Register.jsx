@@ -67,7 +67,7 @@ function Register() {
   };
 
   return (
-    <div>
+    <div className="page-background register-background">
 
       <h1>Create Account</h1>
 

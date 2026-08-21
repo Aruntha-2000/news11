@@ -149,8 +149,10 @@ function Login() {
   // ==========================================
 
   return (
-    <div className="login-page">
-
+      <div className="page-background login-background">
+      <div className="login-page">
+      </div>
+      
       <div className="login-card">
 
         {/* HEADER */}

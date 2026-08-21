@@ -108,7 +108,7 @@ function NewsFeed() {
   }
 
   return (
-    <div className="news-page">
+    <div className="page-background news-background">
 
       {/* HEADER */}
 

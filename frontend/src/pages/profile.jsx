@@ -107,7 +107,7 @@ function Profile() {
 
 
   return (
-    <div>
+    <div className="page-background profile-background">
 
       <h1>My Profile</h1>
 
