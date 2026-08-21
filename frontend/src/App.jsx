@@ -80,8 +80,7 @@ function App() {
       <main className="page-container">
         <Routes>
           {/* HOME & AUTH */}
-          <Route path="/news" element={<NewsFeed />} />
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<NewsFeed />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
