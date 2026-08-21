@@ -1298,3 +1298,70 @@ body {
   }
 }
 }
+/* =====================================================
+   PAGE BACKGROUND IMAGES
+===================================================== */
+
+.page-background {
+  min-height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+    /* NEWS */
+    .news-background {
+      background-image: url("/images/news-bg.jpg");
+    }
+
+    /* LOGIN */
+    .login-background {
+      background-image: url("/images/login-bg.jpg");
+    }
+
+    /* REGISTER */
+    .register-background {
+      background-image: url("/images/register-bg.jpg");
+    }
+
+    /* PROFILE */
+    .profile-background {
+      background-image: url("/images/profile-bg.jpg");
+    }
+
+    /* CREATE NEWS */
+    .create-news-background {
+      background-image: url("/images/create-news-bg.jpg");
+    }
+
+    /* NOTIFICATIONS */
+    .notifications-background {
+      background-image: url("/images/notifications-bg.jpg");
+    }
+
+    /* REPORTS */
+    .reports-background {
+      background-image: url("/images/reports-bg.jpg");
+    }
+
+    /* FEEDBACK */
+    .feedback-background {
+      background-image: url("/images/feedback-bg.jpg");
+    }
+
+    /* ADMIN */
+    .admin-background {
+      background-image: url("/images/admin-bg.jpg");
+    }
+
+    /* RESET PASSWORD */
+    .reset-password-background {
+      background-image: url("/images/reset-password-bg.jpg");
+    }
+
+    /* FORGOT PASSWORD */
+    .forgot-password-background {
+      background-image: url("/images/forgot-password-bg.jpg");
+    }
