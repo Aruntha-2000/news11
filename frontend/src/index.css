@@ -110,19 +110,16 @@ code {
   background: var(--code-bg);
 }
 
-/* ========================================= */
-/* Floating Navigation Drawer Styles         */
-/* ========================================= */
-
+/* Update the main container */
 .floating-sidebar {
   position: fixed;
-  top: 50%; /* Moves it to the middle of the screen */
-  transform: translateY(-50%); /* Perfectly centers it vertically */
+  top: 50%;
+  transform: translateY(-50%);
   right: 0;
   width: 140px;
-  max-height: 90vh; /* Prevents it from going off the top/bottom of the screen */
-  overflow-y: auto; /* Allows scrolling if there are too many items */
-  scrollbar-width: none; /* Hides the scrollbar in Firefox */
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: none;
   background-color: var(--bg); 
   border: 1px solid var(--border);
   border-right: none;
@@ -131,9 +128,18 @@ code {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 10px;
-  gap: 20px; /* Slightly reduced gap to fit more items */
+  /* CHANGED: Added 40px to the bottom padding to prevent cutoff */
+  padding: 24px 10px 40px 10px; 
+  gap: 20px;
   z-index: 999;
+}
+
+/* Update the login/register button container */
+.apply-btn {
+  margin-top: 5px;
+  margin-bottom: 20px; /* Forces extra space below the button */
+  text-align: center;
+  flex-shrink: 0; /* STRICT RULE: Tells the browser NEVER to squish this item */
 }
 
 /* Hides the scrollbar in Chrome/Safari/Edge */
@@ -163,11 +169,6 @@ code {
   width: 26px; /* Slightly smaller icons to save space */
   height: 26px;
   margin-bottom: 6px;
-}
-.apply-btn {
-  margin-top: 5px;
-  margin-bottom: 12px; /* Adds extra space at the bottom so it doesn't get cut off */
-  text-align: center;
 }
 
 .apply-tag {
