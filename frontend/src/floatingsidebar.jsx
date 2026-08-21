@@ -39,7 +39,17 @@ export default function FloatingSidebar() {
         <Link to="/register" className="nav-item apply-btn">
         <span className="apply-badge" style={{ backgroundColor: '#2e303a' }}>REGISTER</span>
       </Link>
-      
+        <Link to="/notifications" className="nav-item">
+        <span>🔔 Notifications</span>
+      </Link>
+
+      <Link to="/report" className="nav-item">
+        <span>📊 Reports</span>
+      </Link>
+
+      <Link to="/admin" className="nav-item">
+        <span>🛠️ Admin</span>
+      </Link>
     </nav>
   );
 }
