@@ -39,7 +39,7 @@ export default function FloatingSidebar() {
       return [
         {
           path: "/login",
-          label: "🔐 Login"
+          label: " Login"
         }
       ];
 
@@ -68,7 +68,7 @@ export default function FloatingSidebar() {
       return [
         {
           path: "/login",
-          label: "🔐 Login"
+          label: " Login"
         }
       ];
 
@@ -81,7 +81,7 @@ export default function FloatingSidebar() {
       return [
         {
           path: "/login",
-          label: "🔐 Login"
+          label: " Login"
         }
       ];
 
@@ -144,7 +144,7 @@ export default function FloatingSidebar() {
 
       {
         path: "/login",
-        label: "🔐 Login"
+        label: " Login"
       },
 
       {
