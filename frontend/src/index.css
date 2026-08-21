@@ -166,7 +166,7 @@ code {
 }
 .apply-btn {
   margin-top: 5px;
-  margin-bottom: 15px; /* Adds extra space at the bottom so it doesn't get cut off */
+  margin-bottom: 12px; /* Adds extra space at the bottom so it doesn't get cut off */
   text-align: center;
 }
 
