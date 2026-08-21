@@ -15,6 +15,10 @@ function Register() {
       ...formData,
       [e.target.name]: e.target.value
     });
+
+    if (message) {
+      setMessage("");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -69,83 +73,160 @@ function Register() {
   return (
     <div className="page-background register-background">
 
-      <h1>Create Account</h1>
+      <div className="register-page">
 
-      <form onSubmit={handleSubmit}>
+        <div className="register-card">
 
-        {/* NAME */}
+          {/* HEADER */}
 
-        <div>
-          <label>Name</label>
-          <br />
+          <div className="register-header">
 
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Enter your name"
-            required
-          />
+            <div className="register-icon">
+              📝
+            </div>
+
+            <h1>
+              Create Account
+            </h1>
+
+            <p>
+              Join the News11 community
+            </p>
+
+          </div>
+
+
+          {/* FORM */}
+
+          <form onSubmit={handleSubmit}>
+
+            {/* NAME */}
+
+            <div className="register-field">
+
+              <label htmlFor="register-name">
+                Name
+              </label>
+
+              <input
+                id="register-name"
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Enter your name"
+                autoComplete="name"
+                required
+                disabled={loading}
+              />
+
+            </div>
+
+
+            {/* EMAIL */}
+
+            <div className="register-field">
+
+              <label htmlFor="register-email">
+                Email Address
+              </label>
+
+              <input
+                id="register-email"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                autoComplete="email"
+                required
+                disabled={loading}
+              />
+
+            </div>
+
+
+            {/* PASSWORD */}
+
+            <div className="register-field">
+
+              <label htmlFor="register-password">
+                Password
+              </label>
+
+              <input
+                id="register-password"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Create a password"
+                autoComplete="new-password"
+                required
+                minLength={6}
+                disabled={loading}
+              />
+
+              <small>
+                Password must be at least 6 characters.
+              </small>
+
+            </div>
+
+
+            {/* MESSAGE */}
+
+            {message && (
+              <div
+                className={`register-message ${
+                  message.includes("successful")
+                    ? "success"
+                    : "error"
+                }`}
+              >
+                {message.includes("successful")
+                  ? "✓"
+                  : "⚠"}
+
+                <span>
+                  {message}
+                </span>
+              </div>
+            )}
+
+
+            {/* BUTTON */}
+
+            <button
+              type="submit"
+              className="register-button"
+              disabled={loading}
+            >
+              {loading
+                ? "Creating account..."
+                : "📝 Create Account"}
+            </button>
+
+          </form>
+
+
+          {/* LOGIN */}
+
+          <div className="register-login">
+
+            <span>
+              Already have an account?
+            </span>
+
+            <a href="/login">
+              Login
+            </a>
+
+          </div>
+
         </div>
 
-        <br />
-
-        {/* EMAIL */}
-
-        <div>
-          <label>Email</label>
-          <br />
-
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-
-        <br />
-
-        {/* PASSWORD */}
-
-        <div>
-          <label>Password</label>
-          <br />
-
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Enter your password"
-            required
-            minLength="6"
-          />
-        </div>
-
-        <br />
-
-        {/* BUTTON */}
-
-        <button
-          type="submit"
-          disabled={loading}
-        >
-          {loading
-            ? "Creating account..."
-            : "Register"}
-        </button>
-
-      </form>
-
-      {/* MESSAGE */}
-
-      {message && (
-        <p>{message}</p>
-      )}
+      </div>
 
     </div>
   );
