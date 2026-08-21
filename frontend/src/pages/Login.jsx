@@ -274,7 +274,7 @@ function Login() {
               </>
             ) : (
               <>
-                🔐 Login
+                 Login
               </>
             )}
           </button>
