@@ -131,21 +131,24 @@ export default function FloatingSidebar() {
     // PUBLIC USER
     // ========================================
 
-   // PUBLIC USER
-return [
-  {
-    path: "/",
-    label: "📰 News"
-  },
-  {
-    path: "/login",
-    label: " Login"
-  },
-  {
-    path: "/register",
-    label: "REGISTER"
-  }
-];
+    return [
+
+      {
+        path: "/news",
+        label: "📰 News"
+      },
+
+      {
+        path: "/login",
+        label: " Login"
+      },
+
+      {
+        path: "/register",
+        label: "REGISTER"
+      }
+
+    ];
 
   };
 
@@ -252,3 +255,4 @@ return [
 
     </>
   );
+}
