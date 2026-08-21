@@ -32,24 +32,27 @@ export default function FloatingSidebar() {
         </svg>
         <span>Feedback</span>
       </Link>
+      
+      <Link to="/notifications" className="nav-item">
+        <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+        </svg>
+        <span>Notifications</span>
+      </Link>
+      
+      <Link to="/report" className="nav-item">
+        <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+        </svg>
+        <span>Reports</span>
+      </Link>
 
+      {/* Put the distinct Login/Register block at the very bottom */}
       <Link to="/login" className="nav-item apply-btn">
         <span className="apply-tag">🔐 Login</span>
-        </Link>
-        <Link to="/register" className="nav-item apply-btn">
         <span className="apply-badge" style={{ backgroundColor: '#2e303a' }}>REGISTER</span>
       </Link>
-        <Link to="/notifications" className="nav-item">
-        <span>🔔 Notifications</span>
-      </Link>
-
-      <Link to="/report" className="nav-item">
-        <span>📊 Reports</span>
-      </Link>
-
-      <Link to="/admin" className="nav-item">
-        <span>🛠️ Admin</span>
-      </Link>
+      
     </nav>
   );
 }

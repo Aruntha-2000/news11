@@ -116,10 +116,14 @@ code {
 
 .floating-sidebar {
   position: fixed;
-  top: 15%;
+  top: 50%; /* Moves it to the middle of the screen */
+  transform: translateY(-50%); /* Perfectly centers it vertically */
   right: 0;
   width: 140px;
-  background-color: var(--bg); /* Adapts to your light/dark mode */
+  max-height: 90vh; /* Prevents it from going off the top/bottom of the screen */
+  overflow-y: auto; /* Allows scrolling if there are too many items */
+  scrollbar-width: none; /* Hides the scrollbar in Firefox */
+  background-color: var(--bg); 
   border: 1px solid var(--border);
   border-right: none;
   border-radius: 20px 0 0 20px;
@@ -128,8 +132,13 @@ code {
   flex-direction: column;
   align-items: center;
   padding: 24px 10px;
-  gap: 22px;
+  gap: 20px; /* Slightly reduced gap to fit more items */
   z-index: 999;
+}
+
+/* Hides the scrollbar in Chrome/Safari/Edge */
+.floating-sidebar::-webkit-scrollbar {
+  display: none; 
 }
 
 .nav-item {
@@ -137,26 +146,27 @@ code {
   flex-direction: column;
   align-items: center;
   text-decoration: none;
-  color: var(--text-h); /* Adapts to your light/dark mode */
+  color: var(--text-h); 
   font-family: var(--sans);
   font-size: 13px;
   font-weight: 500;
   transition: transform 0.2s ease, color 0.2s ease;
+  flex-shrink: 0; /* Prevents items from squishing together */
 }
 
 .nav-item:hover {
   transform: translateY(-2px);
-  color: var(--accent); /* Uses your custom purple/pink accent color */
+  color: var(--accent); 
 }
 
 .nav-icon {
-  width: 28px;
-  height: 28px;
+  width: 26px; /* Slightly smaller icons to save space */
+  height: 26px;
   margin-bottom: 6px;
 }
 
 .apply-btn {
-  margin-top: 10px;
+  margin-top: 5px;
   text-align: center;
 }
 
@@ -168,8 +178,8 @@ code {
 
 .apply-badge {
   display: inline-block;
-  margin-top: 2px;
-  padding: 3px 8px;
+  margin-top: 4px;
+  padding: 4px 10px;
   color: #ffffff;
   font-size: 11px;
   font-weight: 800;
