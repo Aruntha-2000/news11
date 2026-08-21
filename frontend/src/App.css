@@ -276,7 +276,7 @@ body {
 
   text-decoration: none;
 
-  color: #1f2937;
+  color: #abb2bb;
 
   font-weight: 600;
 
@@ -387,7 +387,7 @@ body {
   padding: 35px;
 
   box-shadow:
-    0 15px 40px rgba(0, 0, 0, 0.15);
+    0 15px 40px rgba(165, 156, 156, 0.15);
 }
 
 
@@ -449,7 +449,7 @@ body {
 
   margin-bottom: 7px;
 
-  color: #374151;
+  color: #d6dfec;
 
   font-size: 14px;
 
