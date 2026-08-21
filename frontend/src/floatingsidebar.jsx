@@ -49,7 +49,7 @@ export default function FloatingSidebar() {
 
       {/* Put the distinct Login/Register block at the very bottom */}
       <Link to="/login" className="nav-item apply-btn">
-        <span className="apply-tag">🔐 Login</span>
+        <span className="apply-tag"> Login</span>
         </Link>
         <Link to="/Register" className="nav-item apply-btn">
         <span className="apply-badge" style={{ backgroundColor: '#2e303a' }}>REGISTER</span>
