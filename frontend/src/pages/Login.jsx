@@ -151,7 +151,6 @@ function Login() {
   return (
       <div className="page-background login-background">
       <div className="login-page">
-      </div>
       
       <div className="login-card">
 
@@ -299,7 +298,7 @@ function Login() {
         </div>
 
       </div>
-
+      </div>
     </div>
   );
 }
