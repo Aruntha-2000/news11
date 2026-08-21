@@ -19,6 +19,8 @@ import Notifications from "./pages/notification";
 import Reports from "./pages/report";
 import Feedback from "./pages/feedback";
 import FeedbackAdmin from "./pages/feedbackadmin";
+import ForgotPassword from "./pages/forgotpassword";
+import ResetPassword from "./pages/resetpassword";
 
 import Protectedroute from "./component/protectedroutes";
 import FloatingSidebar from "./floatingsidebar"; // <-- NEW IMPORT
@@ -126,6 +128,16 @@ function App() {
           <Route path="/news" element={<NewsFeed />} />
           <Route path="/news/:id" element={<NewsDetails />} />
 
+            <Route
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          />
+
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPassword />}
+          />
+          
           {/* NOTIFICATIONS */}
           <Route
             path="/notifications"

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Login() {
   const API_URL = "https://news-11-production.up.railway.app";
@@ -157,7 +158,7 @@ function Login() {
         <div className="login-header">
 
           <div className="login-icon">
-            🔐
+            
           </div>
 
           <h1>
@@ -198,27 +199,34 @@ function Login() {
           </div>
 
 
-          {/* PASSWORD */}
+         <div className="login-field">
 
-          <div className="login-field">
+        <label htmlFor="login-password">
+          Password
+        </label>
 
-            <label htmlFor="login-password">
-              Password
-            </label>
+        <input
+          id="login-password"
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Enter your password"
+          autoComplete="current-password"
+          required
+          disabled={loading}
+        />
 
-            <input
-              id="login-password"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              autoComplete="current-password"
-              required
-              disabled={loading}
-            />
+      </div>
 
-          </div>
+
+      <div className="forgot-password">
+
+        <Link to="/forgot-password">
+          Forgot Password?
+        </Link>
+
+      </div>
 
 
           {/* MESSAGE */}
@@ -282,9 +290,9 @@ function Login() {
             Don't have an account?
           </span>
 
-          <a href="/register">
+          <Link to="/register">
             Create Account
-          </a>
+          </Link>
 
         </div>
 
