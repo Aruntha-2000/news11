@@ -45,21 +45,17 @@ export default function FloatingSidebar() {
 
     }
 
+              // LOGIN PAGE
+          if (path === "/login") {
+            return [
+              {
+                path: "/register",
+                label: "REGISTER"
+              }
+            ];
+          }
 
-    // LOGIN PAGE
-    if (
-      path === "/login" ||
-      path === "/"
-    ) {
-
-      return [
-        {
-          path: "/register",
-          label: "REGISTER"
-        }
-      ];
-
-    }
+              }
 
 
     // FORGOT PASSWORD PAGE
@@ -135,24 +131,21 @@ export default function FloatingSidebar() {
     // PUBLIC USER
     // ========================================
 
-    return [
-
-      {
-        path: "/news",
-        label: "📰 News"
-      },
-
-      {
-        path: "/login",
-        label: " Login"
-      },
-
-      {
-        path: "/register",
-        label: "REGISTER"
-      }
-
-    ];
+   // PUBLIC USER
+return [
+  {
+    path: "/",
+    label: "📰 News"
+  },
+  {
+    path: "/login",
+    label: " Login"
+  },
+  {
+    path: "/register",
+    label: "REGISTER"
+  }
+];
 
   };
 
