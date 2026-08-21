@@ -143,10 +143,6 @@ export default function FloatingSidebar() {
 
     return [
       {
-        path: "/",
-        label: "📰 News",
-      },
-      {
         path: "/login",
         label: " Login",
       },
