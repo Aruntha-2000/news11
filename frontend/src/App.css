@@ -1159,4 +1159,124 @@ body {
     width: 100%;
   }
 
+  /* =========================================================
+   CONTENT BOX FIT WITH MENU
+========================================================= */
+
+.page-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 35px auto 50px;
+  padding: 0 20px;
+  transition: none;
+}
+
+/* Keep content centered when sidebar opens */
+.floating-sidebar.sidebar-open ~ .page-container {
+  width: 100%;
+  max-width: 1100px;
+}
+
+
+/* =========================================================
+   ALL COMMON CONTENT BOXES
+========================================================= */
+
+.page-container > * {
+  max-width: 100%;
+}
+
+
+/* Cards should never overflow */
+.login-card,
+.register-card,
+.news-card,
+.profile-card,
+.feedback-card,
+.report-card,
+.admin-card,
+.notification-card,
+.article-card {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* Images fit inside boxes */
+.page-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* Tables fit screen */
+.page-container table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+
+/* Long text doesn't push boxes outside */
+.page-container {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+
+/* =========================================================
+   MOBILE BOX FIT
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .page-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 10px;
+    margin: 15px auto 35px;
+  }
+
+  .page-container > * {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .login-card,
+  .register-card,
+  .news-card,
+  .profile-card,
+  .feedback-card,
+  .report-card,
+  .admin-card,
+  .notification-card,
+  .article-card {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL SCREEN
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .page-container {
+    padding: 0 8px;
+  }
+
+  .login-card,
+  .register-card,
+  .news-card,
+  .profile-card,
+  .feedback-card,
+  .report-card,
+  .admin-card,
+  .notification-card,
+  .article-card {
+    border-radius: 10px;
+  }
+}
 }
