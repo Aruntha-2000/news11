@@ -336,8 +336,7 @@ function AdminDashboard() {
 
               {posts.map((post) => {
 
-                const imageUrl =
-                  getImageUrl(post.image);
+                const imageUrl = getImageUrl(post.image_url || post.image);
 
                 const isProcessing =
                   processingId === post.id;
