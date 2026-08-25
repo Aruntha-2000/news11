@@ -19,30 +19,22 @@ function Feedback() {
 
     const token = localStorage.getItem("token");
 
-    // Check login
     if (!token) {
-      setStatusMessage(
-        "Please login to submit feedback."
-      );
+      setStatusMessage("Please login to submit feedback.");
       setStatusType("error");
       return;
     }
 
-    // Validate feedback
     const trimmedMessage = message.trim();
 
     if (!trimmedMessage) {
-      setStatusMessage(
-        "Feedback cannot be empty."
-      );
+      setStatusMessage("Feedback cannot be empty.");
       setStatusType("error");
       return;
     }
 
     if (trimmedMessage.length < 3) {
-      setStatusMessage(
-        "Please enter at least 3 characters."
-      );
+      setStatusMessage("Please enter at least 3 characters.");
       setStatusType("error");
       return;
     }
@@ -64,53 +56,37 @@ function Feedback() {
     setStatusType("loading");
 
     try {
-      const response = await fetch(
-        `${API_URL}/api/feedbacks`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-
-          body: JSON.stringify({
-            message: trimmedMessage,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/feedbacks`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          message: trimmedMessage,
+        }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
         setStatusMessage(
-          data.message ||
-            "Unable to submit feedback."
+          data.message || "Unable to submit feedback."
         );
         setStatusType("error");
         return;
       }
 
       setStatusMessage(
-        data.message ||
-          "Feedback submitted successfully."
+        data.message || "Feedback submitted successfully."
       );
 
       setStatusType("success");
-
-      // Clear textarea after successful submission
       setMessage("");
-
     } catch (error) {
-      console.error(
-        "Feedback error:",
-        error
-      );
+      console.error("Feedback error:", error);
 
-      setStatusMessage(
-        "Cannot connect to server."
-      );
-
+      setStatusMessage("Cannot connect to server.");
       setStatusType("error");
     } finally {
       setSubmitting(false);
@@ -128,16 +104,11 @@ function Feedback() {
       setMessage(value);
     }
 
-    // Clear previous status when user starts typing
     if (statusMessage && statusType !== "loading") {
       setStatusMessage("");
       setStatusType("");
     }
   };
-
-  // ==========================================
-  // CHARACTER COUNT
-  // ==========================================
 
   const characterCount = message.length;
 
@@ -146,9 +117,9 @@ function Feedback() {
   // ==========================================
 
   return (
-    <div className="feedback-page">
+    <div className="page-background feedback-background">
 
-      {/* HEADER */}
+      {/* PAGE HEADER */}
 
       <div className="feedback-header">
 
@@ -157,9 +128,7 @@ function Feedback() {
         </div>
 
         <div>
-          <h1>
-            Feedback
-          </h1>
+          <h1>Feedback</h1>
 
           <p>
             We would love to hear your feedback.
@@ -209,6 +178,7 @@ function Feedback() {
             />
 
             <div className="feedback-counter">
+
               <span>
                 Please don't include passwords or
                 other private information.
@@ -217,14 +187,16 @@ function Feedback() {
               <span>
                 {characterCount}/{MAX_LENGTH}
               </span>
+
             </div>
 
           </div>
 
 
-          {/* STATUS */}
+          {/* STATUS MESSAGE */}
 
           {statusMessage && (
+
             <div
               className={`feedback-status ${statusType}`}
             >
@@ -250,10 +222,11 @@ function Feedback() {
               </span>
 
             </div>
+
           )}
 
 
-          {/* SUBMIT */}
+          {/* SUBMIT BUTTON */}
 
           <button
             type="submit"
@@ -263,6 +236,7 @@ function Feedback() {
               !message.trim()
             }
           >
+
             {submitting ? (
               <>
                 <span className="button-spinner"></span>
@@ -273,6 +247,7 @@ function Feedback() {
                 💬 Submit Feedback
               </>
             )}
+
           </button>
 
         </form>
@@ -289,6 +264,7 @@ function Feedback() {
         </div>
 
         <div>
+
           <h3>
             Thank you for helping us improve
           </h3>
@@ -297,6 +273,7 @@ function Feedback() {
             We review feedback from our users and
             use it to improve the News11 experience.
           </p>
+
         </div>
 
       </div>

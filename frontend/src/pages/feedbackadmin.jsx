@@ -9,9 +9,9 @@ function FeedbackAdmin() {
   const [messageType, setMessageType] = useState("");
   const [processingId, setProcessingId] = useState(null);
 
-  // ==========================================
+  // =====================================================
   // GET FEEDBACK
-  // ==========================================
+  // =====================================================
 
   const getFeedback = async () => {
     const token = localStorage.getItem("token");
@@ -42,8 +42,7 @@ function FeedbackAdmin() {
 
       if (!response.ok) {
         setMessage(
-          data.message ||
-            "Unable to load feedback."
+          data.message || "Unable to load feedback."
         );
         setMessageType("error");
         setFeedback([]);
@@ -52,14 +51,9 @@ function FeedbackAdmin() {
 
       setFeedback(data.feedback || []);
     } catch (error) {
-      console.error(
-        "Get feedback error:",
-        error
-      );
+      console.error("Get feedback error:", error);
 
-      setMessage(
-        "Cannot connect to server."
-      );
+      setMessage("Cannot connect to server.");
       setMessageType("error");
       setFeedback([]);
     } finally {
@@ -67,17 +61,17 @@ function FeedbackAdmin() {
     }
   };
 
-  // ==========================================
+  // =====================================================
   // LOAD FEEDBACK
-  // ==========================================
+  // =====================================================
 
   useEffect(() => {
     getFeedback();
   }, []);
 
-  // ==========================================
+  // =====================================================
   // UPDATE FEEDBACK STATUS
-  // ==========================================
+  // =====================================================
 
   const updateStatus = async (id, status) => {
     const token = localStorage.getItem("token");
@@ -124,14 +118,13 @@ function FeedbackAdmin() {
         return;
       }
 
-      // Update only the changed feedback
+      // Update changed feedback
       setFeedback((previous) =>
         previous.map((item) =>
           item.id === id
             ? {
                 ...item,
-                status:
-                  data.status || status,
+                status: data.status || status,
               }
             : item
         )
@@ -149,18 +142,16 @@ function FeedbackAdmin() {
         error
       );
 
-      setMessage(
-        "Cannot connect to server."
-      );
+      setMessage("Cannot connect to server.");
       setMessageType("error");
     } finally {
       setProcessingId(null);
     }
   };
 
-  // ==========================================
+  // =====================================================
   // STATUS CLASS
-  // ==========================================
+  // =====================================================
 
   const getStatusClass = (status) => {
     switch (
@@ -180,9 +171,9 @@ function FeedbackAdmin() {
     }
   };
 
-  // ==========================================
+  // =====================================================
   // FORMAT DATE
-  // ==========================================
+  // =====================================================
 
   const formatDate = (date) => {
     if (!date) {
@@ -198,35 +189,72 @@ function FeedbackAdmin() {
     return parsedDate.toLocaleString();
   };
 
-  // ==========================================
+  // =====================================================
+  // STATISTICS
+  // =====================================================
+
+  const totalFeedback = feedback.length;
+
+  const pendingFeedback = feedback.filter(
+    (item) =>
+      String(item.status || "").toLowerCase() ===
+      "pending"
+  ).length;
+
+  const reviewedFeedback = feedback.filter(
+    (item) =>
+      String(item.status || "").toLowerCase() ===
+      "reviewed"
+  ).length;
+
+  const resolvedFeedback = feedback.filter(
+    (item) =>
+      String(item.status || "").toLowerCase() ===
+      "resolved"
+  ).length;
+
+  // =====================================================
   // LOADING
-  // ==========================================
+  // =====================================================
 
   if (loading) {
     return (
       <div className="feedback-admin-page">
 
-        <div className="feedback-admin-header">
+        <div className="feedback-admin-container">
 
-          <div>
-            <h1>
-              💬 Feedback Management
-            </h1>
+          <div className="feedback-admin-header">
 
-            <p>
-              Review feedback submitted by News11 users.
-            </p>
+            <div className="feedback-admin-title-row">
+
+              <div className="feedback-admin-icon">
+                💬
+              </div>
+
+              <div>
+                <h1>
+                  Feedback Management
+                </h1>
+
+                <p>
+                  Review feedback submitted by
+                  News11 users.
+                </p>
+              </div>
+
+            </div>
+
           </div>
 
-        </div>
+          <div className="feedback-admin-loading">
 
-        <div className="feedback-admin-loading">
+            <div className="feedback-admin-spinner"></div>
 
-          <div className="feedback-admin-spinner"></div>
+            <p>
+              Loading feedback...
+            </p>
 
-          <p>
-            Loading feedback...
-          </p>
+          </div>
 
         </div>
 
@@ -234,342 +262,378 @@ function FeedbackAdmin() {
     );
   }
 
-  // ==========================================
-  // PAGE
-  // ==========================================
+  // =====================================================
+  // MAIN PAGE
+  // =====================================================
 
   return (
     <div className="feedback-admin-page">
 
-      {/* HEADER */}
+      <div className="feedback-admin-container">
 
-      <div className="feedback-admin-header">
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
-        <div>
+        <div className="feedback-admin-header">
 
           <div className="feedback-admin-title-row">
 
-            <span className="feedback-admin-icon">
+            <div className="feedback-admin-icon">
               💬
-            </span>
+            </div>
 
             <div>
-
               <h1>
                 Feedback Management
               </h1>
 
               <p>
-                Review feedback submitted by News11 users.
+                Review feedback submitted by
+                News11 users.
               </p>
-
             </div>
 
           </div>
 
-        </div>
-
-        <button
-          type="button"
-          className="feedback-admin-refresh"
-          onClick={getFeedback}
-          disabled={processingId !== null}
-        >
-          🔄 Refresh
-        </button>
-
-      </div>
-
-
-      {/* MESSAGE */}
-
-      {message && (
-        <div
-          className={`feedback-admin-message ${messageType}`}
-        >
-
-          {messageType === "success" && (
-            <span>✓</span>
-          )}
-
-          {messageType === "error" && (
-            <span>⚠</span>
-          )}
-
-          <span>
-            {message}
-          </span>
+          <button
+            type="button"
+            className="feedback-admin-refresh"
+            onClick={getFeedback}
+            disabled={
+              loading ||
+              processingId !== null
+            }
+          >
+            🔄 Refresh
+          </button>
 
         </div>
-      )}
 
 
-      {/* STATISTICS */}
+        {/* =================================================
+            MESSAGE
+        ================================================= */}
 
-      <div className="feedback-admin-stats">
+        {message && (
+          <div
+            className={`feedback-admin-message ${messageType}`}
+          >
 
-        <div className="feedback-stat-card">
+            {messageType === "success" && (
+              <span className="message-icon">
+                ✓
+              </span>
+            )}
 
-          <div className="feedback-stat-icon">
-            💬
-          </div>
-
-          <div>
+            {messageType === "error" && (
+              <span className="message-icon">
+                ⚠
+              </span>
+            )}
 
             <span>
-              Total Feedback
+              {message}
             </span>
 
-            <strong>
-              {feedback.length}
-            </strong>
-
           </div>
-
-        </div>
-
-
-        <div className="feedback-stat-card">
-
-          <div className="feedback-stat-icon">
-            ⏳
-          </div>
-
-          <div>
-
-            <span>
-              Pending
-            </span>
-
-            <strong>
-              {
-                feedback.filter(
-                  (item) =>
-                    String(
-                      item.status || ""
-                    ).toLowerCase() ===
-                    "pending"
-                ).length
-              }
-            </strong>
-
-          </div>
-
-        </div>
+        )}
 
 
-        <div className="feedback-stat-card">
+        {/* =================================================
+            STATISTICS
+        ================================================= */}
 
-          <div className="feedback-stat-icon">
-            ✅
-          </div>
+        <div className="feedback-admin-stats">
 
-          <div>
+          {/* TOTAL */}
 
-            <span>
-              Reviewed
-            </span>
+          <div className="feedback-stat-card">
 
-            <strong>
-              {
-                feedback.filter(
-                  (item) =>
-                    String(
-                      item.status || ""
-                    ).toLowerCase() ===
-                    "reviewed"
-                ).length
-              }
-            </strong>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      {/* FEEDBACK LIST */}
-
-      <div className="feedback-admin-section">
-
-        <div className="feedback-admin-section-header">
-
-          <div>
-
-            <h2>
-              User Feedback
-            </h2>
-
-            <p>
-              Read and manage feedback from users.
-            </p>
-
-          </div>
-
-          <span className="feedback-count">
-            {feedback.length}
-          </span>
-
-        </div>
-
-
-        {/* EMPTY */}
-
-        {feedback.length === 0 ? (
-          <div className="feedback-admin-empty">
-
-            <div className="feedback-empty-icon">
+            <div className="feedback-stat-icon">
               💬
             </div>
 
-            <h3>
-              No Feedback Found
-            </h3>
+            <div>
+              <span>
+                Total Feedback
+              </span>
 
-            <p>
-              There is currently no feedback
-              submitted by users.
-            </p>
-
-            <button
-              type="button"
-              onClick={getFeedback}
-            >
-              🔄 Refresh
-            </button>
+              <strong>
+                {totalFeedback}
+              </strong>
+            </div>
 
           </div>
-        ) : (
 
-          <div className="feedback-admin-list">
 
-            {feedback.map((item) => {
+          {/* PENDING */}
 
-              const isProcessing =
-                processingId === item.id;
+          <div className="feedback-stat-card">
 
-              return (
-                <article
-                  className="feedback-admin-card"
-                  key={item.id}
-                >
+            <div className="feedback-stat-icon">
+              ⏳
+            </div>
 
-                  {/* USER */}
+            <div>
+              <span>
+                Pending
+              </span>
 
-                  <div className="feedback-user">
+              <strong>
+                {pendingFeedback}
+              </strong>
+            </div>
 
-                    <div className="feedback-user-avatar">
-                      {(item.user_name ||
-                        "U")
-                        .charAt(0)
-                        .toUpperCase()}
+          </div>
+
+
+          {/* REVIEWED */}
+
+          <div className="feedback-stat-card">
+
+            <div className="feedback-stat-icon">
+              ✅
+            </div>
+
+            <div>
+              <span>
+                Reviewed
+              </span>
+
+              <strong>
+                {reviewedFeedback}
+              </strong>
+            </div>
+
+          </div>
+
+
+          {/* RESOLVED */}
+
+          <div className="feedback-stat-card">
+
+            <div className="feedback-stat-icon">
+              🎯
+            </div>
+
+            <div>
+              <span>
+                Resolved
+              </span>
+
+              <strong>
+                {resolvedFeedback}
+              </strong>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        {/* =================================================
+            FEEDBACK SECTION
+        ================================================= */}
+
+        <div className="feedback-admin-section">
+
+          {/* SECTION HEADER */}
+
+          <div className="feedback-admin-section-header">
+
+            <div>
+              <h2>
+                User Feedback
+              </h2>
+
+              <p>
+                Read and manage feedback from
+                News11 users.
+              </p>
+            </div>
+
+            <span className="feedback-count">
+              {feedback.length}
+            </span>
+
+          </div>
+
+
+          {/* =================================================
+              EMPTY
+          ================================================= */}
+
+          {feedback.length === 0 ? (
+
+            <div className="feedback-admin-empty">
+
+              <div className="feedback-empty-icon">
+                💬
+              </div>
+
+              <h3>
+                No Feedback Found
+              </h3>
+
+              <p>
+                There is currently no feedback
+                submitted by users.
+              </p>
+
+              <button
+                type="button"
+                className="feedback-empty-refresh"
+                onClick={getFeedback}
+              >
+                🔄 Refresh
+              </button>
+
+            </div>
+
+          ) : (
+
+            /* =================================================
+               FEEDBACK LIST
+            ================================================= */
+
+            <div className="feedback-admin-list">
+
+              {feedback.map((item) => {
+
+                const isProcessing =
+                  processingId === item.id;
+
+                const status =
+                  String(
+                    item.status || "pending"
+                  ).toLowerCase();
+
+                return (
+                  <article
+                    className="feedback-admin-card"
+                    key={item.id}
+                  >
+
+                    {/* USER INFORMATION */}
+
+                    <div className="feedback-user">
+
+                      <div className="feedback-user-avatar">
+                        {(item.user_name || "U")
+                          .charAt(0)
+                          .toUpperCase()}
+                      </div>
+
+                      <div className="feedback-user-details">
+
+                        <h3>
+                          {item.user_name ||
+                            "Unknown User"}
+                        </h3>
+
+                        <p>
+                          {item.email ||
+                            "No email available"}
+                        </p>
+
+                      </div>
+
                     </div>
 
-                    <div>
 
-                      <h3>
-                        {item.user_name ||
-                          "Unknown User"}
-                      </h3>
+                    {/* TOP ROW */}
+
+                    <div className="feedback-card-top">
+
+                      <span
+                        className={`feedback-status-badge ${getStatusClass(
+                          status
+                        )}`}
+                      >
+                        {status}
+                      </span>
+
+                    </div>
+
+
+                    {/* FEEDBACK CONTENT */}
+
+                    <div className="feedback-content">
+
+                      <span className="feedback-label">
+                        Feedback
+                      </span>
 
                       <p>
-                        {item.email ||
-                          "No email available"}
+                        {item.message ||
+                          "No message available."}
                       </p>
 
                     </div>
 
-                  </div>
 
+                    {/* DATE */}
 
-                  {/* STATUS */}
+                    <div className="feedback-date">
 
-                  <div className="feedback-card-top">
+                      🕒
 
-                    <span
-                      className={`feedback-status-badge ${getStatusClass(
-                        item.status
-                      )}`}
-                    >
-                      {item.status ||
-                        "pending"}
-                    </span>
-
-                  </div>
-
-
-                  {/* MESSAGE */}
-
-                  <div className="feedback-content">
-
-                    <span className="feedback-label">
-                      Feedback
-                    </span>
-
-                    <p>
-                      {item.message ||
-                        "No message available."}
-                    </p>
-
-                  </div>
-
-
-                  {/* DATE */}
-
-                  <div className="feedback-date">
-
-                    🕒{" "}
-                    {formatDate(
-                      item.created_at
-                    )}
-
-                  </div>
-
-
-                  {/* ACTION */}
-
-                  {String(
-                    item.status || ""
-                  ).toLowerCase() ===
-                    "pending" && (
-
-                    <div className="feedback-actions">
-
-                      <button
-                        type="button"
-                        className="feedback-review-button"
-                        disabled={isProcessing}
-                        onClick={() =>
-                          updateStatus(
-                            item.id,
-                            "reviewed"
-                          )
-                        }
-                      >
-                        {isProcessing ? (
-                          <>
-                            <span className="button-spinner"></span>
-                            Updating...
-                          </>
-                        ) : (
-                          <>
-                            ✓ Mark Reviewed
-                          </>
+                      <span>
+                        {formatDate(
+                          item.created_at
                         )}
-                      </button>
+                      </span>
 
                     </div>
 
-                  )}
 
-                </article>
-              );
-            })}
+                    {/* ACTIONS */}
 
-          </div>
+                    {status === "pending" && (
 
-        )}
+                      <div className="feedback-actions">
+
+                        <button
+                          type="button"
+                          className="feedback-review-button"
+                          disabled={
+                            isProcessing
+                          }
+                          onClick={() =>
+                            updateStatus(
+                              item.id,
+                              "reviewed"
+                            )
+                          }
+                        >
+
+                          {isProcessing ? (
+                            <>
+                              <span className="button-spinner"></span>
+                              Updating...
+                            </>
+                          ) : (
+                            <>
+                              ✓ Mark Reviewed
+                            </>
+                          )}
+
+                        </button>
+
+                      </div>
+
+                    )}
+
+                  </article>
+                );
+              })}
+
+            </div>
+
+          )}
+
+        </div>
 
       </div>
 

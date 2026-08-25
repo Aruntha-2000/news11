@@ -8,6 +8,10 @@ function Profile() {
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
 
+  // =====================================================
+  // GET PROFILE
+  // =====================================================
+
   useEffect(() => {
     const getProfile = async () => {
       const token = localStorage.getItem("token");
@@ -31,7 +35,8 @@ function Profile() {
 
         if (!response.ok) {
           setMessage(
-            data.message || "Unable to load profile."
+            data.message ||
+              "Unable to load profile."
           );
           return;
         }
@@ -40,16 +45,24 @@ function Profile() {
         setMessage("");
 
       } catch (error) {
-        console.error("Profile error:", error);
-        setMessage("Cannot connect to server.");
+        console.error(
+          "Profile error:",
+          error
+        );
+
+        setMessage(
+          "Cannot connect to server."
+        );
       }
     };
 
     getProfile();
   }, []);
 
-
+  // =====================================================
   // GET FOLLOW COUNTS
+  // =====================================================
+
   useEffect(() => {
     if (!user) return;
 
@@ -62,8 +75,13 @@ function Profile() {
         const data = await response.json();
 
         if (response.ok) {
-          setFollowers(data.followers || 0);
-          setFollowing(data.following || 0);
+          setFollowers(
+            data.followers || 0
+          );
+
+          setFollowing(
+            data.following || 0
+          );
         }
 
       } catch (error) {
@@ -78,88 +96,239 @@ function Profile() {
 
   }, [user]);
 
-
+  // =====================================================
   // LOGIN ERROR
+  // =====================================================
+
   if (message) {
     return (
-      <div>
-        <h1>My Profile</h1>
+      <div className="page-background profile-background">
 
-        <p>{message}</p>
+        <div className="profile-page">
 
-        <Link to="/login">
-          Login
-        </Link>
+          <div className="profile-card">
+
+            <div className="profile-icon">
+              👤
+            </div>
+
+            <h1>
+              My Profile
+            </h1>
+
+            <div className="profile-message error">
+              ⚠️ {message}
+            </div>
+
+            <Link
+              to="/login"
+              className="profile-button"
+            >
+              🔐 Login
+            </Link>
+
+          </div>
+
+        </div>
+
       </div>
     );
   }
 
-
+  // =====================================================
   // LOADING
+  // =====================================================
+
   if (!user) {
     return (
-      <div>
-        <h1>My Profile</h1>
-        <p>Loading profile...</p>
+      <div className="page-background profile-background">
+
+        <div className="profile-page">
+
+          <div className="profile-card">
+
+            <div className="profile-icon">
+              👤
+            </div>
+
+            <h1>
+              My Profile
+            </h1>
+
+            <div className="profile-loading">
+
+              <span className="profile-spinner"></span>
+
+              Loading profile...
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
     );
   }
 
+  // =====================================================
+  // PROFILE
+  // =====================================================
 
   return (
     <div className="page-background profile-background">
 
-      <h1>My Profile</h1>
+      <div className="profile-page">
 
-      <hr />
+        <div className="profile-card">
 
-      {/* USER INFORMATION */}
+          {/* PROFILE HEADER */}
 
-      <h2>
-        👤 {user.name}
-      </h2>
+          <div className="profile-header">
 
-      <p>
-        <strong>Email:</strong>{" "}
-        {user.email}
-      </p>
+            <div className="profile-avatar">
 
-      <p>
-        <strong>Role:</strong>{" "}
-        {user.role}
-      </p>
+              {user.name
+                ? user.name
+                    .charAt(0)
+                    .toUpperCase()
+                : "U"}
 
-      <hr />
+            </div>
 
-      {/* FOLLOW INFORMATION */}
+            <h1>
+              My Profile
+            </h1>
 
-      <h3>Social Information</h3>
+            <p>
+              Welcome back to News11
+            </p>
 
-      <div>
+          </div>
 
-        <strong>
-          {followers}
-        </strong>{" "}
-        Followers
 
-        {" | "}
+          {/* USER INFORMATION */}
 
-        <strong>
-          {following}
-        </strong>{" "}
-        Following
+          <div className="profile-information">
+
+            <div className="profile-info-item">
+
+              <span className="profile-info-icon">
+                👤
+              </span>
+
+              <div>
+                <small>
+                  Name
+                </small>
+
+                <strong>
+                  {user.name}
+                </strong>
+              </div>
+
+            </div>
+
+
+            <div className="profile-info-item">
+
+              <span className="profile-info-icon">
+                📧
+              </span>
+
+              <div>
+                <small>
+                  Email
+                </small>
+
+                <strong>
+                  {user.email}
+                </strong>
+              </div>
+
+            </div>
+
+
+            <div className="profile-info-item">
+
+              <span className="profile-info-icon">
+                🛡️
+              </span>
+
+              <div>
+                <small>
+                  Account Role
+                </small>
+
+                <strong className="role-badge">
+                  {user.role}
+                </strong>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          {/* SOCIAL INFORMATION */}
+
+          <div className="social-section">
+
+            <h2>
+              Social Information
+            </h2>
+
+            <div className="social-stats">
+
+              <div className="social-stat">
+
+                <strong>
+                  {followers}
+                </strong>
+
+                <span>
+                  Followers
+                </span>
+
+              </div>
+
+
+              <div className="social-divider"></div>
+
+
+              <div className="social-stat">
+
+                <strong>
+                  {following}
+                </strong>
+
+                <span>
+                  Following
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          {/* BACK TO NEWS */}
+
+          <div className="profile-footer">
+
+            <Link
+              to="/news"
+              className="profile-news-button"
+            >
+              ← Back to News Feed
+            </Link>
+
+          </div>
+
+        </div>
 
       </div>
-
-      <br />
-
-      <hr />
-
-      <p>
-        <Link to="/news">
-          ← Back to News Feed
-        </Link>
-      </p>
 
     </div>
   );

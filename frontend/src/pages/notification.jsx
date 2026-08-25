@@ -2,11 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 
 const API_URL = "https://news-11-production.up.railway.app";
 
+
 function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+
+  // =========================================================
+  // GET NOTIFICATIONS
+  // =========================================================
 
   const getNotifications = useCallback(
     async (showLoading = true) => {
@@ -14,6 +20,7 @@ function Notifications() {
 
       if (!token) {
         setMessage("Please login to view notifications.");
+        setMessageType("error");
         setLoading(false);
         return;
       }
@@ -25,25 +32,26 @@ function Notifications() {
       }
 
       setMessage("");
+      setMessageType("");
 
       try {
         const response = await fetch(
           `${API_URL}/api/notifications`,
           {
+            method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
         );
 
         const data = await response.json();
 
         if (!response.ok) {
-          setMessage(
-            data.message ||
-              "Unable to load notifications."
+          throw new Error(
+            data.message || "Unable to load notifications."
           );
-          return;
         }
 
         setNotifications(
@@ -51,7 +59,6 @@ function Notifications() {
             ? data.notifications
             : []
         );
-
       } catch (error) {
         console.error(
           "Get notifications error:",
@@ -59,9 +66,11 @@ function Notifications() {
         );
 
         setMessage(
-          "Cannot connect to server."
+          error.message ||
+            "Cannot connect to server."
         );
 
+        setMessageType("error");
       } finally {
         setLoading(false);
         setRefreshing(false);
@@ -70,14 +79,18 @@ function Notifications() {
     []
   );
 
+  // =========================================================
+  // INITIAL LOAD
+  // =========================================================
 
-  // Initial loading
   useEffect(() => {
     getNotifications(true);
   }, [getNotifications]);
 
+  // =========================================================
+  // AUTO REFRESH EVERY 30 SECONDS
+  // =========================================================
 
-  // Automatically check for new notifications
   useEffect(() => {
     const interval = setInterval(() => {
       getNotifications(false);
@@ -86,52 +99,55 @@ function Notifications() {
     return () => clearInterval(interval);
   }, [getNotifications]);
 
+  // =========================================================
+  // MARK AS READ
+  // =========================================================
 
-  // Mark notification as read
   const markAsRead = async (notificationId) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      setMessage(
-        "Please login to continue."
-      );
+      setMessage("Please login to continue.");
+      setMessageType("error");
       return;
     }
 
     try {
       const response = await fetch(
-        `${API_URL}/notifications/${notificationId}/read`,
+        `${API_URL}/api/notifications/${notificationId}/read`,
         {
           method: "PUT",
-
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(
+        throw new Error(
           data.message ||
             "Unable to mark notification as read."
         );
-        return;
       }
 
+      // Update only the selected notification
       setNotifications((previous) =>
         previous.map((notification) =>
           Number(notification.id) ===
           Number(notificationId)
             ? {
                 ...notification,
-                is_read: 1
+                is_read: 1,
               }
             : notification
         )
       );
 
+      setMessage("");
+      setMessageType("");
     } catch (error) {
       console.error(
         "Mark notification error:",
@@ -139,179 +155,274 @@ function Notifications() {
       );
 
       setMessage(
-        "Cannot connect to server."
+        error.message ||
+          "Cannot connect to server."
       );
+
+      setMessageType("error");
     }
   };
 
+  // =========================================================
+  // LOADING
+  // =========================================================
 
-  // Loading
   if (loading) {
     return (
-      <div className="notifications-page">
+      <div className="page-background notifications-background">
+        <div className="page-container">
+          <div className="notifications-page">
 
-        <h1>🔔 Notifications</h1>
+            <div className="notifications-header">
+              <div className="notifications-header-icon">
+                🔔
+              </div>
 
-        <p>
-          Loading notifications...
-        </p>
+              <div>
+                <h1>Notifications</h1>
+                <p>
+                  Stay updated with your latest activities.
+                </p>
+              </div>
+            </div>
 
+            <div className="notifications-loading">
+              <div className="notifications-spinner"></div>
+              <p>Loading notifications...</p>
+            </div>
+
+          </div>
+        </div>
       </div>
     );
   }
 
+  // =========================================================
+  // NO LOGIN / ERROR
+  // =========================================================
 
-  // Login / error message
   if (message && notifications.length === 0) {
     return (
-      <div className="notifications-page">
+      <div className="page-background notifications-background">
+        <div className="page-container">
+          <div className="notifications-page">
 
-        <h1>🔔 Notifications</h1>
+            <div className="notifications-header">
+              <div className="notifications-header-icon">
+                🔔
+              </div>
 
-        <p>{message}</p>
+              <div>
+                <h1>Notifications</h1>
+                <p>
+                  Stay updated with your latest activities.
+                </p>
+              </div>
+            </div>
 
-        <button
-          onClick={() =>
-            getNotifications(true)
-          }
-        >
-          🔄 Try Again
-        </button>
+            <div className="notifications-error">
+              <div className="notifications-error-icon">
+                ⚠️
+              </div>
 
+              <h2>Something went wrong</h2>
+
+              <p>{message}</p>
+
+              <button
+                className="notifications-retry-button"
+                onClick={() => getNotifications(true)}
+              >
+                🔄 Try Again
+              </button>
+            </div>
+
+          </div>
+        </div>
       </div>
     );
   }
 
+  // =========================================================
+  // MAIN PAGE
+  // =========================================================
 
   return (
-    <div className="notifications-page">
+    <div className="page-background notifications-background">
+      <div className="page-container">
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px"
-        }}
-      >
+        <div className="notifications-page">
 
-        <h1>
-          🔔 Notifications
-        </h1>
+          {/* HEADER */}
 
-        <button
-          onClick={() =>
-            getNotifications(false)
-          }
-          disabled={refreshing}
-        >
-          {refreshing
-            ? "Refreshing..."
-            : "🔄 Refresh"}
-        </button>
+          <div className="notifications-header">
 
-      </div>
+            <div className="notifications-header-icon">
+              🔔
+            </div>
+
+            <div className="notifications-header-content">
+
+              <h1>Notifications</h1>
+
+              <p>
+                Stay updated with your latest activities.
+              </p>
+
+            </div>
+
+            <button
+              className="notifications-refresh-button"
+              onClick={() =>
+                getNotifications(false)
+              }
+              disabled={refreshing}
+            >
+              {refreshing
+                ? "Refreshing..."
+                : "🔄 Refresh"}
+            </button>
+
+          </div>
 
 
-      {message && (
-        <p>
-          {message}
-        </p>
-      )}
+          {/* MESSAGE */}
+
+          {message && (
+            <div
+              className={`notifications-message ${messageType}`}
+            >
+              {message}
+            </div>
+          )}
 
 
-      {notifications.length === 0 ? (
+          {/* SUMMARY */}
 
-        <div>
-          <h2>
-            No notifications
-          </h2>
+          <div className="notifications-summary">
 
-          <p>
-            You don't have any notifications yet.
-          </p>
+            <span>
+              🔔 {notifications.length}{" "}
+              {notifications.length === 1
+                ? "notification"
+                : "notifications"}
+            </span>
+
+            <span>
+              {notifications.filter(
+                (notification) =>
+                  Number(notification.is_read) !== 1
+              ).length}{" "}
+              unread
+            </span>
+
+          </div>
+
+
+          {/* EMPTY */}
+
+          {notifications.length === 0 ? (
+
+            <div className="notifications-empty">
+
+              <div className="notifications-empty-icon">
+                🔔
+              </div>
+
+              <h2>No notifications</h2>
+
+              <p>
+                You don't have any notifications yet.
+              </p>
+
+            </div>
+
+          ) : (
+
+            <div className="notifications-list">
+
+              {notifications.map(
+                (notification) => {
+
+                  const isRead =
+                    Number(
+                      notification.is_read
+                    ) === 1;
+
+                  return (
+                    <div
+                      key={notification.id}
+                      className={`notification-card ${
+                        isRead
+                          ? "notification-read"
+                          : "notification-unread"
+                      }`}
+                    >
+
+                      {/* NOTIFICATION TOP */}
+
+                      <div className="notification-top">
+
+                        <span className="notification-icon">
+                          {isRead ? "🔔" : "🔵"}
+                        </span>
+
+                        {!isRead && (
+                          <span className="notification-new">
+                            NEW
+                          </span>
+                        )}
+
+                      </div>
+
+
+                      {/* MESSAGE */}
+
+                      <div className="notification-content">
+
+                        <p className="notification-message">
+                          {notification.message}
+                        </p>
+
+                        <small className="notification-date">
+                          🕒{" "}
+                          {notification.created_at
+                            ? new Date(
+                                notification.created_at
+                              ).toLocaleString()
+                            : "Recently"}
+                        </small>
+
+                      </div>
+
+
+                      {/* ACTION */}
+
+                      {!isRead && (
+                        <button
+                          className="notification-read-button"
+                          onClick={() =>
+                            markAsRead(
+                              notification.id
+                            )
+                          }
+                        >
+                          ✅ Mark as read
+                        </button>
+                      )}
+
+                    </div>
+                  );
+                }
+              )}
+
+            </div>
+
+          )}
+
         </div>
 
-      ) : (
-
-        notifications.map(
-          (notification) => {
-
-            const isRead =
-              Number(
-                notification.is_read
-              ) === 1;
-
-            return (
-              <div
-                key={notification.id}
-                style={{
-                  border:
-                    "1px solid #ddd",
-
-                  borderRadius:
-                    "10px",
-
-                  padding:
-                    "15px",
-
-                  marginBottom:
-                    "12px",
-
-                  backgroundColor:
-                    isRead
-                      ? "#ffffff"
-                      : "#eef6ff",
-
-                  boxShadow:
-                    "0 2px 8px rgba(0,0,0,0.05)"
-                }}
-              >
-
-                <p>
-                  <strong>
-                    {notification.message}
-                  </strong>
-                </p>
-
-
-                <small>
-                  {notification.created_at
-                    ? new Date(
-                        notification.created_at
-                      ).toLocaleString()
-                    : ""}
-                </small>
-
-
-                {!isRead && (
-                  <div
-                    style={{
-                      marginTop:
-                        "10px"
-                    }}
-                  >
-
-                    <button
-                      onClick={() =>
-                        markAsRead(
-                          notification.id
-                        )
-                      }
-                    >
-                      ✅ Mark as read
-                    </button>
-
-                  </div>
-                )}
-
-              </div>
-            );
-          }
-        )
-
-      )}
-
+      </div>
     </div>
   );
 }

@@ -1,191 +1,112 @@
 import { useState } from "react";
-import {
-  Link,
-  useParams
-} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
+const API_URL = "https://news-11-production.up.railway.app";
 
 function ResetPassword() {
+  const { token } = useParams();
 
-  const API_URL =
-    "https://news-11-production.up.railway.app";
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
-  const { token } =
-    useParams();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const [password, setPassword] =
-    useState("");
+    setMessage("");
+    setMessageType("");
 
+    // Check reset token
+    if (!token) {
+      setMessage("Invalid or missing password reset link.");
+      setMessageType("error");
+      return;
+    }
 
-  const [confirmPassword,
-    setConfirmPassword] =
-    useState("");
+    // Check password length
+    if (password.length < 6) {
+      setMessage("Password must be at least 6 characters.");
+      setMessageType("error");
+      return;
+    }
 
+    // Check passwords match
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match.");
+      setMessageType("error");
+      return;
+    }
 
-  const [message,
-    setMessage] =
-    useState("");
+    setLoading(true);
 
+    try {
+      const response = await fetch(
+        `${API_URL}/api/auth/reset-password/${encodeURIComponent(token)}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            password: password,
+          }),
+        }
+      );
 
-  const [messageType,
-    setMessageType] =
-    useState("");
-
-
-  const [loading,
-    setLoading] =
-    useState(false);
-
-
-  const [success,
-    setSuccess] =
-    useState(false);
-
-
-  const handleSubmit =
-    async (e) => {
-
-      e.preventDefault();
-
-
-      if (password.length < 6) {
-
-        setMessage(
-          "Password must be at least 6 characters."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-        return;
-      }
-
-
-      if (
-        password !==
-        confirmPassword
-      ) {
-
-        setMessage(
-          "Passwords do not match."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-        return;
-      }
-
-
-      setLoading(true);
-
-      setMessage("");
-
+      let data = {};
 
       try {
-
-        const response =
-          await fetch(
-
-            `${API_URL}/api/auth/reset-password/${token}`,
-
-            {
-
-              method: "POST",
-
-              headers: {
-
-                "Content-Type":
-                  "application/json"
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  password
-
-                })
-
-            }
-
-          );
-
-
-        const data =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          setMessage(
-            data.message ||
-            "Password reset failed."
-          );
-
-          setMessageType(
-            "error"
-          );
-
-          return;
-        }
-
-
-        setMessage(
-          "Password reset successfully!"
-        );
-
-        setMessageType(
-          "success"
-        );
-
-        setSuccess(true);
-
-
-      } catch (error) {
-
-        console.error(
-          "Reset password error:",
-          error
-        );
-
-        setMessage(
-          "Cannot connect to the server."
-        );
-
-        setMessageType(
-          "error"
-        );
-
-      } finally {
-
-        setLoading(false);
-
+        data = await response.json();
+      } catch {
+        data = {};
       }
 
-    };
+      if (!response.ok) {
+        setMessage(
+          data.message || "Password reset failed. The link may be expired."
+        );
 
+        setMessageType("error");
+        return;
+      }
+
+      setMessage("Password reset successfully!");
+      setMessageType("success");
+      setSuccess(true);
+
+      // Clear password fields
+      setPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      console.error("Reset password error:", error);
+
+      setMessage(
+        "Cannot connect to the server. Please try again later."
+      );
+
+      setMessageType("error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-
     <div className="login-page">
-
       <div className="login-card">
 
-
+        {/* HEADER */}
         <div className="login-header">
 
           <div className="login-icon">
             🔐
           </div>
 
-          <h1>
-            Create New Password
-          </h1>
+          <h1>Create New Password</h1>
 
           <p>
             Enter your new News11 password.
@@ -193,159 +114,120 @@ function ResetPassword() {
 
         </div>
 
+        {/* SUCCESS */}
+        {success ? (
+          <div className="login-success-box">
 
-        {!success ? (
-
-          <form
-            onSubmit={handleSubmit}
-          >
-
-
-            <div
-              className="login-field"
-            >
-
-              <label
-                htmlFor="new-password"
-              >
-                New Password
-              </label>
-
-
-              <input
-
-                id="new-password"
-
-                type="password"
-
-                value={password}
-
-                onChange={(e) =>
-                  setPassword(
-                    e.target.value
-                  )
-                }
-
-                placeholder=
-                  "Enter new password"
-
-                autoComplete=
-                  "new-password"
-
-                required
-
-                disabled={loading}
-
-              />
-
+            <div className="success-icon">
+              ✅
             </div>
 
-
-            <div
-              className="login-field"
-            >
-
-              <label
-                htmlFor="confirm-password"
-              >
-                Confirm New Password
-              </label>
-
-
-              <input
-
-                id="confirm-password"
-
-                type="password"
-
-                value={
-                  confirmPassword
-                }
-
-                onChange={(e) =>
-                  setConfirmPassword(
-                    e.target.value
-                  )
-                }
-
-                placeholder=
-                  "Confirm new password"
-
-                autoComplete=
-                  "new-password"
-
-                required
-
-                disabled={loading}
-
-              />
-
-            </div>
-
-
-            {message && (
-
-              <div
-                className=
-                  {`login-message ${messageType}`}
-              >
-                {message}
-              </div>
-
-            )}
-
-
-            <button
-
-              type="submit"
-
-              className=
-                "login-button"
-
-              disabled={loading}
-
-            >
-
-              {loading
-                ? "Resetting..."
-                : "🔐 Reset Password"}
-
-            </button>
-
-
-          </form>
-
-        ) : (
-
-          <div
-            className=
-              "login-message success"
-          >
+            <h2>Password Changed</h2>
 
             <p>
-              Your password has been
-              changed successfully.
+              Your password has been changed
+              successfully.
             </p>
 
-
-            <Link to="/login">
-
+            <Link
+              to="/login"
+              className="login-button"
+            >
               Go to Login
-
             </Link>
 
           </div>
+        ) : (
 
+          /* FORM */
+          <form onSubmit={handleSubmit}>
+
+            {/* NEW PASSWORD */}
+            <div className="login-field">
+
+              <label htmlFor="new-password">
+                New Password
+              </label>
+
+              <input
+                id="new-password"
+                type="password"
+                value={password}
+                onChange={(e) =>
+                  setPassword(e.target.value)
+                }
+                placeholder="Enter new password"
+                autoComplete="new-password"
+                minLength={6}
+                required
+                disabled={loading}
+              />
+
+            </div>
+
+
+            {/* CONFIRM PASSWORD */}
+            <div className="login-field">
+
+              <label htmlFor="confirm-password">
+                Confirm New Password
+              </label>
+
+              <input
+                id="confirm-password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) =>
+                  setConfirmPassword(e.target.value)
+                }
+                placeholder="Confirm new password"
+                autoComplete="new-password"
+                minLength={6}
+                required
+                disabled={loading}
+              />
+
+            </div>
+
+
+            {/* MESSAGE */}
+            {message && (
+              <div
+                className={`login-message ${messageType}`}
+                role="alert"
+              >
+                {message}
+              </div>
+            )}
+
+
+            {/* SUBMIT */}
+            <button
+              type="submit"
+              className="login-button"
+              disabled={loading}
+            >
+              {loading
+                ? "Resetting..."
+                : "🔐 Reset Password"}
+            </button>
+
+
+            {/* BACK TO LOGIN */}
+            <div className="login-register">
+
+              <Link to="/login">
+                ← Back to Login
+              </Link>
+
+            </div>
+
+          </form>
         )}
 
-
       </div>
-
     </div>
-
   );
-
 }
-
 
 export default ResetPassword;

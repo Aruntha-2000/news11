@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 
+const API_URL = "https://news-11-production.up.railway.app";
+
 function Reports() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [updatingId, setUpdatingId] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   // =========================
   // GET REPORTS
   // =========================
 
-  const getReports = async () => {
+  const getReports = async (showLoading = true) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -20,41 +23,54 @@ function Reports() {
     }
 
     try {
-      setLoading(true);
+      if (showLoading) {
+        setLoading(true);
+      } else {
+        setRefreshing(true);
+      }
+
       setError("");
 
       const response = await fetch(
-        "https://news-11-production.up.railway.app/api/reports",
+        `${API_URL}/api/reports`,
         {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(
+        throw new Error(
           data.message || "Unable to load reports."
         );
-        return;
       }
 
-      setReports(data.reports || []);
+      setReports(
+        Array.isArray(data.reports)
+          ? data.reports
+          : []
+      );
 
     } catch (error) {
       console.error("Get reports error:", error);
-      setError("Cannot connect to server.");
+
+      setError(
+        error.message ||
+          "Cannot connect to server."
+      );
 
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
 
   useEffect(() => {
-    getReports();
+    getReports(true);
   }, []);
 
 
@@ -62,49 +78,56 @@ function Reports() {
   // UPDATE REPORT STATUS
   // =========================
 
-  const updateStatus = async (reportId, status) => {
+  const updateStatus = async (
+    reportId,
+    status
+  ) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Please login.");
+      setError("Please login.");
       return;
     }
 
     setUpdatingId(reportId);
+    setError("");
 
     try {
       const response = await fetch(
-        `https://news-11-production.up.railway.app/api/reports/${reportId}/status`,
+        `${API_URL}/api/reports/${reportId}/status`,
         {
           method: "PUT",
 
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            "Content-Type":
+              "application/json",
+
+            Authorization:
+              `Bearer ${token}`,
           },
 
           body: JSON.stringify({
-            status
-          })
+            status,
+          }),
         }
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        alert(
+        throw new Error(
           data.message ||
-          "Unable to update report."
+            "Unable to update report."
         );
-        return;
       }
 
       setReports((previous) =>
         previous.map((report) =>
-          report.id === reportId
+          Number(report.id) ===
+          Number(reportId)
             ? {
                 ...report,
-                status
+                status,
               }
             : report
         )
@@ -116,10 +139,50 @@ function Reports() {
         error
       );
 
-      alert("Cannot connect to server.");
+      setError(
+        error.message ||
+          "Cannot connect to server."
+      );
 
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+
+  // =========================
+  // STATUS
+  // =========================
+
+  const getStatus = (status) => {
+    switch (status) {
+      case "pending":
+        return (
+          <span className="report-status pending">
+            🟡 Pending
+          </span>
+        );
+
+      case "reviewed":
+        return (
+          <span className="report-status reviewed">
+            🟢 Reviewed
+          </span>
+        );
+
+      case "dismissed":
+        return (
+          <span className="report-status dismissed">
+            ⚪ Dismissed
+          </span>
+        );
+
+      default:
+        return (
+          <span className="report-status">
+            {status || "Unknown"}
+          </span>
+        );
     }
   };
 
@@ -130,9 +193,36 @@ function Reports() {
 
   if (loading) {
     return (
-      <div>
-        <h1>🚩 Reports</h1>
-        <p>Loading reports...</p>
+      <div className="reports-page">
+
+        <div className="reports-header">
+
+          <div className="reports-header-icon">
+            🚩
+          </div>
+
+          <div>
+            <h1>Reported News</h1>
+
+            <p>
+              Review and manage reported
+              news articles.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div className="reports-loading">
+
+          <div className="reports-spinner"></div>
+
+          <p>
+            Loading reports...
+          </p>
+
+        </div>
+
       </div>
     );
   }
@@ -142,16 +232,51 @@ function Reports() {
   // ERROR
   // =========================
 
-  if (error) {
+  if (error && reports.length === 0) {
     return (
-      <div>
-        <h1>🚩 Reports</h1>
+      <div className="reports-page">
 
-        <p>{error}</p>
+        <div className="reports-header">
 
-        <button onClick={getReports}>
-          🔄 Try Again
-        </button>
+          <div className="reports-header-icon">
+            🚩
+          </div>
+
+          <div>
+            <h1>Reported News</h1>
+
+            <p>
+              Review and manage reported
+              news articles.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div className="reports-error">
+
+          <div className="reports-error-icon">
+            ⚠️
+          </div>
+
+          <h2>
+            Something went wrong
+          </h2>
+
+          <p>{error}</p>
+
+          <button
+            className="reports-retry"
+            onClick={() =>
+              getReports(true)
+            }
+          >
+            🔄 Try Again
+          </button>
+
+        </div>
+
       </div>
     );
   }
@@ -162,128 +287,237 @@ function Reports() {
   // =========================
 
   return (
-    <div>
+    <div className="reports-page">
 
-      <h1>🚩 Reported News</h1>
+      {/* HEADER */}
 
-      <button onClick={getReports}>
-        🔄 Refresh
-      </button>
+      <div className="reports-header">
 
-      <br />
-      <br />
+        <div className="reports-header-icon">
+          🚩
+        </div>
+
+        <div className="reports-header-content">
+
+          <h1>
+            Reported News
+          </h1>
+
+          <p>
+            Review and manage reported
+            news articles.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      {/* SUMMARY */}
+
+      <div className="reports-summary">
+
+        <span>
+          🚩 {reports.length}{" "}
+          {reports.length === 1
+            ? "report"
+            : "reports"}
+        </span>
+
+        <button
+          className="reports-refresh"
+          onClick={() =>
+            getReports(false)
+          }
+          disabled={refreshing}
+        >
+          {refreshing
+            ? "Refreshing..."
+            : "🔄 Refresh"}
+        </button>
+
+      </div>
+
+
+      {/* ERROR WHILE REFRESHING */}
+
+      {error && reports.length > 0 && (
+        <div className="reports-inline-error">
+          ⚠️ {error}
+        </div>
+      )}
+
+
+      {/* EMPTY */}
 
       {reports.length === 0 ? (
 
-        <p>No reports found.</p>
+        <div className="reports-empty">
+
+          <div className="reports-empty-icon">
+            📭
+          </div>
+
+          <h2>
+            No reports found
+          </h2>
+
+          <p>
+            There are no reported news
+            articles at the moment.
+          </p>
+
+          <button
+            className="reports-retry"
+            onClick={() =>
+              getReports(false)
+            }
+          >
+            🔄 Check Again
+          </button>
+
+        </div>
 
       ) : (
 
-        reports.map((report) => (
+        <div className="reports-list">
 
-          <div
-            key={report.id}
-            style={{
-              border: "1px solid #ccc",
-              borderRadius: "10px",
-              padding: "15px",
-              marginBottom: "15px"
-            }}
-          >
+          {reports.map((report) => {
 
-            <h3>
-              📰 {report.post_title}
-            </h3>
+            const isUpdating =
+              Number(updatingId) ===
+              Number(report.id);
 
+            return (
+              <article
+                className="report-card"
+                key={report.id}
+              >
 
-            <p>
-              <strong>Reported by:</strong>{" "}
-              {report.user_name}
-            </p>
+                {/* CARD HEADER */}
 
+                <div className="report-card-header">
 
-            <p>
-              <strong>Reason:</strong>
-            </p>
+                  <span className="report-number">
+                    Report #{report.id}
+                  </span>
 
-            <p>
-              {report.reason}
-            </p>
+                  {getStatus(
+                    report.status
+                  )}
+
+                </div>
 
 
-            <p>
-              <strong>Status:</strong>{" "}
+                {/* NEWS TITLE */}
 
-              {report.status === "pending" && (
-                <span>🟡 Pending</span>
-              )}
-
-              {report.status === "reviewed" && (
-                <span>🟢 Reviewed</span>
-              )}
-
-              {report.status === "dismissed" && (
-                <span>⚪ Dismissed</span>
-              )}
-            </p>
+                <h2 className="report-title">
+                  📰{" "}
+                  {report.post_title ||
+                    "Untitled News"}
+                </h2>
 
 
-            <small>
-              {new Date(
-                report.created_at
-              ).toLocaleString()}
-            </small>
+                {/* REPORT DETAILS */}
+
+                <div className="report-details">
+
+                  <div className="report-detail">
+
+                    <span className="detail-label">
+                      Reported by
+                    </span>
+
+                    <strong>
+                      {report.user_name ||
+                        "Unknown user"}
+                    </strong>
+
+                  </div>
 
 
-            <br />
-            <br />
+                  <div className="report-detail">
+
+                    <span className="detail-label">
+                      Date
+                    </span>
+
+                    <strong>
+                      {report.created_at
+                        ? new Date(
+                            report.created_at
+                          ).toLocaleString()
+                        : "Unknown"}
+                    </strong>
+
+                  </div>
+
+                </div>
 
 
-            {report.status === "pending" && (
+                {/* REASON */}
 
-              <div>
+                <div className="report-reason">
 
-                <button
-                  onClick={() =>
-                    updateStatus(
-                      report.id,
-                      "reviewed"
-                    )
-                  }
-                  disabled={
-                    updatingId === report.id
-                  }
-                >
-                  {updatingId === report.id
-                    ? "Updating..."
-                    : "✅ Mark Reviewed"}
-                </button>
+                  <span className="detail-label">
+                    Reason
+                  </span>
 
-                {" "}
+                  <p>
+                    {report.reason ||
+                      "No reason provided."}
+                  </p>
 
-                <button
-                  onClick={() =>
-                    updateStatus(
-                      report.id,
-                      "dismissed"
-                    )
-                  }
-                  disabled={
-                    updatingId === report.id
-                  }
-                >
-                  {updatingId === report.id
-                    ? "Updating..."
-                    : "❌ Dismiss"}
-                </button>
+                </div>
 
-              </div>
 
-            )}
+                {/* ACTIONS */}
 
-          </div>
+                {report.status ===
+                  "pending" && (
 
-        ))
+                  <div className="report-actions">
+
+                    <button
+                      className="report-action reviewed-button"
+                      onClick={() =>
+                        updateStatus(
+                          report.id,
+                          "reviewed"
+                        )
+                      }
+                      disabled={isUpdating}
+                    >
+                      {isUpdating
+                        ? "Updating..."
+                        : "✅ Mark Reviewed"}
+                    </button>
+
+
+                    <button
+                      className="report-action dismissed-button"
+                      onClick={() =>
+                        updateStatus(
+                          report.id,
+                          "dismissed"
+                        )
+                      }
+                      disabled={isUpdating}
+                    >
+                      {isUpdating
+                        ? "Updating..."
+                        : "❌ Dismiss"}
+                    </button>
+
+                  </div>
+
+                )}
+
+              </article>
+            );
+          })}
+
+        </div>
 
       )}
 

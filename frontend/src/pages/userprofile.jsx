@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-//import "./userprofile.css";
+
+const API_URL = "https://news-11-production.up.railway.app";
 
 function UserProfile() {
   const { id } = useParams();
@@ -16,29 +17,31 @@ function UserProfile() {
   const [message, setMessage] = useState("Loading...");
   const [loading, setLoading] = useState(false);
 
-  // =========================
+  // =========================================================
   // GET CURRENT USER
-  // =========================
+  // =========================================================
 
   useEffect(() => {
     const getCurrentUser = async () => {
       const token = localStorage.getItem("token");
 
-      if (!token) return;
+      if (!token) {
+        return;
+      }
 
       try {
         const response = await fetch(
-          "https://news-11-production.up.railway.app/api/users/profile",
+          `${API_URL}/api/users/profile`,
           {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
         const data = await response.json();
 
-        if (response.ok) {
+        if (response.ok && data.user) {
           setCurrentUser(data.user);
         }
       } catch (error) {
@@ -49,17 +52,23 @@ function UserProfile() {
     getCurrentUser();
   }, []);
 
-  // =========================
-  // GET USER
-  // =========================
+  // =========================================================
+  // GET USER PROFILE
+  // =========================================================
 
   useEffect(() => {
     const getUser = async () => {
+      if (!id) {
+        setMessage("Invalid user profile.");
+        return;
+      }
+
       setMessage("Loading...");
+      setUser(null);
 
       try {
         const response = await fetch(
-          `https://news-11-production.up.railway.app/api/users/${id}`
+          `${API_URL}/api/users/${id}`
         );
 
         const data = await response.json();
@@ -71,64 +80,86 @@ function UserProfile() {
           return;
         }
 
+        if (!data.user) {
+          setMessage("User not found.");
+          return;
+        }
+
         setUser(data.user);
         setMessage("");
-
       } catch (error) {
-        console.error(error);
-        setMessage("Cannot connect to server.");
+        console.error("Get user error:", error);
+
+        setMessage(
+          "Cannot connect to server."
+        );
       }
     };
 
     getUser();
   }, [id]);
 
-  // =========================
+  // =========================================================
   // GET FOLLOW INFORMATION
-  // =========================
+  // =========================================================
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !id) {
+      return;
+    }
 
     const getFollowInfo = async () => {
       try {
+        // -------------------------
         // FOLLOW COUNTS
+        // -------------------------
 
         const countResponse = await fetch(
-          `https://news-11-production.up.railway.app/api/follows/${id}/counts`
+          `${API_URL}/api/follows/${id}/counts`
         );
 
-        const countData = await countResponse.json();
+        const countData =
+          await countResponse.json();
 
         if (countResponse.ok) {
-          setFollowers(countData.followers || 0);
-          setFollowing(countData.following || 0);
-        }
-
-        // FOLLOW STATUS
-
-        const token = localStorage.getItem("token");
-
-        if (token) {
-          const statusResponse = await fetch(
-            `https://news-11-production.up.railway.app/api/follows/status/${id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
+          setFollowers(
+            Number(countData.followers) || 0
           );
 
-          const statusData =
-            await statusResponse.json();
-
-          if (statusResponse.ok) {
-            setIsFollowing(
-              Boolean(statusData.following)
-            );
-          }
+          setFollowing(
+            Number(countData.following) || 0
+          );
         }
 
+        // -------------------------
+        // FOLLOW STATUS
+        // -------------------------
+
+        const token =
+          localStorage.getItem("token");
+
+        if (!token) {
+          setIsFollowing(false);
+          return;
+        }
+
+        const statusResponse = await fetch(
+          `${API_URL}/api/follows/status/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const statusData =
+          await statusResponse.json();
+
+        if (statusResponse.ok) {
+          setIsFollowing(
+            Boolean(statusData.following)
+          );
+        }
       } catch (error) {
         console.error(
           "Follow information error:",
@@ -138,15 +169,15 @@ function UserProfile() {
     };
 
     getFollowInfo();
-
   }, [id, user]);
 
-  // =========================
+  // =========================================================
   // FOLLOW / UNFOLLOW
-  // =========================
+  // =========================================================
 
   const handleFollow = async () => {
-    const token = localStorage.getItem("token");
+    const token =
+      localStorage.getItem("token");
 
     if (!token) {
       alert("Please login first.");
@@ -161,19 +192,25 @@ function UserProfile() {
       return;
     }
 
+    if (loading) {
+      return;
+    }
+
     setLoading(true);
+
+    const wasFollowing = isFollowing;
 
     try {
       const response = await fetch(
-        `https://news-11-production.up.railway.app/api/follows/${id}`,
+        `${API_URL}/api/follows/${id}`,
         {
-          method: isFollowing
+          method: wasFollowing
             ? "DELETE"
             : "POST",
 
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -182,40 +219,47 @@ function UserProfile() {
       if (!response.ok) {
         alert(
           data.message ||
-          "Unable to update follow."
+            "Unable to update follow."
         );
         return;
       }
 
-      setIsFollowing(!isFollowing);
+      // Update button
+      setIsFollowing(!wasFollowing);
 
+      // Update follower count
       setFollowers((previous) =>
-        isFollowing
+        wasFollowing
           ? Math.max(0, previous - 1)
           : previous + 1
       );
-
     } catch (error) {
-      console.error(error);
-      alert("Cannot connect to server.");
+      console.error(
+        "Follow error:",
+        error
+      );
 
+      alert(
+        "Cannot connect to server."
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  // =========================
+  // =========================================================
   // LOADING / ERROR
-  // =========================
+  // =========================================================
 
   if (message) {
     return (
       <div className="user-profile-page">
-
         <div className="profile-message-card">
 
           <div className="profile-message-icon">
-            👤
+            {message === "Loading..."
+              ? "⏳"
+              : "👤"}
           </div>
 
           <h2>
@@ -226,15 +270,16 @@ function UserProfile() {
 
           <p>{message}</p>
 
-          <Link
-            to="/news"
-            className="profile-back-button"
-          >
-            ← Back to News
-          </Link>
+          {message !== "Loading..." && (
+            <Link
+              to="/news"
+              className="profile-back-button"
+            >
+              ← Back to News
+            </Link>
+          )}
 
         </div>
-
       </div>
     );
   }
@@ -243,29 +288,63 @@ function UserProfile() {
     return (
       <div className="user-profile-page">
         <div className="profile-message-card">
-          <p>Loading...</p>
+          <div className="profile-message-icon">
+            👤
+          </div>
+
+          <h2>
+            Profile Not Found
+          </h2>
+
+          <p>
+            This user profile could not be found.
+          </p>
+
+          <Link
+            to="/news"
+            className="profile-back-button"
+          >
+            ← Back to News
+          </Link>
         </div>
       </div>
     );
   }
 
-  const initial = user.name
-    ? user.name.charAt(0).toUpperCase()
-    : "U";
+  // =========================================================
+  // PROFILE DATA
+  // =========================================================
+
+  const displayName =
+    user.name || "Unknown User";
+
+  const initial =
+    displayName
+      .charAt(0)
+      .toUpperCase() || "U";
 
   const isOwnProfile =
     currentUser &&
-    Number(currentUser.id) === Number(user.id);
+    Number(currentUser.id) ===
+      Number(user.id);
+
+  // =========================================================
+  // PAGE
+  // =========================================================
 
   return (
     <div className="user-profile-page">
 
-      {/* PROFILE HEADER */}
+      {/* =====================================================
+          PROFILE CARD
+      ===================================================== */}
 
       <div className="profile-card">
 
+        {/* COVER */}
         <div className="profile-cover"></div>
 
+        {/* MAIN PROFILE */}
         <div className="profile-main">
 
           <div className="profile-avatar">
@@ -275,7 +354,7 @@ function UserProfile() {
           <div className="profile-information">
 
             <h1>
-              {user.name}
+              {displayName}
             </h1>
 
             <span className="profile-role">
@@ -288,6 +367,7 @@ function UserProfile() {
 
           {!isOwnProfile && (
             <button
+              type="button"
               className={
                 isFollowing
                   ? "profile-follow-button following"
@@ -306,8 +386,9 @@ function UserProfile() {
 
         </div>
 
-
-        {/* PROFILE DETAILS */}
+        {/* =================================================
+            PROFILE DETAILS
+        ================================================= */}
 
         <div className="profile-details">
 
@@ -318,15 +399,16 @@ function UserProfile() {
             </span>
 
             <div>
-              <small>Username</small>
+              <small>
+                Username
+              </small>
 
               <strong>
-                {user.name}
+                {displayName}
               </strong>
             </div>
 
           </div>
-
 
           <div className="profile-detail-item">
 
@@ -335,7 +417,9 @@ function UserProfile() {
             </span>
 
             <div>
-              <small>Role</small>
+              <small>
+                Role
+              </small>
 
               <strong>
                 {user.role || "User"}
@@ -346,8 +430,9 @@ function UserProfile() {
 
         </div>
 
-
-        {/* FOLLOW STATS */}
+        {/* =================================================
+            FOLLOW STATS
+        ================================================= */}
 
         <div className="profile-stats">
 
@@ -363,9 +448,7 @@ function UserProfile() {
 
           </div>
 
-
           <div className="profile-stat-divider"></div>
-
 
           <div className="profile-stat">
 
@@ -383,8 +466,9 @@ function UserProfile() {
 
       </div>
 
-
-      {/* INFORMATION */}
+      {/* =====================================================
+          ABOUT USER
+      ===================================================== */}
 
       <div className="profile-info-card">
 
@@ -400,18 +484,22 @@ function UserProfile() {
 
         <p>
           This is the public profile of{" "}
-          <strong>{user.name}</strong>.
+          <strong>
+            {displayName}
+          </strong>.
         </p>
 
         <p className="profile-note">
           Follow this user to stay connected
-          with their activity on the news platform.
+          with their activity on the news
+          platform.
         </p>
 
       </div>
 
-
-      {/* BACK */}
+      {/* =====================================================
+          BACK TO NEWS
+      ===================================================== */}
 
       <Link
         to="/news"
