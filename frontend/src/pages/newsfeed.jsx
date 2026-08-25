@@ -305,6 +305,27 @@ function NewsFeed() {
                 key={post.id}
               >
 
+                {/* NEWS IMAGE */}
+
+                <div className="news-image-wrapper">
+
+                  <img
+                    className="news-image"
+                    src={
+                      post.image_url ||
+                      post.image ||
+                      "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80"
+                    }
+                    alt={title}
+                    onError={(e) => {
+                      e.currentTarget.src =
+                        "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80";
+                    }}
+                  />
+
+                </div>
+
+
                 {/* CARD TOP */}
 
                 <div className="news-card-top">
@@ -319,19 +340,13 @@ function NewsFeed() {
 
                 </div>
 
-
                 {/* TITLE */}
 
                 <h2 className="news-title">
-
-                  <Link
-                    to={`/news/${post.id}`}
-                  >
+                  <Link to={`/news/${post.id}`}>
                     {title}
                   </Link>
-
                 </h2>
-
 
                 {/* CONTENT */}
 

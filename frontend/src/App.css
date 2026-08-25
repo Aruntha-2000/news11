@@ -5262,3 +5262,29 @@ select:disabled {
   text-decoration: none;
   box-sizing: border-box;
 }
+/* =========================================================
+   NEWS IMAGE
+========================================================= */
+
+.news-image-wrapper {
+  width: 100%;
+  height: 220px;
+  margin-bottom: 18px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.news-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .news-card:hover .news-image {
+    transform: scale(1.03);
+  }
+}
