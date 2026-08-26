@@ -52,7 +52,7 @@ body {
 
   display: flex;
   align-items: center;
-  /* justify-content: center; */
+  justify-content: center; 
 
   padding: 40px 20px 60px;
 
@@ -173,7 +173,7 @@ body {
 
   height: 46px;
 
-  padding: 0 14px;
+  padding: 0 20px;
 
   border: 1px solid #d1d5db;
 
