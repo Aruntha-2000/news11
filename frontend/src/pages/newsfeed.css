@@ -2,21 +2,28 @@
    NEWS11 - NEWS FEED
 ========================================================= */
 
-
 /* =========================================================
-   NEWS PAGE / BACKGROUND CONTAINER
+   NEWS PAGE BACKGROUND
 ========================================================= */
 
 .news-background {
   width: 100%;
   min-height: 100vh;
 
-  padding-top: 1px;
-  padding-bottom: 60px;
+  /*
+   * IMPORTANT:
+   * Keep this transparent so the global
+   * body background image remains visible.
+   */
+  background: transparent;
+
+  padding:
+    20px 20px 70px;
+
+  margin: 0;
 
   box-sizing: border-box;
 }
-
 
 /* =========================================================
    NEWS CONTENT WIDTH
@@ -28,7 +35,9 @@
 .news-background > .error-card,
 .news-background > .empty-news,
 .news-background > .loading-card {
+
   width: 100%;
+
   max-width: 1100px;
 
   margin-left: auto;
@@ -36,7 +45,6 @@
 
   box-sizing: border-box;
 }
-
 
 /* =========================================================
    HEADER
@@ -46,8 +54,8 @@
   background:
     linear-gradient(
       135deg,
-      #2563eb,
-      #4f46e5
+      rgba(37, 99, 235, 0.97),
+      rgba(79, 70, 229, 0.97)
     );
 
   color: white;
@@ -57,19 +65,21 @@
   padding: 30px;
 
   display: flex;
+
   align-items: center;
 
   gap: 18px;
 
-  margin-top: 12px;
+  margin-top: 0;
   margin-bottom: 22px;
 
   box-shadow:
-    0 10px 30px rgba(37, 99, 235, 0.18);
+    0 12px 30px rgba(0, 0, 0, 0.18);
 
   box-sizing: border-box;
-}
 
+  backdrop-filter: blur(4px);
+}
 
 /* =========================================================
    HEADER ICON
@@ -86,7 +96,11 @@
   background:
     rgba(255, 255, 255, 0.18);
 
+  border:
+    1px solid rgba(255, 255, 255, 0.20);
+
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -95,6 +109,13 @@
   flex-shrink: 0;
 }
 
+/* =========================================================
+   HEADER TEXT
+========================================================= */
+
+.news-header > div:last-child {
+  min-width: 0;
+}
 
 /* =========================================================
    HEADER TITLE
@@ -106,8 +127,11 @@
   font-size: 30px;
 
   line-height: 1.2;
-}
 
+  font-weight: 700;
+
+  overflow-wrap: anywhere;
+}
 
 /* =========================================================
    HEADER DESCRIPTION
@@ -116,13 +140,12 @@
 .news-header p {
   margin: 0;
 
-  opacity: 0.9;
+  opacity: 0.92;
 
   font-size: 15px;
 
   line-height: 1.5;
 }
-
 
 /* =========================================================
    SUMMARY
@@ -138,15 +161,32 @@
 
   margin-bottom: 20px;
 
-  padding: 0 4px;
+  padding:
+    0 4px;
 
-  color: #6b7280;
+  color: white;
 
   font-size: 14px;
 
   box-sizing: border-box;
+
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
+/* =========================================================
+   SUMMARY ITEMS
+========================================================= */
+
+.news-summary span {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  min-height: 24px;
+}
 
 /* =========================================================
    NEWS GRID
@@ -161,22 +201,24 @@
   gap: 22px;
 
   width: 100%;
-}
 
+  align-items: stretch;
+}
 
 /* =========================================================
    NEWS CARD
 ========================================================= */
 
 .news-card {
-  background: white;
+  background:
+    rgba(255, 255, 255, 0.97);
 
   border:
-    1px solid #e5e7eb;
+    1px solid rgba(255, 255, 255, 0.7);
 
   border-radius: 16px;
 
-  padding: 22px;
+  padding: 0;
 
   transition:
     transform 0.2s ease,
@@ -184,7 +226,7 @@
     border-color 0.2s ease;
 
   box-shadow:
-    0 3px 12px rgba(0, 0, 0, 0.04);
+    0 8px 25px rgba(0, 0, 0, 0.12);
 
   display: flex;
 
@@ -192,9 +234,12 @@
 
   min-width: 0;
 
-  box-sizing: border-box;
-}
+  overflow: hidden;
 
+  box-sizing: border-box;
+
+  height: 100%;
+}
 
 /* =========================================================
    DESKTOP HOVER
@@ -207,14 +252,79 @@
       translateY(-5px);
 
     border-color:
-      #bfdbfe;
+      rgba(191, 219, 254, 0.9);
 
     box-shadow:
-      0 15px 35px rgba(0, 0, 0, 0.09);
+      0 18px 40px rgba(0, 0, 0, 0.18);
   }
 
 }
 
+/* =========================================================
+   NEWS IMAGE WRAPPER
+========================================================= */
+
+.news-image-wrapper {
+  width: 100%;
+
+  height: 230px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #e0e7ff
+    );
+
+  position: relative;
+}
+
+/* =========================================================
+   NEWS IMAGE
+========================================================= */
+
+.news-image {
+  width: 100%;
+
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  transition:
+    transform 0.35s ease;
+}
+
+/* =========================================================
+   IMAGE HOVER
+========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .news-card:hover .news-image {
+    transform:
+      scale(1.04);
+  }
+
+}
+
+/* =========================================================
+   CARD CONTENT AREA
+========================================================= */
+
+.news-card-top,
+.news-title,
+.news-content,
+.news-author,
+.news-card-footer {
+  margin-left: 22px;
+  margin-right: 22px;
+}
 
 /* =========================================================
    CARD TOP
@@ -228,11 +338,11 @@
 
   gap: 10px;
 
+  margin-top: 20px;
   margin-bottom: 14px;
 
   min-width: 0;
 }
-
 
 /* =========================================================
    CATEGORY
@@ -270,7 +380,6 @@
     70%;
 }
 
-
 /* =========================================================
    APPROVED STATUS
 ========================================================= */
@@ -287,16 +396,18 @@
 
   white-space:
     nowrap;
-}
 
+  flex-shrink: 0;
+}
 
 /* =========================================================
    TITLE
 ========================================================= */
 
 .news-title {
-  margin:
-    0 0 12px;
+  margin-top: 0;
+
+  margin-bottom: 12px;
 
   line-height:
     1.35;
@@ -304,10 +415,12 @@
   font-size:
     21px;
 
+  font-weight:
+    700;
+
   overflow-wrap:
     anywhere;
 }
-
 
 /* =========================================================
    TITLE LINK
@@ -324,7 +437,6 @@
     color 0.2s ease;
 }
 
-
 @media (hover: hover) and (pointer: fine) {
 
   .news-title a:hover {
@@ -333,7 +445,6 @@
   }
 
 }
-
 
 /* =========================================================
    CONTENT
@@ -349,8 +460,9 @@
   font-size:
     14px;
 
-  margin:
-    0 0 22px;
+  margin-top: 0;
+
+  margin-bottom: 22px;
 
   overflow-wrap:
     anywhere;
@@ -361,10 +473,12 @@
   -webkit-box-orient:
     vertical;
 
+  -webkit-line-clamp:
+    5;
+
   overflow:
     hidden;
 }
-
 
 /* =========================================================
    AUTHOR
@@ -392,7 +506,6 @@
   min-width:
     0;
 }
-
 
 /* =========================================================
    AUTHOR AVATAR
@@ -431,8 +544,10 @@
 
   font-size:
     16px;
-}
 
+  flex-shrink:
+    0;
+}
 
 /* =========================================================
    AUTHOR INFORMATION
@@ -452,7 +567,6 @@
     0;
 }
 
-
 /* =========================================================
    AUTHOR LABEL
 ========================================================= */
@@ -464,7 +578,6 @@
   color:
     #9ca3af;
 }
-
 
 /* =========================================================
    AUTHOR NAME
@@ -487,7 +600,6 @@
     nowrap;
 }
 
-
 .author-info strong a {
   color:
     #374151;
@@ -495,7 +607,6 @@
   text-decoration:
     none;
 }
-
 
 @media (hover: hover) and (pointer: fine) {
 
@@ -505,7 +616,6 @@
   }
 
 }
-
 
 /* =========================================================
    CARD FOOTER
@@ -527,10 +637,12 @@
   margin-top:
     18px;
 
+  margin-bottom:
+    22px;
+
   flex-wrap:
     wrap;
 }
-
 
 /* =========================================================
    DATE
@@ -542,8 +654,10 @@
 
   font-size:
     12px;
-}
 
+  line-height:
+    1.4;
+}
 
 /* =========================================================
    READ MORE
@@ -594,7 +708,6 @@
     border-box;
 }
 
-
 @media (hover: hover) and (pointer: fine) {
 
   .read-more:hover {
@@ -607,14 +720,13 @@
 
 }
 
-
 /* =========================================================
    LOADING CARD
 ========================================================= */
 
 .loading-card {
   background:
-    white;
+    rgba(255, 255, 255, 0.97);
 
   border-radius:
     16px;
@@ -631,10 +743,9 @@
   box-sizing:
     border-box;
 
-  margin-top:
-    10px;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.12);
 }
-
 
 .loading-card p {
   margin:
@@ -646,7 +757,6 @@
   font-size:
     14px;
 }
-
 
 /* =========================================================
    LOADING SPINNER
@@ -675,7 +785,6 @@
     newsFeedSpin 0.8s linear infinite;
 }
 
-
 @keyframes newsFeedSpin {
 
   to {
@@ -685,14 +794,13 @@
 
 }
 
-
 /* =========================================================
    ERROR CARD
 ========================================================= */
 
 .error-card {
   background:
-    white;
+    rgba(255, 255, 255, 0.97);
 
   border:
     1px solid #fecaca;
@@ -711,8 +819,10 @@
 
   margin-bottom:
     20px;
-}
 
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.10);
+}
 
 /* =========================================================
    ERROR ICON
@@ -726,7 +836,6 @@
     10px;
 }
 
-
 /* =========================================================
    ERROR TITLE
 ========================================================= */
@@ -738,7 +847,6 @@
   color:
     #111827;
 }
-
 
 /* =========================================================
    ERROR MESSAGE
@@ -754,7 +862,6 @@
   line-height:
     1.6;
 }
-
 
 /* =========================================================
    RETRY BUTTON
@@ -790,7 +897,6 @@
     transform 0.2s ease;
 }
 
-
 .retry-button:hover {
   background:
     #1d4ed8;
@@ -798,7 +904,6 @@
   transform:
     translateY(-1px);
 }
-
 
 .retry-button:disabled {
   opacity:
@@ -811,14 +916,13 @@
     none;
 }
 
-
 /* =========================================================
    EMPTY NEWS
 ========================================================= */
 
 .empty-news {
   background:
-    white;
+    rgba(255, 255, 255, 0.97);
 
   border-radius:
     16px;
@@ -834,8 +938,10 @@
 
   box-sizing:
     border-box;
-}
 
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.10);
+}
 
 /* =========================================================
    EMPTY ICON
@@ -849,7 +955,6 @@
     10px;
 }
 
-
 /* =========================================================
    EMPTY TITLE
 ========================================================= */
@@ -861,7 +966,6 @@
   color:
     #111827;
 }
-
 
 /* =========================================================
    EMPTY TEXT
@@ -878,29 +982,39 @@
     0 0 20px;
 }
 
-
 /* =========================================================
    TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .news-background {
+    padding:
+      18px 15px 60px;
+  }
+
+  .news-grid {
+    gap:
+      18px;
+  }
+
+  .news-image-wrapper {
+    height:
+      210px;
+  }
+
+}
+
+/* =========================================================
+   MOBILE / ONE COLUMN
 ========================================================= */
 
 @media (max-width: 750px) {
 
   .news-background {
-    padding-bottom:
-      50px;
+    padding:
+      15px 14px 50px;
   }
-
-
-  .news-background > .news-header,
-  .news-background > .news-summary,
-  .news-background > .news-grid,
-  .news-background > .error-card,
-  .news-background > .empty-news,
-  .news-background > .loading-card {
-    width:
-      calc(100% - 28px);
-  }
-
 
   .news-grid {
     grid-template-columns:
@@ -910,7 +1024,6 @@
       16px;
   }
 
-
   .news-header {
     padding:
       24px;
@@ -919,18 +1032,15 @@
       16px;
   }
 
-
   .news-header h1 {
     font-size:
       24px;
   }
 
-
   .news-header p {
     font-size:
       14px;
   }
-
 
   .news-summary {
     flex-direction:
@@ -943,14 +1053,17 @@
       6px;
   }
 
-
   .news-card {
-    padding:
-      20px;
+    border-radius:
+      16px;
+  }
+
+  .news-image-wrapper {
+    height:
+      230px;
   }
 
 }
-
 
 /* =========================================================
    MOBILE
@@ -959,21 +1072,9 @@
 @media (max-width: 500px) {
 
   .news-background {
-    padding-bottom:
-      40px;
+    padding:
+      10px 10px 40px;
   }
-
-
-  .news-background > .news-header,
-  .news-background > .news-summary,
-  .news-background > .news-grid,
-  .news-background > .error-card,
-  .news-background > .empty-news,
-  .news-background > .loading-card {
-    width:
-      calc(100% - 20px);
-  }
-
 
   .news-header {
     border-radius:
@@ -985,13 +1086,9 @@
     gap:
       12px;
 
-    margin-top:
-      8px;
-
     margin-bottom:
       16px;
   }
-
 
   .news-header-icon {
     width:
@@ -1010,7 +1107,6 @@
       23px;
   }
 
-
   .news-header h1 {
     font-size:
       21px;
@@ -1018,7 +1114,6 @@
     margin-bottom:
       4px;
   }
-
 
   .news-header p {
     font-size:
@@ -1028,7 +1123,6 @@
       1.4;
   }
 
-
   .news-summary {
     font-size:
       13px;
@@ -1037,30 +1131,40 @@
       14px;
   }
 
-
   .news-grid {
     gap:
       14px;
   }
 
-
   .news-card {
-    padding:
-      16px;
-
     border-radius:
       14px;
-
-    box-shadow:
-      0 2px 10px rgba(0, 0, 0, 0.04);
   }
 
+  .news-image-wrapper {
+    height:
+      200px;
+  }
+
+  .news-card-top,
+  .news-title,
+  .news-content,
+  .news-author,
+  .news-card-footer {
+    margin-left:
+      16px;
+
+    margin-right:
+      16px;
+  }
 
   .news-card-top {
+    margin-top:
+      16px;
+
     margin-bottom:
       11px;
   }
-
 
   .category-badge {
     font-size:
@@ -1070,12 +1174,10 @@
       5px 9px;
   }
 
-
   .news-status {
     font-size:
       11px;
   }
-
 
   .news-title {
     font-size:
@@ -1088,7 +1190,6 @@
       10px;
   }
 
-
   .news-content {
     font-size:
       14px;
@@ -1100,7 +1201,6 @@
       17px;
   }
 
-
   .news-author {
     padding-top:
       12px;
@@ -1108,7 +1208,6 @@
     gap:
       9px;
   }
-
 
   .author-avatar {
     width:
@@ -1124,33 +1223,31 @@
       14px;
   }
 
-
   .author-label {
     font-size:
       10px;
   }
-
 
   .author-info strong {
     font-size:
       13px;
   }
 
-
   .news-card-footer {
     margin-top:
       14px;
+
+    margin-bottom:
+      16px;
 
     gap:
       8px;
   }
 
-
   .news-date {
     font-size:
       11px;
   }
-
 
   .read-more {
     min-height:
@@ -1163,7 +1260,6 @@
       12px;
   }
 
-
   .loading-card {
     padding:
       45px 15px;
@@ -1172,7 +1268,6 @@
       14px;
   }
 
-
   .error-card {
     padding:
       40px 15px;
@@ -1180,7 +1275,6 @@
     border-radius:
       14px;
   }
-
 
   .empty-news {
     padding:
@@ -1192,23 +1286,16 @@
 
 }
 
-
 /* =========================================================
    VERY SMALL PHONES
 ========================================================= */
 
 @media (max-width: 360px) {
 
-  .news-background > .news-header,
-  .news-background > .news-summary,
-  .news-background > .news-grid,
-  .news-background > .error-card,
-  .news-background > .empty-news,
-  .news-background > .loading-card {
-    width:
-      calc(100% - 16px);
+  .news-background {
+    padding:
+      8px 8px 30px;
   }
-
 
   .news-header {
     padding:
@@ -1217,7 +1304,6 @@
     gap:
       10px;
   }
-
 
   .news-header-icon {
     width:
@@ -1233,36 +1319,47 @@
       20px;
   }
 
-
   .news-header h1 {
     font-size:
       19px;
   }
-
 
   .news-header p {
     font-size:
       12px;
   }
 
+  .news-card-top,
+  .news-title,
+  .news-content,
+  .news-author,
+  .news-card-footer {
+    margin-left:
+      14px;
 
-  .news-card {
-    padding:
+    margin-right:
       14px;
   }
 
+  .news-image-wrapper {
+    height:
+      180px;
+  }
+
+  .news-card {
+    border-radius:
+      13px;
+  }
 
   .news-title {
     font-size:
       18px;
   }
 
-
   .news-content {
     font-size:
       13px;
   }
-
 
   .news-card-footer {
     align-items:
@@ -1272,14 +1369,12 @@
       column;
   }
 
-
   .read-more {
     width:
       100%;
   }
 
 }
-
 
 /* =========================================================
    REDUCED MOTION
@@ -1288,6 +1383,7 @@
 @media (prefers-reduced-motion: reduce) {
 
   .news-card,
+  .news-image,
   .read-more,
   .retry-button,
   .news-title a {
@@ -1299,5 +1395,4 @@
     animation:
       none;
   }
-
 }

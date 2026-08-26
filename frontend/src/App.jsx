@@ -1,183 +1,168 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
-
-import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
-import Register from "./pages/Register";
+// =====================================================
+// PAGES
+// =====================================================
+
 import Login from "./pages/Login";
-import Profile from "./pages/profile";
-import CreatePost from "./pages/createpost";
-import AdminDashboard from "./pages/admindashboard";
+import Register from "./pages/newsfeed";
 import NewsFeed from "./pages/newsfeed";
 import NewsDetails from "./pages/newdetails";
-import UserProfile from "./pages/userprofile";
+import Profile from "./pages/profile";
+import CreatePost from "./pages/createpost";
 import Notifications from "./pages/notification";
 import Reports from "./pages/report";
-import Feedback from "./pages/feedback";
-import FeedbackAdmin from "./pages/feedbackadmin";
-import ForgotPassword from "./pages/forgotpassword";
-import ResetPassword from "./pages/resetpassword";
+import AdminDashboard from "./pages/admindashboard";
 
-import Protectedroute from "./component/protectedroutes";
-import FloatingSidebar from "./floatingsidebar"; // <-- NEW IMPORT
+// =====================================================
+// COMPONENTS
+// =====================================================
+
+import Navbar from "./component/Navbar";
 
 function App() {
-  const [notificationCount, setNotificationCount] = useState(0);
-
-  // =========================
-  // NOTIFICATION COUNT
-  // =========================
-  useEffect(() => {
-    const getUnreadCount = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        setNotificationCount(0);
-        return;
-      }
-      try {
-        const response = await fetch(
-          "https://news-11-production.up.railway.app/api/notifications/unread-count",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setNotificationCount(data.count || 0);
-        } else {
-          setNotificationCount(0);
-        }
-      } catch (error) {
-        console.error("Notification count error:", error);
-      }
-    };
-
-    getUnreadCount();
-    const interval = setInterval(getUnreadCount, 10000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
   return (
     <BrowserRouter>
-      
-      {/* =========================
-          NEW FLOATING SIDEBAR
-      ========================= */}
-      <FloatingSidebar />
+      <div className="app">
 
-      {/* =========================
-          ROUTES
-      ========================= */}
-      <main className="page-container">
-        <Routes>
-          {/* HOME & AUTH */}
-          <Route path="/" element={<NewsFeed />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+        {/* =================================================
+            NAVBAR
+        ================================================= */}
 
-          {/* PROFILE */}
-          <Route
-            path="/profile"
-            element={
-              <Protectedroute>
-                <Profile />
-              </Protectedroute>
-            }
-          />
+        <Navbar />
 
-          {/* USER PROFILE */}
-          <Route
-            path="/user/:id"
-            element={
-              <Protectedroute>
-                <UserProfile />
-              </Protectedroute>
-            }
-          />
+        {/* =================================================
+            MAIN CONTENT
+        ================================================= */}
 
-          {/* CREATE NEWS */}
-          <Route
-            path="/create-news"
-            element={
-              <Protectedroute>
-                <CreatePost />
-              </Protectedroute>
-            }
-          />
+        <main className="app-content">
 
-          {/* ADMIN */}
-          <Route
-            path="/admin"
-            element={
-              <Protectedroute>
-                <AdminDashboard />
-              </Protectedroute>
-            }
-          />
+          <Routes>
 
-          {/* NEWS */}
-          <Route path="/news/:id" element={<NewsDetails />} />
+            {/* =================================================
+                HOME
+            ================================================= */}
 
             <Route
-            path="/forgot-password"
-            element={<ForgotPassword />}
-          />
+              path="/"
+              element={<NewsFeed />}
+            />
 
-          <Route
-            path="/reset-password/:token"
-            element={<ResetPassword />}
-          />
-          
-          {/* NOTIFICATIONS */}
-          <Route
-            path="/notifications"
-            element={
-              <Protectedroute>
-                <Notifications />
-              </Protectedroute>
-            }
-          />
+            {/* =================================================
+                AUTHENTICATION
+            ================================================= */}
 
-          {/* REPORTS */}
-          <Route
-            path="/report"
-            element={
-              <Protectedroute>
-                <Reports />
-              </Protectedroute>
-            }
-          />
+            <Route
+              path="/login"
+              element={<Login />}
+            />
 
-          {/* FEEDBACK */}
-          <Route
-            path="/feedback"
-            element={
-              <Protectedroute>
-                <Feedback />
-              </Protectedroute>
-            }
-          />
+            <Route
+              path="/register"
+              element={<Register />}
+            />
 
-          {/* ADMIN FEEDBACK */}
-          <Route
-            path="/admin/feedback"
-            element={
-              <Protectedroute>
-                <FeedbackAdmin />
-              </Protectedroute>
-            }
-          />
-        </Routes>
-      </main>
+            {/* =================================================
+                NEWS
+            ================================================= */}
+
+            <Route
+              path="/news"
+              element={<NewsFeed />}
+            />
+
+            <Route
+              path="/news/:id"
+              element={<NewsDetails />}
+            />
+
+            {/* =================================================
+                USER PROFILE
+            ================================================= */}
+
+            <Route
+              path="/profile"
+              element={<Profile />}
+            />
+
+            {/* =================================================
+                CREATE NEWS
+            ================================================= */}
+
+            <Route
+              path="/create-post"
+              element={<CreatePost />}
+            />
+
+            <Route
+              path="/create-news"
+              element={<CreatePost />}
+            />
+
+            {/* =================================================
+                NOTIFICATIONS
+            ================================================= */}
+
+            <Route
+              path="/notifications"
+              element={<Notifications />}
+            />
+
+            {/* =================================================
+                REPORTS
+            ================================================= */}
+
+            <Route
+              path="/reports"
+              element={<Reports />}
+            />
+
+            {/* =================================================
+                ADMIN DASHBOARD
+            ================================================= */}
+
+            <Route
+              path="/admin"
+              element={<AdminDashboard />}
+            />
+
+            {/* =================================================
+                404
+            ================================================= */}
+
+            <Route
+              path="*"
+              element={
+                <div className="not-found">
+
+                  <div className="not-found-icon">
+                    🔎
+                  </div>
+
+                  <h1>404</h1>
+
+                  <p>
+                    The page you are looking for
+                    could not be found.
+                  </p>
+
+                  <a
+                    href="/"
+                    className="not-found-button"
+                  >
+                    ← Back to News
+                  </a>
+
+                </div>
+              }
+            />
+
+          </Routes>
+
+        </main>
+
+      </div>
     </BrowserRouter>
   );
 }

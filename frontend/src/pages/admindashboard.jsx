@@ -1,54 +1,67 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 function AdminDashboard() {
-  const [posts, setPosts] = useState([]);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [processingId, setProcessingId] = useState(null);
-
   const API_URL =
     "https://news-11-production.up.railway.app";
 
-  // ==========================================
-  // GET PENDING NEWS
-  // ==========================================
+  const [posts, setPosts] = useState([]);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [processingId, setProcessingId] = useState(null);
 
-  const getPendingPosts = async () => {
+  // =====================================================
+  // GET PENDING NEWS
+  // =====================================================
+
+  const getPendingPosts = useCallback(async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
       setMessage("Please login as admin.");
+      setMessageType("error");
       setLoading(false);
+      setPosts([]);
       return;
     }
 
     setLoading(true);
     setMessage("");
+    setMessageType("");
 
     try {
       const response = await fetch(
         `${API_URL}/api/admin/pending-posts`,
         {
           method: "GET",
+
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      const data = await response.json();
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
 
       if (!response.ok) {
-        setMessage(
+        throw new Error(
           data.message ||
             "Unable to load pending news."
         );
-
-        setPosts([]);
-        return;
       }
 
-      setPosts(data.posts || []);
+      setPosts(
+        Array.isArray(data.posts)
+          ? data.posts
+          : []
+      );
+
     } catch (error) {
       console.error(
         "Get pending posts error:",
@@ -56,32 +69,44 @@ function AdminDashboard() {
       );
 
       setMessage(
-        "Cannot connect to server."
+        error.message ||
+          "Cannot connect to server."
       );
 
+      setMessageType("error");
+
       setPosts([]);
+
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  // ==========================================
-  // LOAD PENDING NEWS
-  // ==========================================
+
+  // =====================================================
+  // LOAD ON PAGE OPEN
+  // =====================================================
 
   useEffect(() => {
     getPendingPosts();
-  }, []);
+  }, [getPendingPosts]);
 
-  // ==========================================
+
+  // =====================================================
   // APPROVE / REJECT NEWS
-  // ==========================================
+  // =====================================================
 
   const updatePost = async (id, action) => {
-    const token = localStorage.getItem("token");
+    const token =
+      localStorage.getItem("token");
 
     if (!token) {
-      setMessage("Please login as admin.");
+      setMessage(
+        "Please login as admin."
+      );
+
+      setMessageType("error");
+
       return;
     }
 
@@ -89,42 +114,66 @@ function AdminDashboard() {
       return;
     }
 
+    if (
+      action !== "approve" &&
+      action !== "reject"
+    ) {
+      return;
+    }
+
     setProcessingId(id);
+
     setMessage("");
+    setMessageType("");
 
     try {
       const response = await fetch(
         `${API_URL}/api/admin/posts/${id}/${action}`,
         {
           method: "PUT",
+
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization:
+              `Bearer ${token}`,
           },
         }
       );
 
-      const data = await response.json();
+      let data = {};
 
-      if (!response.ok) {
-        setMessage(
-          data.message ||
-            "Unable to update news."
-        );
-
-        return;
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
       }
 
-      setMessage(
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            `Unable to ${action} news.`
+        );
+      }
+
+      const successMessage =
         data.message ||
-          `News ${action}d successfully.`
+        (
+          action === "approve"
+            ? "News approved successfully."
+            : "News rejected successfully."
+        );
+
+      setMessage(successMessage);
+      setMessageType("success");
+
+      // Remove processed post
+      setPosts(
+        (currentPosts) =>
+          currentPosts.filter(
+            (post) =>
+              post.id !== id
+          )
       );
 
-      // Remove processed news
-      setPosts((currentPosts) =>
-        currentPosts.filter(
-          (post) => post.id !== id
-        )
-      );
     } catch (error) {
       console.error(
         "Update post error:",
@@ -132,45 +181,74 @@ function AdminDashboard() {
       );
 
       setMessage(
-        "Cannot connect to server."
+        error.message ||
+          "Cannot connect to server."
       );
+
+      setMessageType("error");
+
     } finally {
       setProcessingId(null);
     }
   };
 
-  // ==========================================
+
+  // =====================================================
   // IMAGE URL
-  // ==========================================
+  // =====================================================
 
   const getImageUrl = (image) => {
     if (!image) {
       return null;
     }
 
-    if (
-      image.startsWith("http://") ||
-      image.startsWith("https://")
-    ) {
-      return image;
+    const cleanImage =
+      String(image).trim();
+
+    if (!cleanImage) {
+      return null;
     }
 
-    return `${API_URL}/${image.replace(
+    if (
+      cleanImage.startsWith(
+        "http://"
+      ) ||
+      cleanImage.startsWith(
+        "https://"
+      )
+    ) {
+      return cleanImage;
+    }
+
+    return `${API_URL}/${cleanImage.replace(
       /^\/+/,
       ""
     )}`;
   };
 
-  // ==========================================
+
+  // =====================================================
+  // IMAGE ERROR
+  // =====================================================
+
+  const handleImageError = (event) => {
+    event.currentTarget.style.display =
+      "none";
+  };
+
+
+  // =====================================================
   // RETURN
-  // ==========================================
+  // =====================================================
 
   return (
     <div className="page-background admin-background">
 
       <div className="admin-page">
 
-        {/* HEADER */}
+        {/* =================================================
+            HEADER
+        ================================================= */}
 
         <div className="admin-header">
 
@@ -181,6 +259,7 @@ function AdminDashboard() {
             </span>
 
             <div>
+
               <h1>
                 Admin Dashboard
               </h1>
@@ -188,9 +267,11 @@ function AdminDashboard() {
               <p>
                 Review and manage submitted news
               </p>
+
             </div>
 
           </div>
+
 
           <button
             type="button"
@@ -204,25 +285,14 @@ function AdminDashboard() {
         </div>
 
 
-        {/* MESSAGE */}
+        {/* =================================================
+            MESSAGE
+        ================================================= */}
 
         {message && (
           <div
             className={`admin-message ${
-              message
-                .toLowerCase()
-                .includes("cannot") ||
-              message
-                .toLowerCase()
-                .includes("error") ||
-              message
-                .toLowerCase()
-                .includes("please") ||
-              message
-                .toLowerCase()
-                .includes("unable")
-                ? "error"
-                : "success"
+              messageType
             }`}
           >
             {message}
@@ -230,7 +300,9 @@ function AdminDashboard() {
         )}
 
 
-        {/* STAT */}
+        {/* =================================================
+            STAT
+        ================================================= */}
 
         <div className="admin-stats">
 
@@ -257,7 +329,9 @@ function AdminDashboard() {
         </div>
 
 
-        {/* PENDING HEADER */}
+        {/* =================================================
+            PENDING HEADER
+        ================================================= */}
 
         <div className="pending-header">
 
@@ -281,7 +355,9 @@ function AdminDashboard() {
         </div>
 
 
-        {/* LOADING */}
+        {/* =================================================
+            LOADING
+        ================================================= */}
 
         {loading && (
           <div className="admin-loading">
@@ -296,7 +372,9 @@ function AdminDashboard() {
         )}
 
 
-        {/* EMPTY */}
+        {/* =================================================
+            EMPTY
+        ================================================= */}
 
         {!loading &&
           posts.length === 0 && (
@@ -327,7 +405,9 @@ function AdminDashboard() {
           )}
 
 
-        {/* NEWS LIST */}
+        {/* =================================================
+            NEWS LIST
+        ================================================= */}
 
         {!loading &&
           posts.length > 0 && (
@@ -336,10 +416,30 @@ function AdminDashboard() {
 
               {posts.map((post) => {
 
-                const imageUrl = getImageUrl(post.image_url || post.image);
+                const imageUrl =
+                  getImageUrl(
+                    post.image_url ||
+                    post.image
+                  );
 
                 const isProcessing =
                   processingId === post.id;
+
+                const author =
+                  post.author ||
+                  "Unknown Author";
+
+                const title =
+                  post.title ||
+                  "Untitled News";
+
+                const category =
+                  post.category ||
+                  "News";
+
+                const status =
+                  post.status ||
+                  "pending";
 
                 return (
                   <article
@@ -347,29 +447,29 @@ function AdminDashboard() {
                     key={post.id}
                   >
 
-                    {/* IMAGE */}
+                    {/* =================================================
+                        IMAGE
+                    ================================================= */}
 
                     {imageUrl && (
                       <div className="admin-news-image">
 
                         <img
                           src={imageUrl}
-                          alt={
-                            post.title ||
-                            "News image"
-                          }
+                          alt={title}
                           loading="lazy"
-                          onError={(event) => {
-                            event.currentTarget.style.display =
-                              "none";
-                          }}
+                          onError={
+                            handleImageError
+                          }
                         />
 
                       </div>
                     )}
 
 
-                    {/* CONTENT */}
+                    {/* =================================================
+                        CONTENT
+                    ================================================= */}
 
                     <div className="admin-news-content">
 
@@ -378,13 +478,11 @@ function AdminDashboard() {
                       <div className="admin-news-top">
 
                         <span className="category-badge">
-                          {post.category ||
-                            "News"}
+                          {category}
                         </span>
 
                         <span className="status-badge">
-                          {post.status ||
-                            "pending"}
+                          {status}
                         </span>
 
                       </div>
@@ -393,8 +491,7 @@ function AdminDashboard() {
                       {/* TITLE */}
 
                       <h3 className="admin-news-title">
-                        {post.title ||
-                          "Untitled News"}
+                        {title}
                       </h3>
 
 
@@ -403,10 +500,11 @@ function AdminDashboard() {
                       <div className="author-info">
 
                         <div className="author-avatar">
-                          {(post.author ||
-                            "U")
+
+                          {author
                             .charAt(0)
                             .toUpperCase()}
+
                         </div>
 
                         <div>
@@ -416,8 +514,7 @@ function AdminDashboard() {
                           </span>
 
                           <strong>
-                            {post.author ||
-                              "Unknown Author"}
+                            {author}
                           </strong>
 
                         </div>
