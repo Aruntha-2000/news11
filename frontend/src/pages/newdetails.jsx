@@ -16,8 +16,8 @@ const API_BASE_URL =
 // =====================================================
 
 const newsImages = [
-  "/images/news-bg.jpg",
-  "/images/admin-bg.jpg",
+  "/images/123.jpg",
+  "/images/123.jpg",
 ];
 
 // =====================================================
