@@ -690,7 +690,7 @@ img {
   margin:
     0 0 8px;
 
-  color: #111827;
+  color: #dadee7;
 
   font-size: 21px;
 }
@@ -917,7 +917,7 @@ img {
   margin:
     0 0 15px;
 
-  color: #111827;
+  color: #c9ccd4;
 
   font-size: 22px;
 
@@ -982,14 +982,14 @@ img {
 
 
 .admin-news-content .author-info span {
-  color: #9ca3af;
+  color: #5b88d6;
 
   font-size: 11px;
 }
 
 
 .admin-news-content .author-info strong {
-  color: #374151;
+  color: #5a87cf;
 
   font-size: 13px;
 
@@ -1006,7 +1006,7 @@ img {
 ========================================================= */
 
 .admin-news-description {
-  color: #4b5563;
+  color: #527fbe;
 
   font-size: 14px;
 
