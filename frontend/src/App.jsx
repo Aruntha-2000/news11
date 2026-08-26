@@ -15,7 +15,7 @@ import ForgotPassword from "./pages/forgotpassword";
 import ResetPassword from "./pages/resetpassword";
 
 // Components
-import Navbar from "./components/Navbar";
+import Navbar from "./component/Navbar";
 
 function App() {
   return (
