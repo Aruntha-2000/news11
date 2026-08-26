@@ -1,74 +1,171 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+const API_URL =
+  "https://news-11-production.up.railway.app";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
 
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ==========================================
+  // HANDLE INPUT
+  // ==========================================
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+
+    setFormData((currentData) => ({
+      ...currentData,
+      [name]: value,
+    }));
 
     if (message) {
       setMessage("");
+      setMessageType("");
     }
   };
+
+  // ==========================================
+  // REGISTER
+  // ==========================================
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setMessage("");
+    if (loading) {
+      return;
+    }
+
+    const name = formData.name.trim();
+    const email = formData.email.trim().toLowerCase();
+    const password = formData.password;
+
+    // ========================================
+    // VALIDATION
+    // ========================================
+
+    if (!name) {
+      setMessage("Please enter your name.");
+      setMessageType("error");
+      return;
+    }
+
+    if (!email) {
+      setMessage("Please enter your email address.");
+      setMessageType("error");
+      return;
+    }
+
+    if (!password) {
+      setMessage("Please enter a password.");
+      setMessageType("error");
+      return;
+    }
+
+    if (password.length < 6) {
+      setMessage(
+        "Password must be at least 6 characters."
+      );
+      setMessageType("error");
+      return;
+    }
+
     setLoading(true);
+    setMessage("Creating your account...");
+    setMessageType("loading");
 
     try {
       const response = await fetch(
-        "https://news-11-production.up.railway.app/api/auth/register",
+        `${API_URL}/api/auth/register`,
         {
           method: "POST",
+
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData)
+
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+          }),
         }
       );
 
-      const data = await response.json();
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      // ========================================
+      // ERROR
+      // ========================================
 
       if (!response.ok) {
         setMessage(
-          data.message || "Registration failed."
+          data.message ||
+            "Registration failed. Please try again."
         );
+
+        setMessageType("error");
         return;
       }
 
+      // ========================================
+      // SUCCESS
+      // ========================================
+
       setMessage(
-        "Registration successful! You can now login."
+        data.message ||
+          "Registration successful! You can now login."
       );
+
+      setMessageType("success");
 
       setFormData({
         name: "",
         email: "",
-        password: ""
+        password: "",
       });
 
+      // Redirect to login after short delay
+      setTimeout(() => {
+        navigate("/login");
+      }, 1200);
+
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error(
+        "Registration error:",
+        error
+      );
 
       setMessage(
-        "Cannot connect to the server."
+        "Cannot connect to the server. Please try again."
       );
+
+      setMessageType("error");
 
     } finally {
       setLoading(false);
     }
   };
+
+  // ==========================================
+  // UI
+  // ==========================================
 
   return (
     <div className="page-background register-background">
@@ -77,7 +174,9 @@ function Register() {
 
         <div className="register-card">
 
-          {/* HEADER */}
+          {/* ==================================
+              HEADER
+          ================================== */}
 
           <div className="register-header">
 
@@ -96,7 +195,9 @@ function Register() {
           </div>
 
 
-          {/* FORM */}
+          {/* ==================================
+              FORM
+          ================================== */}
 
           <form onSubmit={handleSubmit}>
 
@@ -116,6 +217,7 @@ function Register() {
                 onChange={handleChange}
                 placeholder="Enter your name"
                 autoComplete="name"
+                maxLength={100}
                 required
                 disabled={loading}
               />
@@ -162,55 +264,77 @@ function Register() {
                 onChange={handleChange}
                 placeholder="Create a password"
                 autoComplete="new-password"
-                required
                 minLength={6}
+                required
                 disabled={loading}
               />
 
-              <small>
+              <span className="field-hint">
                 Password must be at least 6 characters.
-              </small>
+              </span>
 
             </div>
 
 
-            {/* MESSAGE */}
+            {/* ==================================
+                MESSAGE
+            ================================== */}
 
             {message && (
               <div
-                className={`register-message ${
-                  message.includes("successful")
-                    ? "success"
-                    : "error"
-                }`}
+                className={`register-message ${messageType}`}
+                role="alert"
               >
-                {message.includes("successful")
-                  ? "✓"
-                  : "⚠"}
+
+                {messageType === "loading" && (
+                  <span className="message-spinner"></span>
+                )}
+
+                {messageType === "success" && (
+                  <span>✓</span>
+                )}
+
+                {messageType === "error" && (
+                  <span>⚠</span>
+                )}
 
                 <span>
                   {message}
                 </span>
+
               </div>
             )}
 
 
-            {/* BUTTON */}
+            {/* ==================================
+                REGISTER BUTTON
+            ================================== */}
 
             <button
               type="submit"
               className="register-button"
               disabled={loading}
             >
-              {loading
-                ? "Creating account..."
-                : "📝 Create Account"}
+
+              {loading ? (
+                <>
+                  <span className="button-spinner"></span>
+                  Creating account...
+                </>
+              ) : (
+                <>
+                  📝 Create Account
+                </>
+              )}
+
             </button>
 
           </form>
 
 
-          {/* LOGIN */}
+          {/* ==================================
+              LOGIN
+          ================================== */}
 
           <div className="register-login">
 
@@ -218,9 +342,9 @@ function Register() {
               Already have an account?
             </span>
 
-            <a href="/login">
+            <Link to="/login">
               Login
-            </a>
+            </Link>
 
           </div>
 

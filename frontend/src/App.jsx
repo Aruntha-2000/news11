@@ -27,72 +27,39 @@ function App() {
         <main className="app-content">
           <Routes>
 
-            {/* ==============================
-                HOME
-            ============================== */}
+            {/* HOME */}
+            <Route path="/" element={<NewsFeed />} />
 
-            <Route
-              path="/"
-              element={<NewsFeed />}
-            />
-
-            {/* ==============================
-                AUTHENTICATION
-            ============================== */}
-
-            <Route
-              path="/login"
-              element={<Login />}
-            />
-
-            <Route
-              path="/register"
-              element={<Register />}
-            />
-
-            <Route
-              path="/Register"
-              element={<Register />}
-            />
+            {/* AUTHENTICATION */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/Register" element={<Register />} />
 
             <Route
               path="/forgot-password"
               element={<ForgotPassword />}
             />
 
-            {/* Password reset link from email */}
             <Route
               path="/reset-password/:token"
               element={<ResetPassword />}
             />
 
-            {/* ==============================
-                NEWS
-            ============================== */}
-
-            <Route
-              path="/news"
-              element={<NewsFeed />}
-            />
+            {/* NEWS */}
+            <Route path="/news" element={<NewsFeed />} />
 
             <Route
               path="/news/:id"
               element={<NewsDetails />}
             />
 
-            {/* ==============================
-                USER
-            ============================== */}
-
+            {/* USER */}
             <Route
               path="/profile"
               element={<Profile />}
             />
 
-            {/* ==============================
-                CREATE NEWS
-            ============================== */}
-
+            {/* CREATE NEWS */}
             <Route
               path="/create-post"
               element={<CreatePost />}
@@ -103,37 +70,25 @@ function App() {
               element={<CreatePost />}
             />
 
-            {/* ==============================
-                NOTIFICATIONS
-            ============================== */}
-
+            {/* NOTIFICATIONS */}
             <Route
               path="/notifications"
               element={<Notifications />}
             />
 
-            {/* ==============================
-                REPORTS
-            ============================== */}
-
+            {/* REPORTS */}
             <Route
               path="/reports"
               element={<Reports />}
             />
 
-            {/* ==============================
-                ADMIN
-            ============================== */}
-
+            {/* ADMIN */}
             <Route
               path="/admin"
               element={<AdminDashboard />}
             />
 
-            {/* ==============================
-                404
-            ============================== */}
-
+            {/* 404 */}
             <Route
               path="*"
               element={

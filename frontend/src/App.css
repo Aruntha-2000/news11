@@ -56,7 +56,47 @@ body {
 
   overflow-x: hidden;
 }
+body {
+  margin: 0;
+  padding: 0;
 
+  min-width: 320px;
+  min-height: 100vh;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: #111827;
+
+  background-color: #0f172a;
+
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -1;
+
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/background.jpg");
+
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  pointer-events: none;
+}
 
 /* =========================================================
    ROOT
