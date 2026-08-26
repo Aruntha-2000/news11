@@ -10,20 +10,19 @@ const API_BASE_URL =
   "https://news-11-production.up.railway.app";
 
 // =====================================================
-// ROTATING NEWS IMAGES
+// LOCAL NEWS IMAGES
+// Images are inside:
+// frontend/public/images/
 // =====================================================
 
 const newsImages = [
-  "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80",
-
-  "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80",
-
-  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1200&q=80",
-
-  "https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=1200&q=80",
-
-  "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=1200&q=80"
+  "/images/news-bg.jpg",
+  "/images/admin-bg.jpg",
 ];
+
+// =====================================================
+// NEWS DETAILS
+// =====================================================
 
 function NewsDetails() {
   const { id } = useParams();
@@ -34,9 +33,8 @@ function NewsDetails() {
 
   const [post, setPost] = useState(null);
 
-  const [message, setMessage] = useState(
-    "Loading news..."
-  );
+  const [message, setMessage] =
+    useState("Loading news...");
 
   // =====================================================
   // ROTATING IMAGE
@@ -44,6 +42,13 @@ function NewsDetails() {
 
   const [currentImageIndex, setCurrentImageIndex] =
     useState(0);
+
+  // =====================================================
+  // IMAGE ERROR
+  // =====================================================
+
+  const [imageError, setImageError] =
+    useState(false);
 
   // =====================================================
   // USER
@@ -56,17 +61,21 @@ function NewsDetails() {
   // LIKES
   // =====================================================
 
-  const [likeCount, setLikeCount] = useState(0);
+  const [likeCount, setLikeCount] =
+    useState(0);
 
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] =
+    useState(false);
 
   // =====================================================
   // COMMENTS
   // =====================================================
 
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] =
+    useState([]);
 
-  const [commentText, setCommentText] = useState("");
+  const [commentText, setCommentText] =
+    useState("");
 
   const [commentMessage, setCommentMessage] =
     useState("");
@@ -75,11 +84,14 @@ function NewsDetails() {
   // REPLIES
   // =====================================================
 
-  const [replies, setReplies] = useState({});
+  const [replies, setReplies] =
+    useState({});
 
-  const [replyText, setReplyText] = useState({});
+  const [replyText, setReplyText] =
+    useState({});
 
-  const [replyMessage, setReplyMessage] = useState({});
+  const [replyMessage, setReplyMessage] =
+    useState({});
 
   // =====================================================
   // REPORT
@@ -95,19 +107,37 @@ function NewsDetails() {
     useState("");
 
   // =====================================================
-  // ROTATE IMAGE EVERY 30 SECONDS
+  // RESET IMAGE WHEN NEWS CHANGES
   // =====================================================
 
   useEffect(() => {
+    setCurrentImageIndex(0);
+    setImageError(false);
+  }, [id]);
+
+  // =====================================================
+  // ROTATE LOCAL BACKGROUND IMAGE
+  // EVERY 30 SECONDS
+  // =====================================================
+
+  useEffect(() => {
+    if (newsImages.length <= 1) {
+      return;
+    }
+
     const timer = setInterval(() => {
       setCurrentImageIndex((previous) => {
         return (
           (previous + 1) % newsImages.length
         );
       });
+
+      setImageError(false);
     }, 30000);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+    };
   }, []);
 
   // =====================================================
@@ -123,12 +153,15 @@ function NewsDetails() {
           `${API_BASE_URL}/api/news/${id}`
         );
 
-        const data = await response.json();
+        const data =
+          await response.json();
 
         if (!response.ok) {
           setMessage(
-            data.message || "News not found."
+            data.message ||
+              "News not found."
           );
+
           return;
         }
 
@@ -168,8 +201,8 @@ function NewsDetails() {
           {
             headers: {
               Authorization:
-                `Bearer ${token}`
-            }
+                `Bearer ${token}`,
+            },
           }
         );
 
@@ -270,8 +303,9 @@ function NewsDetails() {
       if (response.ok) {
         setReplies((previous) => ({
           ...previous,
+
           [commentId]:
-            data.replies || []
+            data.replies || [],
         }));
       }
     } catch (error) {
@@ -294,6 +328,7 @@ function NewsDetails() {
       alert(
         "Please login to like this news."
       );
+
       return;
     }
 
@@ -301,15 +336,14 @@ function NewsDetails() {
       const response = await fetch(
         `${API_BASE_URL}/api/likes/${id}`,
         {
-          method:
-            liked
-              ? "DELETE"
-              : "POST",
+          method: liked
+            ? "DELETE"
+            : "POST",
 
           headers: {
             Authorization:
-              `Bearer ${token}`
-          }
+              `Bearer ${token}`,
+          },
         }
       );
 
@@ -319,8 +353,9 @@ function NewsDetails() {
       if (!response.ok) {
         alert(
           data.message ||
-          "Unable to update like."
+            "Unable to update like."
         );
+
         return;
       }
 
@@ -328,7 +363,9 @@ function NewsDetails() {
         data.likeCount || 0
       );
 
-      setLiked(!liked);
+      setLiked(
+        !liked
+      );
     } catch (error) {
       console.error(
         "Like error:",
@@ -353,6 +390,7 @@ function NewsDetails() {
       setReportMessage(
         "Please login to report this news."
       );
+
       return;
     }
 
@@ -360,6 +398,7 @@ function NewsDetails() {
       setReportMessage(
         "Please enter a reason."
       );
+
       return;
     }
 
@@ -374,13 +413,13 @@ function NewsDetails() {
               "application/json",
 
             Authorization:
-              `Bearer ${token}`
+              `Bearer ${token}`,
           },
 
           body: JSON.stringify({
             reason:
-              reportReason.trim()
-          })
+              reportReason.trim(),
+          }),
         }
       );
 
@@ -390,8 +429,9 @@ function NewsDetails() {
       if (!response.ok) {
         setReportMessage(
           data.message ||
-          "Unable to submit report."
+            "Unable to submit report."
         );
+
         return;
       }
 
@@ -428,6 +468,7 @@ function NewsDetails() {
       setCommentMessage(
         "Please login to comment."
       );
+
       return;
     }
 
@@ -435,6 +476,7 @@ function NewsDetails() {
       setCommentMessage(
         "Comment cannot be empty."
       );
+
       return;
     }
 
@@ -449,13 +491,13 @@ function NewsDetails() {
               "application/json",
 
             Authorization:
-              `Bearer ${token}`
+              `Bearer ${token}`,
           },
 
           body: JSON.stringify({
             comment:
-              commentText.trim()
-          })
+              commentText.trim(),
+          }),
         }
       );
 
@@ -465,14 +507,15 @@ function NewsDetails() {
       if (!response.ok) {
         setCommentMessage(
           data.message ||
-          "Unable to add comment."
+            "Unable to add comment."
         );
+
         return;
       }
 
       setComments((previous) => [
         ...previous,
-        data.comment
+        data.comment,
       ]);
 
       setCommentText("");
@@ -501,8 +544,9 @@ function NewsDetails() {
     if (!token) {
       setReplyMessage((previous) => ({
         ...previous,
+
         [commentId]:
-          "Please login to reply."
+          "Please login to reply.",
       }));
 
       return;
@@ -514,8 +558,9 @@ function NewsDetails() {
     if (!text || !text.trim()) {
       setReplyMessage((previous) => ({
         ...previous,
+
         [commentId]:
-          "Reply cannot be empty."
+          "Reply cannot be empty.",
       }));
 
       return;
@@ -532,13 +577,13 @@ function NewsDetails() {
               "application/json",
 
             Authorization:
-              `Bearer ${token}`
+              `Bearer ${token}`,
           },
 
           body: JSON.stringify({
             reply:
-              text.trim()
-          })
+              text.trim(),
+          }),
         }
       );
 
@@ -548,9 +593,10 @@ function NewsDetails() {
       if (!response.ok) {
         setReplyMessage((previous) => ({
           ...previous,
+
           [commentId]:
             data.message ||
-            "Unable to add reply."
+            "Unable to add reply.",
         }));
 
         return;
@@ -561,18 +607,20 @@ function NewsDetails() {
 
         [commentId]: [
           ...(previous[commentId] || []),
-          data.reply
-        ]
+          data.reply,
+        ],
       }));
 
       setReplyText((previous) => ({
         ...previous,
-        [commentId]: ""
+
+        [commentId]: "",
       }));
 
       setReplyMessage((previous) => ({
         ...previous,
-        [commentId]: ""
+
+        [commentId]: "",
       }));
     } catch (error) {
       console.error(
@@ -584,9 +632,39 @@ function NewsDetails() {
         ...previous,
 
         [commentId]:
-          "Cannot connect to server."
+          "Cannot connect to server.",
       }));
     }
+  };
+
+  // =====================================================
+  // IMAGE SOURCE
+  // =====================================================
+
+  const getImageSource = () => {
+    // If the database has an image URL,
+    // use it first.
+    if (
+      post?.image_url &&
+      !imageError
+    ) {
+      return post.image_url;
+    }
+
+    // Otherwise use local images.
+    return newsImages[
+      currentImageIndex
+    ];
+  };
+
+  // =====================================================
+  // IMAGE ERROR HANDLER
+  // =====================================================
+
+  const handleImageError = () => {
+    // If database image fails,
+    // switch to local fallback.
+    setImageError(true);
   };
 
   // =====================================================
@@ -691,26 +769,47 @@ function NewsDetails() {
 
           </div>
 
-          {/* ROTATING IMAGE */}
+          {/* =================================================
+              NEWS IMAGE
+          ================================================= */}
 
           <div className="rotating-news-image">
 
             <img
-              src={
-                post.image_url ||
-                post.image ||
-                newsImages[
-                  currentImageIndex
-                ]
+              key={
+                `${getImageSource()}-${currentImageIndex}`
               }
-              alt={post.title}
-              onError={(e) => {
-                e.currentTarget.src =
-                  newsImages[
-                    currentImageIndex
-                  ];
-              }}
+              src={getImageSource()}
+              alt={
+                post.title ||
+                "News image"
+              }
+              onError={
+                handleImageError
+              }
             />
+
+            {/* IMAGE INDICATOR */}
+
+            {newsImages.length > 1 && (
+              <div className="image-indicator">
+
+                {newsImages.map(
+                  (_, index) => (
+                    <span
+                      key={index}
+                      className={
+                        index ===
+                        currentImageIndex
+                          ? "active"
+                          : ""
+                      }
+                    ></span>
+                  )
+                )}
+
+              </div>
+            )}
 
           </div>
 
@@ -826,11 +925,11 @@ function NewsDetails() {
 
         </article>
 
-        {/* COMMENTS */}
+        {/* =================================================
+            COMMENTS
+        ================================================= */}
 
         <section className="comments-section">
-
-          {/* COMMENT HEADER */}
 
           <div className="comments-heading">
 
@@ -916,197 +1015,203 @@ function NewsDetails() {
 
             <div className="comments-list">
 
-              {comments.map((comment) => (
+              {comments.map(
+                (comment) => (
 
-                <div
-                  className="comment-card"
-                  key={comment.id}
-                >
-
-                  {/* COMMENT HEADER */}
-
-                  <div className="comment-header">
-
-                    <div className="comment-avatar">
-
-                      {comment.author
-                        ? comment.author
-                            .charAt(0)
-                            .toUpperCase()
-                        : "U"}
-
-                    </div>
-
-                    <div>
-
-                      <strong>
-                        {comment.author ||
-                          "User"}
-                      </strong>
-
-                      <small>
-                        {comment.created_at
-                          ? new Date(
-                              comment.created_at
-                            ).toLocaleString()
-                          : "Recently"}
-                      </small>
-
-                    </div>
-
-                  </div>
-
-                  {/* COMMENT TEXT */}
-
-                  <p className="comment-text">
-                    {comment.comment}
-                  </p>
-
-                  {/* REPLIES BUTTON */}
-
-                  <button
-                    className="reply-toggle"
-                    onClick={() =>
-                      getReplies(
-                        comment.id
-                      )
-                    }
+                  <div
+                    className="comment-card"
+                    key={comment.id}
                   >
-                    ↩️ View Replies
-                  </button>
 
-                  {/* REPLIES */}
+                    {/* COMMENT HEADER */}
 
-                  {replies[comment.id] &&
-                    replies[comment.id].map(
-                      (reply) => (
+                    <div className="comment-header">
 
-                        <div
-                          className="reply-card"
-                          key={reply.id}
-                        >
+                      <div className="comment-avatar">
 
-                          <div className="reply-header">
-
-                            <div className="reply-avatar">
-
-                              {reply.author
-                                ? reply.author
-                                    .charAt(0)
-                                    .toUpperCase()
-                                : "U"}
-
-                            </div>
-
-                            <div>
-
-                              <strong>
-
-                                {reply.author ||
-                                  "User"}
-
-                                {Number(
-                                  reply.user_id
-                                ) ===
-                                  Number(
-                                    post.user_id
-                                  ) && (
-
-                                    <span className="publisher-badge">
-                                      Publisher
-                                    </span>
-
-                                  )}
-
-                              </strong>
-
-                              <small>
-
-                                {reply.created_at
-                                  ? new Date(
-                                      reply.created_at
-                                    ).toLocaleString()
-                                  : "Recently"}
-
-                              </small>
-
-                            </div>
-
-                          </div>
-
-                          <p>
-                            {reply.reply}
-                          </p>
-
-                        </div>
-
-                      )
-                    )}
-
-                  {/* PUBLISHER REPLY FORM */}
-
-                  {currentUser &&
-                    Number(
-                      currentUser.id
-                    ) ===
-                      Number(
-                        post.user_id
-                      ) && (
-
-                      <div className="reply-form">
-
-                        <input
-                          type="text"
-                          placeholder="Write a reply..."
-                          value={
-                            replyText[
-                              comment.id
-                            ] || ""
-                          }
-                          onChange={(e) =>
-                            setReplyText(
-                              (previous) => ({
-                                ...previous,
-
-                                [comment.id]:
-                                  e.target.value
-                              })
-                            )
-                          }
-                        />
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleReply(
-                              comment.id
-                            )
-                          }
-                        >
-                          Reply
-                        </button>
-
-                        {replyMessage[
-                          comment.id
-                        ] && (
-
-                          <p>
-                            {
-                              replyMessage[
-                                comment.id
-                              ]
-                            }
-                          </p>
-
-                        )}
+                        {comment.author
+                          ? comment.author
+                              .charAt(0)
+                              .toUpperCase()
+                          : "U"}
 
                       </div>
 
-                    )}
+                      <div>
 
-                </div>
+                        <strong>
+                          {comment.author ||
+                            "User"}
+                        </strong>
 
-              ))}
+                        <small>
+                          {comment.created_at
+                            ? new Date(
+                                comment.created_at
+                              ).toLocaleString()
+                            : "Recently"}
+                        </small>
+
+                      </div>
+
+                    </div>
+
+                    {/* COMMENT TEXT */}
+
+                    <p className="comment-text">
+                      {comment.comment}
+                    </p>
+
+                    {/* REPLIES BUTTON */}
+
+                    <button
+                      className="reply-toggle"
+                      onClick={() =>
+                        getReplies(
+                          comment.id
+                        )
+                      }
+                    >
+                      ↩️ View Replies
+                    </button>
+
+                    {/* REPLIES */}
+
+                    {replies[
+                      comment.id
+                    ] &&
+                      replies[
+                        comment.id
+                      ].map(
+                        (reply) => (
+
+                          <div
+                            className="reply-card"
+                            key={reply.id}
+                          >
+
+                            <div className="reply-header">
+
+                              <div className="reply-avatar">
+
+                                {reply.author
+                                  ? reply.author
+                                      .charAt(0)
+                                      .toUpperCase()
+                                  : "U"}
+
+                              </div>
+
+                              <div>
+
+                                <strong>
+
+                                  {reply.author ||
+                                    "User"}
+
+                                  {Number(
+                                    reply.user_id
+                                  ) ===
+                                    Number(
+                                      post.user_id
+                                    ) && (
+
+                                      <span className="publisher-badge">
+                                        Publisher
+                                      </span>
+
+                                    )}
+
+                                </strong>
+
+                                <small>
+
+                                  {reply.created_at
+                                    ? new Date(
+                                        reply.created_at
+                                      ).toLocaleString()
+                                    : "Recently"}
+
+                                </small>
+
+                              </div>
+
+                            </div>
+
+                            <p>
+                              {reply.reply}
+                            </p>
+
+                          </div>
+
+                        )
+                      )}
+
+                    {/* PUBLISHER REPLY FORM */}
+
+                    {currentUser &&
+                      Number(
+                        currentUser.id
+                      ) ===
+                        Number(
+                          post.user_id
+                        ) && (
+
+                        <div className="reply-form">
+
+                          <input
+                            type="text"
+                            placeholder="Write a reply..."
+                            value={
+                              replyText[
+                                comment.id
+                              ] || ""
+                            }
+                            onChange={(e) =>
+                              setReplyText(
+                                (previous) => ({
+                                  ...previous,
+
+                                  [comment.id]:
+                                    e.target.value,
+                                })
+                              )
+                            }
+                          />
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleReply(
+                                comment.id
+                              )
+                            }
+                          >
+                            Reply
+                          </button>
+
+                          {replyMessage[
+                            comment.id
+                          ] && (
+
+                            <p>
+                              {
+                                replyMessage[
+                                  comment.id
+                                ]
+                              }
+                            </p>
+
+                          )}
+
+                        </div>
+
+                      )}
+
+                  </div>
+
+                )
+              )}
 
             </div>
 
