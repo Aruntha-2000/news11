@@ -6,7 +6,7 @@ import "./App.css";
 // =====================================================
 
 import Login from "./pages/Login";
-import Register from "./pages/newsfeed";
+import Register from "./pages/Register";
 import NewsFeed from "./pages/newsfeed";
 import NewsDetails from "./pages/newdetails";
 import Profile from "./pages/profile";
