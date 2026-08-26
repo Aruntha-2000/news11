@@ -5,15 +5,31 @@ import "./newsfeed.css";
 const API_URL =
   "https://news-11-production.up.railway.app";
 
+// =====================================================
+// LOCAL NEWS IMAGES
+// Files are inside:
+// frontend/public/images/
+// =====================================================
+
+const newsImages = [
+  "/images/news-bg.jpg",
+  "/images/admin-bg.jpg",
+  "/images/login-bg.jpg",
+];
+
+// =====================================================
+// NEWS FEED
+// =====================================================
+
 function NewsFeed() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
 
-  // ==========================================
+  // =====================================================
   // LOAD NEWS
-  // ==========================================
+  // =====================================================
 
   const loadNews = useCallback(async (showLoading = true) => {
     if (showLoading) {
@@ -65,17 +81,17 @@ function NewsFeed() {
     }
   }, []);
 
-  // ==========================================
+  // =====================================================
   // INITIAL LOAD
-  // ==========================================
+  // =====================================================
 
   useEffect(() => {
     loadNews(true);
   }, [loadNews]);
 
-  // ==========================================
-  // AUTOMATIC REFRESH
-  // ==========================================
+  // =====================================================
+  // AUTOMATIC REFRESH EVERY 30 SECONDS
+  // =====================================================
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -87,9 +103,9 @@ function NewsFeed() {
     };
   }, [loadNews]);
 
-  // ==========================================
+  // =====================================================
   // PAGE HEADER
-  // ==========================================
+  // =====================================================
 
   const renderHeader = () => (
     <div className="news-header">
@@ -111,9 +127,9 @@ function NewsFeed() {
     </div>
   );
 
-  // ==========================================
+  // =====================================================
   // LOADING
-  // ==========================================
+  // =====================================================
 
   if (loading) {
     return (
@@ -135,9 +151,9 @@ function NewsFeed() {
     );
   }
 
-  // ==========================================
+  // =====================================================
   // ERROR WITH NO POSTS
-  // ==========================================
+  // =====================================================
 
   if (error && posts.length === 0) {
     return (
@@ -173,9 +189,9 @@ function NewsFeed() {
     );
   }
 
-  // ==========================================
+  // =====================================================
   // MAIN PAGE
-  // ==========================================
+  // =====================================================
 
   return (
     <div className="page-background news-background">
@@ -183,7 +199,6 @@ function NewsFeed() {
       {/* HEADER */}
 
       {renderHeader()}
-
 
       {/* SUMMARY */}
 
@@ -203,7 +218,6 @@ function NewsFeed() {
         </span>
 
       </div>
-
 
       {/* REFRESH ERROR */}
 
@@ -235,7 +249,6 @@ function NewsFeed() {
 
         </div>
       )}
-
 
       {/* EMPTY NEWS */}
 
@@ -270,13 +283,13 @@ function NewsFeed() {
 
       ) : (
 
-        /* ======================================
+        /* =================================================
            NEWS GRID
-        ====================================== */
+        ================================================= */
 
         <div className="news-grid">
 
-          {posts.map((post) => {
+          {posts.map((post, index) => {
 
             const title =
               post.title ||
@@ -299,34 +312,72 @@ function NewsFeed() {
                 .charAt(0)
                 .toUpperCase() || "U";
 
+            // =================================================
+            // IMAGE
+            // =================================================
+
+            /*
+             * If the database contains an image_url,
+             * use that image.
+             *
+             * If there is no database image,
+             * use one of the local images.
+             *
+             * Each news card gets a different local image.
+             */
+
+            const localImage =
+              newsImages[
+                index % newsImages.length
+              ];
+
+            const imageSource =
+              post.image_url ||
+              post.image ||
+              localImage;
+
             return (
               <article
                 className="news-card"
                 key={post.id}
               >
 
-                {/* NEWS IMAGE */}
+                {/* =================================================
+                   NEWS IMAGE
+                ================================================= */}
 
                 <div className="news-image-wrapper">
 
                   <img
                     className="news-image"
-                    src={
-                      post.image_url ||
-                      post.image ||
-                      "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80"
-                    }
+                    src={imageSource}
                     alt={title}
+
                     onError={(e) => {
+
+                      /*
+                       * If database image fails,
+                       * replace it with local image.
+                       */
+
+                      if (
+                        e.currentTarget.src.includes(
+                          localImage
+                        )
+                      ) {
+                        return;
+                      }
+
                       e.currentTarget.src =
-                        "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=1200&q=80";
+                        localImage;
                     }}
                   />
 
                 </div>
 
-
-                {/* CARD TOP */}
+                {/* =================================================
+                   CARD TOP
+                ================================================= */}
 
                 <div className="news-card-top">
 
@@ -340,15 +391,23 @@ function NewsFeed() {
 
                 </div>
 
-                {/* TITLE */}
+                {/* =================================================
+                   TITLE
+                ================================================= */}
 
                 <h2 className="news-title">
-                  <Link to={`/news/${post.id}`}>
+
+                  <Link
+                    to={`/news/${post.id}`}
+                  >
                     {title}
                   </Link>
+
                 </h2>
 
-                {/* CONTENT */}
+                {/* =================================================
+                   CONTENT
+                ================================================= */}
 
                 <p className="news-content">
 
@@ -361,8 +420,9 @@ function NewsFeed() {
 
                 </p>
 
-
-                {/* AUTHOR */}
+                {/* =================================================
+                   AUTHOR
+                ================================================= */}
 
                 <div className="news-author">
 
@@ -379,13 +439,17 @@ function NewsFeed() {
                     <strong>
 
                       {post.user_id ? (
+
                         <Link
                           to={`/user/${post.user_id}`}
                         >
                           {author}
                         </Link>
+
                       ) : (
+
                         author
+
                       )}
 
                     </strong>
@@ -394,8 +458,9 @@ function NewsFeed() {
 
                 </div>
 
-
-                {/* FOOTER */}
+                {/* =================================================
+                   FOOTER
+                ================================================= */}
 
                 <div className="news-card-footer">
 
@@ -410,7 +475,6 @@ function NewsFeed() {
                       : "Latest update"}
 
                   </span>
-
 
                   <Link
                     to={`/news/${post.id}`}
