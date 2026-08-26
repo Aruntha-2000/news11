@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
-  const API_URL = "https://news-11-production.up.railway.app";
+  const navigate = useNavigate();
+
+  const API_URL =
+    "https://news-11-production.up.railway.app";
 
   const [formData, setFormData] = useState({
     email: "",
@@ -25,7 +28,6 @@ function Login() {
       [name]: value,
     }));
 
-    // Clear old message when typing
     if (message) {
       setMessage("");
       setMessageType("");
@@ -46,14 +48,16 @@ function Login() {
     const email = formData.email.trim();
     const password = formData.password;
 
-    // Validate email
+    // ========================================
+    // VALIDATION
+    // ========================================
+
     if (!email) {
       setMessage("Please enter your email address.");
       setMessageType("error");
       return;
     }
 
-    // Validate password
     if (!password) {
       setMessage("Please enter your password.");
       setMessageType("error");
@@ -81,7 +85,17 @@ function Login() {
         }
       );
 
-      const data = await response.json();
+      let data = {};
+
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+
+      // ========================================
+      // LOGIN ERROR
+      // ========================================
 
       if (!response.ok) {
         setMessage(
@@ -94,22 +108,43 @@ function Login() {
       }
 
       // ========================================
-      // SAVE LOGIN INFORMATION
+      // CHECK TOKEN
       // ========================================
 
-      if (data.token) {
-        localStorage.setItem(
-          "token",
-          data.token
+      if (!data.token) {
+        setMessage(
+          "Login succeeded, but no authentication token was received."
         );
+
+        setMessageType("error");
+        return;
       }
+
+      // ========================================
+      // SAVE TOKEN
+      // ========================================
+
+      localStorage.setItem(
+        "token",
+        data.token
+      );
+
+      // ========================================
+      // SAVE USER
+      // ========================================
 
       if (data.user) {
         localStorage.setItem(
           "user",
           JSON.stringify(data.user)
         );
+      } else {
+        localStorage.removeItem("user");
       }
+
+      // ========================================
+      // SUCCESS
+      // ========================================
 
       setMessage(
         `Welcome ${
@@ -120,12 +155,11 @@ function Login() {
       setMessageType("success");
 
       // ========================================
-      // REDIRECT AFTER LOGIN
+      // REDIRECT
       // ========================================
 
-      // Small delay so user can see success message
       setTimeout(() => {
-        window.location.href = "/";
+        navigate("/", { replace: true });
       }, 700);
 
     } catch (error) {
@@ -135,10 +169,11 @@ function Login() {
       );
 
       setMessage(
-        "Cannot connect to the server."
+        "Cannot connect to the server. Please try again."
       );
 
       setMessageType("error");
+
     } finally {
       setLoading(false);
     }
@@ -149,156 +184,164 @@ function Login() {
   // ==========================================
 
   return (
-      <div className="page-background login-background">
+    <div className="page-background login-background">
+
       <div className="login-page">
-      
-      <div className="login-card">
 
-        {/* HEADER */}
+        <div className="login-card">
 
-        <div className="login-header">
+          {/* HEADER */}
 
-          <div className="login-icon">
-            
-          </div>
+          <div className="login-header">
 
-          <h1>
-            Welcome Back
-          </h1>
+            <div className="login-icon">
+              🔐
+            </div>
 
-          <p>
-            Login to your News11 account
-          </p>
+            <h1>
+              Welcome Back
+            </h1>
 
-        </div>
-
-
-        {/* FORM */}
-
-        <form onSubmit={handleSubmit}>
-
-          {/* EMAIL */}
-
-          <div className="login-field">
-
-            <label htmlFor="login-email">
-              Email Address
-            </label>
-
-            <input
-              id="login-email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              autoComplete="email"
-              required
-              disabled={loading}
-            />
+            <p>
+              Login to your News11 account
+            </p>
 
           </div>
 
 
-         <div className="login-field">
+          {/* FORM */}
 
-        <label htmlFor="login-password">
-          Password
-        </label>
+          <form onSubmit={handleSubmit}>
 
-        <input
-          id="login-password"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Enter your password"
-          autoComplete="current-password"
-          required
-          disabled={loading}
-        />
+            {/* EMAIL */}
 
-      </div>
+            <div className="login-field">
 
+              <label htmlFor="login-email">
+                Email Address
+              </label>
 
-      <div className="forgot-password">
-
-        <Link to="/forgot-password">
-          Forgot Password?
-        </Link>
-
-      </div>
-
-
-          {/* MESSAGE */}
-
-          {message && (
-            <div
-              className={`login-message ${messageType}`}
-            >
-
-              {messageType === "loading" && (
-                <span className="message-spinner"></span>
-              )}
-
-              {messageType === "success" && (
-                <span>
-                  ✓
-                </span>
-              )}
-
-              {messageType === "error" && (
-                <span>
-                  ⚠
-                </span>
-              )}
-
-              <span>
-                {message}
-              </span>
+              <input
+                id="login-email"
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                autoComplete="email"
+                required
+                disabled={loading}
+              />
 
             </div>
-          )}
 
 
-          {/* LOGIN BUTTON */}
+            {/* PASSWORD */}
 
-          <button
-            type="submit"
-            className="login-button"
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <span className="button-spinner"></span>
-                Logging in...
-              </>
-            ) : (
-              <>
-                 Login
-              </>
+            <div className="login-field">
+
+              <label htmlFor="login-password">
+                Password
+              </label>
+
+              <input
+                id="login-password"
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                required
+                disabled={loading}
+              />
+
+            </div>
+
+
+            {/* FORGOT PASSWORD */}
+
+            <div className="forgot-password">
+
+              <Link to="/forgot-password">
+                Forgot Password?
+              </Link>
+
+            </div>
+
+
+            {/* MESSAGE */}
+
+            {message && (
+              <div
+                className={`login-message ${messageType}`}
+              >
+
+                {messageType === "loading" && (
+                  <span className="message-spinner">
+                  </span>
+                )}
+
+                {messageType === "success" && (
+                  <span>✓</span>
+                )}
+
+                {messageType === "error" && (
+                  <span>⚠</span>
+                )}
+
+                <span>
+                  {message}
+                </span>
+
+              </div>
             )}
-          </button>
-
-        </form>
 
 
-        {/* REGISTER */}
+            {/* LOGIN BUTTON */}
 
-        <div className="login-register">
+            <button
+              type="submit"
+              className="login-button"
+              disabled={loading}
+            >
 
-          <span>
-            Don't have an account?
-          </span>
+              {loading ? (
+                <>
+                  <span className="button-spinner">
+                  </span>
 
-          <Link to="/register">
-            Create Account
-          </Link>
+                  Logging in...
+                </>
+              ) : (
+                <>
+                  🔐 Login
+                </>
+              )}
+
+            </button>
+
+          </form>
+
+
+          {/* REGISTER */}
+
+          <div className="login-register">
+
+            <span>
+              Don't have an account?
+            </span>
+
+            <Link to="/register">
+              Create Account
+            </Link>
+
+          </div>
 
         </div>
 
       </div>
-      </div>
+
     </div>
   );
 }

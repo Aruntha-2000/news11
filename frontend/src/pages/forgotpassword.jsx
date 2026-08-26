@@ -2,50 +2,65 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function ForgotPassword() {
-  const API_URL = "https://news-11-production.up.railway.app";
+  const API_URL =
+    "https://news-11-production.up.railway.app";
 
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ==========================================
+  // HANDLE INPUT
+  // ==========================================
+
+  const handleChange = (e) => {
+    setEmail(e.target.value);
+
+    if (message) {
+      setMessage("");
+      setMessageType("");
+    }
+  };
+
+  // ==========================================
+  // SUBMIT
+  // ==========================================
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const trimmedEmail = email.trim();
-
-    // ==============================
-    // VALIDATE EMAIL
-    // ==============================
-
-    if (!trimmedEmail) {
-      setMessage("Please enter your email address.");
-      setMessageType("error");
-      return;
-    }
-
-    // Basic email validation
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(trimmedEmail)) {
-      setMessage("Please enter a valid email address.");
-      setMessageType("error");
-      return;
-    }
 
     if (loading) {
       return;
     }
 
-    // ==============================
-    // START REQUEST
-    // ==============================
+    const cleanEmail = email.trim();
+
+    if (!cleanEmail) {
+      setMessage(
+        "Please enter your email address."
+      );
+
+      setMessageType("error");
+      return;
+    }
 
     setLoading(true);
-    setMessage("");
-    setMessageType("");
+    setMessage("Checking your request...");
+    setMessageType("loading");
 
     try {
+      /*
+       * IMPORTANT:
+       *
+       * This endpoint must exist in your backend:
+       *
+       * POST /api/auth/forgot-password
+       *
+       * If your backend uses a different endpoint,
+       * we need to change this URL.
+       */
+
       const response = await fetch(
         `${API_URL}/api/auth/forgot-password`,
         {
@@ -56,7 +71,7 @@ function ForgotPassword() {
           },
 
           body: JSON.stringify({
-            email: trimmedEmail,
+            email: cleanEmail,
           }),
         }
       );
@@ -69,32 +84,23 @@ function ForgotPassword() {
         data = {};
       }
 
-      // ==============================
-      // SERVER ERROR
-      // ==============================
-
       if (!response.ok) {
         setMessage(
           data.message ||
-            "Unable to process your request. Please try again."
+            "Unable to process your request."
         );
 
         setMessageType("error");
         return;
       }
 
-      // ==============================
-      // SUCCESS
-      // ==============================
-
       setMessage(
         data.message ||
-          "If an account exists with this email, a password reset link has been sent."
+          "If an account exists with this email, password reset instructions have been sent."
       );
 
       setMessageType("success");
 
-      // Clear email after successful request
       setEmail("");
 
     } catch (error) {
@@ -104,7 +110,7 @@ function ForgotPassword() {
       );
 
       setMessage(
-        "Cannot connect to the server. Please try again later."
+        "Cannot connect to the server. Please try again."
       );
 
       setMessageType("error");
@@ -114,36 +120,22 @@ function ForgotPassword() {
     }
   };
 
-  // ==============================
-  // HANDLE EMAIL CHANGE
-  // ==============================
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-
-    // Clear previous message when user starts typing
-    if (message) {
-      setMessage("");
-      setMessageType("");
-    }
-  };
+  // ==========================================
+  // UI
+  // ==========================================
 
   return (
     <div className="page-background forgot-password-background">
 
-      {/* PAGE CONTAINER */}
+      <div className="forgot-password-page">
 
-      <div className="login-page">
-
-        {/* LOGIN CARD */}
-
-        <div className="login-card">
+        <div className="forgot-password-card">
 
           {/* HEADER */}
 
-          <div className="login-header">
+          <div className="forgot-password-header">
 
-            <div className="login-icon">
+            <div className="forgot-password-icon">
               🔑
             </div>
 
@@ -152,8 +144,8 @@ function ForgotPassword() {
             </h1>
 
             <p>
-              Enter your email address to
-              receive a password reset link.
+              Enter your email address and
+              we'll help you reset your password.
             </p>
 
           </div>
@@ -163,9 +155,7 @@ function ForgotPassword() {
 
           <form onSubmit={handleSubmit}>
 
-            {/* EMAIL */}
-
-            <div className="login-field">
+            <div className="forgot-password-field">
 
               <label htmlFor="forgot-email">
                 Email Address
@@ -175,11 +165,11 @@ function ForgotPassword() {
                 id="forgot-email"
                 type="email"
                 value={email}
-                onChange={handleEmailChange}
+                onChange={handleChange}
                 placeholder="Enter your email"
                 autoComplete="email"
-                disabled={loading}
                 required
+                disabled={loading}
               />
 
             </div>
@@ -189,8 +179,13 @@ function ForgotPassword() {
 
             {message && (
               <div
-                className={`login-message ${messageType}`}
+                className={`forgot-password-message ${messageType}`}
               >
+
+                {messageType === "loading" && (
+                  <span className="message-spinner">
+                  </span>
+                )}
 
                 {messageType === "success" && (
                   <span>✓</span>
@@ -198,10 +193,6 @@ function ForgotPassword() {
 
                 {messageType === "error" && (
                   <span>⚠</span>
-                )}
-
-                {messageType === "loading" && (
-                  <span className="message-spinner"></span>
                 )}
 
                 <span>
@@ -212,22 +203,24 @@ function ForgotPassword() {
             )}
 
 
-            {/* SUBMIT BUTTON */}
+            {/* SUBMIT */}
 
             <button
               type="submit"
-              className="login-button"
-              disabled={loading || !email.trim()}
+              className="forgot-password-button"
+              disabled={loading}
             >
 
               {loading ? (
                 <>
-                  <span className="button-spinner"></span>
-                  Sending...
+                  <span className="button-spinner">
+                  </span>
+
+                  Please wait...
                 </>
               ) : (
                 <>
-                  📧 Send Reset Link
+                  📧 Send Reset Instructions
                 </>
               )}
 
@@ -238,7 +231,7 @@ function ForgotPassword() {
 
           {/* BACK TO LOGIN */}
 
-          <div className="login-register">
+          <div className="forgot-password-login">
 
             <Link to="/login">
               ← Back to Login
