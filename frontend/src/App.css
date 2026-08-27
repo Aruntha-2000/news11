@@ -1,6 +1,7 @@
 /* =========================================================
-   NEWS11 - COMPLETE GLOBAL APP CSS
-   ========================================================= */
+   NEWS11 - COMPLETE APP.CSS
+   Different background image for each page
+========================================================= */
 
 
 /* =========================================================
@@ -32,31 +33,10 @@ body {
 
   color: #111827;
 
-  /* =======================================================
-     GLOBAL BACKGROUND IMAGE
-     Put image inside:
-     frontend/public/news11-background.jfif
-  ======================================================= */
-
-  background:
-    linear-gradient(
-      rgba(15, 23, 42, 0.55),
-      rgba(15, 23, 42, 0.55)
-    ),
-    url("/images/images.jfif");
-
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: #0f172a;
 
   overflow-x: hidden;
 }
-
-
-/* =========================================================
-   ROOT
-========================================================= */
 
 #root {
   width: 100%;
@@ -74,25 +54,14 @@ body {
   width: 100%;
   min-height: 100vh;
 
-  background: transparent;
-
   overflow-x: hidden;
 }
-
-
-/* =========================================================
-   APP CONTENT
-========================================================= */
 
 .app-content {
   position: relative;
 
-  z-index: 1;
-
   width: 100%;
-  min-height: 100vh;
-
-  background: transparent;
+  min-height: calc(100vh - 68px);
 
   overflow-x: hidden;
 }
@@ -104,17 +73,20 @@ body {
 
 .page-background {
   width: 100%;
-  min-height: 100vh;
-
-  background: transparent;
+  min-height: calc(100vh - 68px);
 
   padding-top: 1px;
   padding-bottom: 60px;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 
 /* =========================================================
-   COMMON PAGE WIDTH
+   COMMON PAGE CONTAINER
 ========================================================= */
 
 .page-container {
@@ -170,15 +142,6 @@ select {
 
 
 /* =========================================================
-   BUTTON
-========================================================= */
-
-button {
-  font-family: inherit;
-}
-
-
-/* =========================================================
    IMAGES
 ========================================================= */
 
@@ -198,14 +161,22 @@ img {
   min-height: calc(100vh - 68px);
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  padding:
-    50px 20px 70px;
+  padding: 40px 20px 60px;
 
-  background: transparent;
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/login.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 
@@ -221,16 +192,15 @@ img {
     rgba(255, 255, 255, 0.97);
 
   border:
-    1px solid rgba(255, 255, 255, 0.85);
+    1px solid rgba(255, 255, 255, 0.8);
 
   border-radius: 18px;
 
-  padding:
-    38px 36px;
+  padding: 36px 34px;
 
   box-shadow:
     0 18px 45px
-    rgba(0, 0, 0, 0.25);
+    rgba(0, 0, 0, 0.20);
 }
 
 
@@ -244,60 +214,45 @@ img {
   margin-bottom: 30px;
 }
 
-
 .login-icon {
   width: 58px;
   height: 58px;
 
-  margin:
-    0 auto 16px;
+  margin: 0 auto 16px;
 
   border-radius: 15px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  background:
-    #eff6ff;
+  background: #eff6ff;
 
-  color:
-    #2563eb;
+  color: #2563eb;
 
   font-size: 28px;
 }
 
-
 .login-header h1 {
-  margin:
-    0 0 8px;
+  margin: 0 0 8px;
 
-  color:
-    #111827;
+  color: #111827;
 
-  font-size:
-    28px;
+  font-size: 28px;
 
-  line-height:
-    1.25;
+  line-height: 1.25;
 
-  font-weight:
-    700;
+  font-weight: 700;
 }
-
 
 .login-header p {
   margin: 0;
 
-  color:
-    #6b7280;
+  color: #6b7280;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  line-height:
-    1.5;
+  line-height: 1.5;
 }
 
 
@@ -309,75 +264,53 @@ img {
   width: 100%;
 }
 
-
-/* =========================================================
-   LOGIN FORM GROUP
-========================================================= */
-
 .login-form-group {
   width: 100%;
 
-  margin-bottom:
-    20px;
+  margin-bottom: 20px;
 }
-
 
 .login-form-group label {
   display: block;
 
-  margin-bottom:
-    8px;
+  margin-bottom: 8px;
 
-  color:
-    #374151;
+  color: #374151;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  text-align:
-    left;
+  text-align: left;
 }
-
 
 .login-form-group input {
   width: 100%;
 
-  height:
-    46px;
+  height: 46px;
 
-  padding:
-    0 14px;
+  padding: 0 20px;
 
   border:
     1px solid #d1d5db;
 
-  border-radius:
-    9px;
+  border-radius: 9px;
 
-  background:
-    white;
+  background: white;
 
-  color:
-    #111827;
+  color: #111827;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  outline:
-    none;
+  outline: none;
 
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
-
 .login-form-group input:focus {
-  border-color:
-    #2563eb;
+  border-color: #2563eb;
 
   box-shadow:
     0 0 0 3px
@@ -392,35 +325,25 @@ img {
 .login-forgot {
   display: flex;
 
-  justify-content:
-    flex-end;
+  justify-content: flex-end;
 
-  margin-top:
-    -8px;
+  margin-top: -8px;
 
-  margin-bottom:
-    22px;
+  margin-bottom: 22px;
 }
-
 
 .login-forgot a {
-  color:
-    #2563eb;
+  color: #2563eb;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  font-weight:
-    600;
+  font-weight: 600;
 
-  text-decoration:
-    none;
+  text-decoration: none;
 }
 
-
 .login-forgot a:hover {
-  text-decoration:
-    underline;
+  text-decoration: underline;
 }
 
 
@@ -431,66 +354,46 @@ img {
 .login-button {
   width: 100%;
 
-  min-height:
-    46px;
+  min-height: 46px;
 
-  border:
-    none;
+  border: none;
 
-  border-radius:
-    9px;
+  border-radius: 9px;
 
-  background:
-    #2563eb;
+  background: #2563eb;
 
-  color:
-    white;
+  color: white;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
+  justify-content: center;
 
-  justify-content:
-    center;
-
-  gap:
-    7px;
+  gap: 7px;
 
   transition:
     background 0.2s ease,
     transform 0.2s ease;
 }
 
-
 .login-button:hover {
-  background:
-    #1d4ed8;
+  background: #1d4ed8;
 
-  transform:
-    translateY(-1px);
+  transform: translateY(-1px);
 }
 
-
 .login-button:disabled {
-  opacity:
-    0.65;
+  opacity: 0.65;
 
-  cursor:
-    not-allowed;
+  cursor: not-allowed;
 
-  transform:
-    none;
+  transform: none;
 }
 
 
@@ -499,47 +402,34 @@ img {
 ========================================================= */
 
 .login-register {
-  margin:
-    25px 0 0;
+  margin: 25px 0 0;
 
-  padding-top:
-    20px;
+  padding-top: 20px;
 
   border-top:
     1px solid #e5e7eb;
 
-  text-align:
-    center;
+  text-align: center;
 
-  color:
-    #6b7280;
+  color: #6b7280;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  line-height:
-    1.5;
+  line-height: 1.5;
 }
-
 
 .login-register a {
-  margin-left:
-    5px;
+  margin-left: 5px;
 
-  color:
-    #2563eb;
+  color: #2563eb;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  text-decoration:
-    none;
+  text-decoration: none;
 }
 
-
 .login-register a:hover {
-  text-decoration:
-    underline;
+  text-decoration: underline;
 }
 
 
@@ -548,32 +438,24 @@ img {
 ========================================================= */
 
 .login-error {
-  margin-bottom:
-    18px;
+  margin-bottom: 18px;
 
-  padding:
-    11px 13px;
+  padding: 11px 13px;
 
   border:
     1px solid #fecaca;
 
-  border-radius:
-    8px;
+  border-radius: 8px;
 
-  background:
-    #fef2f2;
+  background: #fef2f2;
 
-  color:
-    #b91c1c;
+  color: #b91c1c;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  line-height:
-    1.5;
+  line-height: 1.5;
 
-  text-align:
-    left;
+  text-align: left;
 }
 
 
@@ -585,24 +467,25 @@ img {
 
 .register-page {
   width: 100%;
+  min-height: calc(100vh - 68px);
 
-  min-height:
-    calc(100vh - 68px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  padding:
-    50px 20px 70px;
+  padding: 40px 20px 60px;
 
   background:
-    transparent;
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/register.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 
@@ -612,25 +495,18 @@ img {
 
 .register-card {
   width: 100%;
-
-  max-width:
-    460px;
+  max-width: 460px;
 
   background:
-    rgba(255, 255, 255, 0.97);
+    rgba(255, 255, 255, 0.98);
 
-  border:
-    1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 18px;
 
-  border-radius:
-    18px;
-
-  padding:
-    38px 36px;
+  padding: 35px 32px;
 
   box-shadow:
-    0 18px 45px
-    rgba(0, 0, 0, 0.25);
+    0 15px 40px
+    rgba(0, 0, 0, 0.20);
 }
 
 
@@ -639,35 +515,22 @@ img {
 ========================================================= */
 
 .register-icon {
-  width:
-    58px;
+  width: 58px;
+  height: 58px;
 
-  height:
-    58px;
+  margin: 0 auto 18px;
 
-  margin:
-    0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  display:
-    flex;
+  border-radius: 16px;
 
-  align-items:
-    center;
+  background: #eff6ff;
 
-  justify-content:
-    center;
+  color: #2563eb;
 
-  border-radius:
-    16px;
-
-  background:
-    #eff6ff;
-
-  color:
-    #2563eb;
-
-  font-size:
-    28px;
+  font-size: 28px;
 }
 
 
@@ -676,41 +539,27 @@ img {
 ========================================================= */
 
 .register-card h1 {
-  margin:
-    0 0 8px;
+  margin: 0 0 8px;
 
-  text-align:
-    center;
+  text-align: center;
 
-  color:
-    #111827;
+  color: #111827;
 
-  font-size:
-    28px;
+  font-size: 28px;
 
-  line-height:
-    1.25;
-
-  font-weight:
-    700;
+  line-height: 1.25;
 }
 
-
 .register-subtitle {
-  margin:
-    0 0 28px;
+  margin: 0 0 28px;
 
-  text-align:
-    center;
+  text-align: center;
 
-  color:
-    #6b7280;
+  color: #6b7280;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  line-height:
-    1.5;
+  line-height: 1.5;
 }
 
 
@@ -719,89 +568,58 @@ img {
 ========================================================= */
 
 .register-form {
-  display:
-    flex;
+  display: flex;
 
-  flex-direction:
-    column;
+  flex-direction: column;
 
-  gap:
-    18px;
+  gap: 18px;
 }
-
-
-/* =========================================================
-   REGISTER FORM GROUP
-========================================================= */
 
 .register-form-group {
-  display:
-    flex;
+  display: flex;
 
-  flex-direction:
-    column;
+  flex-direction: column;
 
-  gap:
-    7px;
+  gap: 7px;
 }
-
 
 .register-form-group label {
-  color:
-    #374151;
+  color: #374151;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  line-height:
-    1.4;
+  line-height: 1.4;
 }
 
-
-/* =========================================================
-   REGISTER INPUTS
-========================================================= */
-
 .register-form-group input {
-  width:
-    100%;
+  width: 100%;
 
-  height:
-    46px;
+  height: 46px;
 
-  padding:
-    0 14px;
+  padding: 0 13px;
 
   border:
     1px solid #d1d5db;
 
-  border-radius:
-    9px;
+  border-radius: 9px;
 
-  background:
-    white;
+  background: white;
 
-  color:
-    #111827;
+  color: #111827;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  outline:
-    none;
+  outline: none;
 
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
-
 .register-form-group input:focus {
-  border-color:
-    #2563eb;
+  border-color: #2563eb;
 
   box-shadow:
     0 0 0 3px
@@ -814,17 +632,13 @@ img {
 ========================================================= */
 
 .password-hint {
-  margin:
-    -2px 0 0;
+  margin: -2px 0 0;
 
-  color:
-    #6b7280;
+  color: #6b7280;
 
-  font-size:
-    11px;
+  font-size: 11px;
 
-  line-height:
-    1.4;
+  line-height: 1.4;
 }
 
 
@@ -833,72 +647,50 @@ img {
 ========================================================= */
 
 .register-button {
-  width:
-    100%;
+  width: 100%;
 
-  min-height:
-    46px;
+  min-height: 46px;
 
-  margin-top:
-    4px;
+  margin-top: 4px;
 
-  border:
-    none;
+  border: none;
 
-  border-radius:
-    9px;
+  border-radius: 9px;
 
-  background:
-    #2563eb;
+  background: #2563eb;
 
-  color:
-    white;
+  color: white;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
+  justify-content: center;
 
-  justify-content:
-    center;
-
-  gap:
-    7px;
+  gap: 7px;
 
   transition:
     background 0.2s ease,
     transform 0.2s ease;
 }
 
-
 .register-button:hover {
-  background:
-    #1d4ed8;
+  background: #1d4ed8;
 
-  transform:
-    translateY(-1px);
+  transform: translateY(-1px);
 }
 
-
 .register-button:disabled {
-  opacity:
-    0.65;
+  opacity: 0.65;
 
-  cursor:
-    not-allowed;
+  cursor: not-allowed;
 
-  transform:
-    none;
+  transform: none;
 }
 
 
@@ -907,47 +699,182 @@ img {
 ========================================================= */
 
 .register-footer {
-  margin:
-    24px 0 0;
+  margin: 24px 0 0;
 
-  padding-top:
-    20px;
+  padding-top: 20px;
 
   border-top:
     1px solid #e5e7eb;
 
-  text-align:
-    center;
+  text-align: center;
 
-  color:
-    #6b7280;
+  color: #6b7280;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  line-height:
-    1.5;
+  line-height: 1.5;
 }
-
 
 .register-footer a {
-  margin-left:
-    5px;
+  margin-left: 5px;
 
-  color:
-    #2563eb;
+  color: #2563eb;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  text-decoration:
-    none;
+  text-decoration: none;
+}
+
+.register-footer a:hover {
+  text-decoration: underline;
 }
 
 
-.register-footer a:hover {
-  text-decoration:
-    underline;
+/* =========================================================
+   =========================================================
+   NEWS FEED PAGE
+   =========================================================
+========================================================= */
+
+.news-page,
+.newsfeed-page,
+.news-feed-page,
+.news-background {
+  width: 100%;
+  min-height: calc(100vh - 68px);
+
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/news.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+/* =========================================================
+   NEWS DETAILS PAGE
+========================================================= */
+
+.news-details-page,
+.newsdetails-page,
+.news-detail-page,
+.news-details-background {
+  width: 100%;
+  min-height: calc(100vh - 68px);
+
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/newsdetails.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+/* =========================================================
+   PROFILE PAGE
+========================================================= */
+
+.profile-page,
+.profile-background {
+  width: 100%;
+  min-height: calc(100vh - 68px);
+
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/profile.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+/* =========================================================
+   CREATE POST / CREATE NEWS
+========================================================= */
+
+.create-post-page,
+.createpost-page,
+.create-news-page,
+.create-background {
+  width: 100%;
+  min-height: calc(100vh - 68px);
+
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/createpost.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+.notifications-page,
+.notification-page,
+.notifications-background {
+  width: 100%;
+  min-height: calc(100vh - 68px);
+
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/notifications.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+/* =========================================================
+   REPORTS
+========================================================= */
+
+.reports-page,
+.report-page,
+.reports-background {
+  width: 100%;
+  min-height: calc(100vh - 68px);
+
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/reports.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 
@@ -958,29 +885,30 @@ img {
 ========================================================= */
 
 .admin-background {
-  width:
-    100%;
-
-  min-height:
-    100vh;
+  width: 100%;
+  min-height: 100vh;
 
   padding:
     20px 20px 70px;
 
   background:
-    transparent;
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/admin.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-
 .admin-page {
-  width:
-    100%;
+  width: 100%;
+  max-width: 1150px;
 
-  max-width:
-    1150px;
-
-  margin:
-    0 auto;
+  margin: 0 auto;
 }
 
 
@@ -989,29 +917,20 @@ img {
 ========================================================= */
 
 .admin-header {
-  width:
-    100%;
+  width: 100%;
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
+  justify-content: space-between;
 
-  justify-content:
-    space-between;
+  gap: 20px;
 
-  gap:
-    20px;
+  padding: 25px 28px;
 
-  padding:
-    25px 28px;
+  margin-bottom: 20px;
 
-  margin-bottom:
-    20px;
-
-  border-radius:
-    18px;
+  border-radius: 18px;
 
   background:
     linear-gradient(
@@ -1020,84 +939,58 @@ img {
       #4338ca
     );
 
-  color:
-    white;
+  color: white;
 
   box-shadow:
     0 12px 30px
     rgba(0, 0, 0, 0.18);
 }
 
-
 .admin-title-row {
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
 
-  gap:
-    16px;
+  gap: 16px;
 
-  min-width:
-    0;
+  min-width: 0;
 }
 
-
 .admin-icon {
-  width:
-    58px;
+  width: 58px;
+  height: 58px;
 
-  height:
-    58px;
+  min-width: 58px;
 
-  min-width:
-    58px;
+  display: flex;
 
-  display:
-    flex;
+  align-items: center;
+  justify-content: center;
 
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  border-radius:
-    15px;
+  border-radius: 15px;
 
   background:
     rgba(255, 255, 255, 0.18);
 
-  font-size:
-    29px;
+  font-size: 29px;
 }
-
 
 .admin-header h1 {
-  margin:
-    0 0 5px;
+  margin: 0 0 5px;
 
-  font-size:
-    28px;
+  font-size: 28px;
 
-  line-height:
-    1.2;
+  line-height: 1.2;
 }
 
-
 .admin-header p {
-  margin:
-    0;
+  margin: 0;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  opacity:
-    0.9;
+  opacity: 0.9;
 
-  line-height:
-    1.5;
+  line-height: 1.5;
 }
 
 
@@ -1106,50 +999,37 @@ img {
 ========================================================= */
 
 .refresh-button {
-  border:
-    none;
+  border: none;
 
-  min-height:
-    42px;
+  min-height: 42px;
 
   padding:
     10px 16px;
 
-  border-radius:
-    9px;
+  border-radius: 9px;
 
   background:
     rgba(255, 255, 255, 0.16);
 
-  color:
-    white;
+  color: white;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
-  display:
-    inline-flex;
+  display: inline-flex;
 
-  align-items:
-    center;
+  align-items: center;
+  justify-content: center;
 
-  justify-content:
-    center;
-
-  gap:
-    7px;
+  gap: 7px;
 
   transition:
     background 0.2s ease,
     transform 0.2s ease;
 }
-
 
 .refresh-button:hover {
   background:
@@ -1159,16 +1039,12 @@ img {
     translateY(-1px);
 }
 
-
 .refresh-button:disabled {
-  opacity:
-    0.65;
+  opacity: 0.65;
 
-  cursor:
-    not-allowed;
+  cursor: not-allowed;
 
-  transform:
-    none;
+  transform: none;
 }
 
 
@@ -1177,50 +1053,37 @@ img {
 ========================================================= */
 
 .admin-message {
-  width:
-    100%;
+  width: 100%;
 
   padding:
     13px 16px;
 
-  margin-bottom:
-    20px;
+  margin-bottom: 20px;
 
-  border-radius:
-    10px;
+  border-radius: 10px;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  line-height:
-    1.5;
+  line-height: 1.5;
 
   border:
     1px solid transparent;
 }
 
-
 .admin-message.success {
-  background:
-    #ecfdf5;
+  background: #ecfdf5;
 
-  color:
-    #166534;
+  color: #166534;
 
-  border-color:
-    #bbf7d0;
+  border-color: #bbf7d0;
 }
 
-
 .admin-message.error {
-  background:
-    #fef2f2;
+  background: #fef2f2;
 
-  color:
-    #b91c1c;
+  color: #b91c1c;
 
-  border-color:
-    #fecaca;
+  border-color: #fecaca;
 }
 
 
@@ -1229,19 +1092,15 @@ img {
 ========================================================= */
 
 .admin-stats {
-  display:
-    grid;
+  display: grid;
 
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap:
-    16px;
+  gap: 16px;
 
-  margin-bottom:
-    25px;
+  margin-bottom: 25px;
 }
-
 
 .stat-card {
   background:
@@ -1250,90 +1109,59 @@ img {
   border:
     1px solid #e5e7eb;
 
-  border-radius:
-    15px;
+  border-radius: 15px;
 
-  padding:
-    20px;
+  padding: 20px;
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
 
-  gap:
-    15px;
+  gap: 15px;
 
   box-shadow:
     0 5px 18px
     rgba(0, 0, 0, 0.07);
 }
 
-
 .stat-icon {
-  width:
-    48px;
+  width: 48px;
+  height: 48px;
 
-  height:
-    48px;
+  min-width: 48px;
 
-  min-width:
-    48px;
+  border-radius: 12px;
 
-  border-radius:
-    12px;
+  background: #eff6ff;
 
-  background:
-    #eff6ff;
+  display: flex;
 
-  color:
-    #2563eb;
+  align-items: center;
+  justify-content: center;
 
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  font-size:
-    23px;
+  font-size: 23px;
 }
-
 
 .stat-label {
-  display:
-    block;
+  display: block;
 
-  margin-bottom:
-    3px;
+  margin-bottom: 3px;
 
-  color:
-    #6b7280;
+  color: #6b7280;
 
-  font-size:
-    12px;
+  font-size: 12px;
 
-  font-weight:
-    600;
+  font-weight: 600;
 }
 
-
 .stat-number {
-  display:
-    block;
+  display: block;
 
-  color:
-    #111827;
+  color: #111827;
 
-  font-size:
-    25px;
+  font-size: 25px;
 
-  line-height:
-    1.2;
+  line-height: 1.2;
 }
 
 
@@ -1342,89 +1170,60 @@ img {
 ========================================================= */
 
 .pending-header {
-  width:
-    100%;
+  width: 100%;
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
+  justify-content: space-between;
 
-  justify-content:
-    space-between;
+  gap: 15px;
 
-  gap:
-    15px;
-
-  margin-bottom:
-    18px;
+  margin-bottom: 18px;
 
   padding:
     0 3px;
 }
 
-
 .pending-header h2 {
-  margin:
-    0 0 5px;
+  margin: 0 0 5px;
 
-  color:
-    white;
+  color: white;
 
-  font-size:
-    23px;
+  font-size: 23px;
 }
 
-
 .pending-header p {
-  margin:
-    0;
+  margin: 0;
 
   color:
     rgba(255, 255, 255, 0.78);
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  line-height:
-    1.5;
+  line-height: 1.5;
 }
 
-
 .pending-count {
-  min-width:
-    38px;
+  min-width: 38px;
+  height: 38px;
 
-  height:
-    38px;
+  padding: 0 10px;
 
-  padding:
-    0 10px;
+  border-radius: 50%;
 
-  border-radius:
-    50%;
+  background: white;
 
-  background:
-    white;
+  color: #2563eb;
 
-  color:
-    #2563eb;
+  display: flex;
 
-  display:
-    flex;
+  align-items: center;
+  justify-content: center;
 
-  align-items:
-    center;
+  font-size: 14px;
 
-  justify-content:
-    center;
-
-  font-size:
-    14px;
-
-  font-weight:
-    800;
+  font-weight: 800;
 }
 
 
@@ -1433,20 +1232,16 @@ img {
 ========================================================= */
 
 .admin-loading {
-  width:
-    100%;
+  width: 100%;
 
   background:
     rgba(255, 255, 255, 0.97);
 
-  border-radius:
-    16px;
+  border-radius: 16px;
 
-  padding:
-    50px 20px;
+  padding: 50px 20px;
 
-  text-align:
-    center;
+  text-align: center;
 
   border:
     1px solid #e5e7eb;
@@ -1456,25 +1251,17 @@ img {
     rgba(0, 0, 0, 0.07);
 }
 
-
 .admin-loading p {
-  margin:
-    0;
+  margin: 0;
 
-  color:
-    #6b7280;
+  color: #6b7280;
 
-  font-size:
-    14px;
+  font-size: 14px;
 }
 
-
 .admin-spinner {
-  width:
-    38px;
-
-  height:
-    38px;
+  width: 38px;
+  height: 38px;
 
   margin:
     0 auto 15px;
@@ -1485,13 +1272,11 @@ img {
   border-top-color:
     #2563eb;
 
-  border-radius:
-    50%;
+  border-radius: 50%;
 
   animation:
     adminSpin 0.8s linear infinite;
 }
-
 
 @keyframes adminSpin {
   to {
@@ -1506,8 +1291,7 @@ img {
 ========================================================= */
 
 .empty-admin {
-  width:
-    100%;
+  width: 100%;
 
   background:
     rgba(255, 255, 255, 0.97);
@@ -1515,97 +1299,73 @@ img {
   border:
     1px solid #e5e7eb;
 
-  border-radius:
-    16px;
+  border-radius: 16px;
 
   padding:
     60px 25px;
 
-  text-align:
-    center;
+  text-align: center;
 
   box-shadow:
     0 5px 18px
     rgba(0, 0, 0, 0.07);
 }
 
-
 .empty-admin-icon {
-  font-size:
-    48px;
+  font-size: 48px;
 
-  margin-bottom:
-    10px;
+  margin-bottom: 10px;
 }
-
 
 .empty-admin h3 {
   margin:
     0 0 8px;
 
-  color:
-    #111827;
+  color: #111827;
 
-  font-size:
-    21px;
+  font-size: 21px;
 }
 
-
 .empty-admin p {
-  max-width:
-    500px;
+  max-width: 500px;
 
   margin:
     0 auto 20px;
 
-  color:
-    #6b7280;
+  color: #6b7280;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  line-height:
-    1.6;
+  line-height: 1.6;
 }
 
-
 .empty-refresh-button {
-  border:
-    none;
+  border: none;
 
-  min-height:
-    42px;
+  min-height: 42px;
 
   padding:
     10px 17px;
 
-  border-radius:
-    8px;
+  border-radius: 8px;
 
-  background:
-    #2563eb;
+  background: #2563eb;
 
-  color:
-    white;
+  color: white;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
   transition:
     background 0.2s ease,
     transform 0.2s ease;
 }
 
-
 .empty-refresh-button:hover {
-  background:
-    #1d4ed8;
+  background: #1d4ed8;
 
   transform:
     translateY(-1px);
@@ -1617,39 +1377,26 @@ img {
 ========================================================= */
 
 .admin-news-list {
-  width:
-    100%;
+  width: 100%;
 
-  display:
-    flex;
+  display: flex;
 
-  flex-direction:
-    column;
+  flex-direction: column;
 
-  gap:
-    18px;
+  gap: 18px;
 }
 
-
-/* =========================================================
-   ADMIN NEWS CARD
-========================================================= */
-
 .admin-news-card {
-  width:
-    100%;
+  width: 100%;
 
-  display:
-    grid;
+  display: grid;
 
   grid-template-columns:
     250px minmax(0, 1fr);
 
-  gap:
-    0;
+  gap: 0;
 
-  overflow:
-    hidden;
+  overflow: hidden;
 
   background:
     rgba(255, 255, 255, 0.98);
@@ -1657,8 +1404,7 @@ img {
   border:
     1px solid #e5e7eb;
 
-  border-radius:
-    17px;
+  border-radius: 17px;
 
   box-shadow:
     0 6px 20px
@@ -1668,7 +1414,6 @@ img {
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
-
 
 .admin-news-card:hover {
   transform:
@@ -1685,35 +1430,25 @@ img {
 ========================================================= */
 
 .admin-news-image {
-  width:
-    100%;
+  width: 100%;
 
-  min-height:
-    260px;
+  min-height: 260px;
 
   background:
     #e5e7eb;
 
-  overflow:
-    hidden;
+  overflow: hidden;
 }
 
-
 .admin-news-image img {
-  width:
-    100%;
+  width: 100%;
+  height: 100%;
 
-  height:
-    100%;
+  min-height: 260px;
 
-  min-height:
-    260px;
+  display: block;
 
-  display:
-    block;
-
-  object-fit:
-    cover;
+  object-fit: cover;
 }
 
 
@@ -1722,102 +1457,69 @@ img {
 ========================================================= */
 
 .admin-news-content {
-  min-width:
-    0;
+  min-width: 0;
 
   padding:
     23px 25px;
 
-  display:
-    flex;
+  display: flex;
 
-  flex-direction:
-    column;
+  flex-direction: column;
 }
-
-
-/* =========================================================
-   ADMIN NEWS TOP
-========================================================= */
 
 .admin-news-top {
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
+  justify-content: space-between;
 
-  justify-content:
-    space-between;
+  gap: 10px;
 
-  gap:
-    10px;
-
-  margin-bottom:
-    12px;
+  margin-bottom: 12px;
 }
 
-
 .admin-news-top .category-badge {
-  display:
-    inline-block;
+  display: inline-block;
 
-  max-width:
-    65%;
+  max-width: 65%;
 
-  overflow:
-    hidden;
+  overflow: hidden;
 
-  text-overflow:
-    ellipsis;
+  text-overflow: ellipsis;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 
   padding:
     6px 11px;
 
-  border-radius:
-    20px;
+  border-radius: 20px;
 
-  background:
-    #eff6ff;
+  background: #eff6ff;
 
-  color:
-    #2563eb;
+  color: #2563eb;
 
-  font-size:
-    11px;
+  font-size: 11px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 }
-
 
 .status-badge {
   padding:
     5px 10px;
 
-  border-radius:
-    20px;
+  border-radius: 20px;
 
-  background:
-    #fff7ed;
+  background: #fff7ed;
 
-  color:
-    #c2410c;
+  color: #c2410c;
 
-  font-size:
-    11px;
+  font-size: 11px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  text-transform:
-    capitalize;
+  text-transform: capitalize;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 }
 
 
@@ -1829,17 +1531,13 @@ img {
   margin:
     0 0 15px;
 
-  color:
-    #111827;
+  color: #111827;
 
-  font-size:
-    22px;
+  font-size: 22px;
 
-  line-height:
-    1.35;
+  line-height: 1.35;
 
-  overflow-wrap:
-    anywhere;
+  overflow-wrap: anywhere;
 }
 
 
@@ -1848,101 +1546,68 @@ img {
 ========================================================= */
 
 .admin-news-content .author-info {
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
 
-  gap:
-    10px;
+  gap: 10px;
 
-  margin-bottom:
-    17px;
+  margin-bottom: 17px;
 
-  padding-bottom:
-    15px;
+  padding-bottom: 15px;
 
   border-bottom:
     1px solid #f0f0f0;
 }
 
-
 .admin-news-content .author-avatar {
-  width:
-    40px;
+  width: 40px;
+  height: 40px;
 
-  height:
-    40px;
+  min-width: 40px;
 
-  min-width:
-    40px;
+  border-radius: 50%;
 
-  border-radius:
-    50%;
+  background: #dbeafe;
 
-  background:
-    #dbeafe;
+  color: #2563eb;
 
-  color:
-    #2563eb;
+  display: flex;
 
-  display:
-    flex;
+  align-items: center;
+  justify-content: center;
 
-  align-items:
-    center;
+  font-size: 15px;
 
-  justify-content:
-    center;
-
-  font-size:
-    15px;
-
-  font-weight:
-    800;
+  font-weight: 800;
 }
-
 
 .admin-news-content .author-info > div:last-child {
-  min-width:
-    0;
+  min-width: 0;
 
-  display:
-    flex;
+  display: flex;
 
-  flex-direction:
-    column;
+  flex-direction: column;
 
-  gap:
-    2px;
+  gap: 2px;
 }
-
 
 .admin-news-content .author-info span {
-  color:
-    #6b7280;
+  color: #6b7280;
 
-  font-size:
-    11px;
+  font-size: 11px;
 }
 
-
 .admin-news-content .author-info strong {
-  color:
-    #374151;
+  color: #111827;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  overflow:
-    hidden;
+  overflow: hidden;
 
-  text-overflow:
-    ellipsis;
+  text-overflow: ellipsis;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 }
 
 
@@ -1951,29 +1616,21 @@ img {
 ========================================================= */
 
 .admin-news-description {
-  color:
-    #4b5563;
+  color: #374151;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  line-height:
-    1.7;
+  line-height: 1.7;
 
-  white-space:
-    pre-wrap;
+  white-space: pre-wrap;
 
-  overflow-wrap:
-    anywhere;
+  overflow-wrap: anywhere;
 
-  margin-bottom:
-    20px;
+  margin-bottom: 20px;
 
-  max-height:
-    220px;
+  max-height: 220px;
 
-  overflow-y:
-    auto;
+  overflow-y: auto;
 }
 
 
@@ -1982,45 +1639,33 @@ img {
 ========================================================= */
 
 .admin-actions {
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
 
-  gap:
-    10px;
+  gap: 10px;
 
-  margin-top:
-    auto;
+  margin-top: auto;
 }
-
 
 .approve-button,
 .reject-button {
-  min-height:
-    42px;
+  min-height: 42px;
 
   padding:
     10px 18px;
 
-  border:
-    none;
+  border: none;
 
-  border-radius:
-    8px;
+  border-radius: 8px;
 
-  color:
-    white;
+  color: white;
 
-  font-size:
-    13px;
+  font-size: 13px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
   transition:
     background 0.2s ease,
@@ -2028,47 +1673,35 @@ img {
     opacity 0.2s ease;
 }
 
-
 .approve-button {
-  background:
-    #16a34a;
+  background: #16a34a;
 }
-
 
 .approve-button:hover {
-  background:
-    #15803d;
+  background: #15803d;
 
   transform:
     translateY(-1px);
 }
-
 
 .reject-button {
-  background:
-    #dc2626;
+  background: #dc2626;
 }
 
-
 .reject-button:hover {
-  background:
-    #b91c1c;
+  background: #b91c1c;
 
   transform:
     translateY(-1px);
 }
-
 
 .approve-button:disabled,
 .reject-button:disabled {
-  opacity:
-    0.6;
+  opacity: 0.6;
 
-  cursor:
-    not-allowed;
+  cursor: not-allowed;
 
-  transform:
-    none;
+  transform: none;
 }
 
 
@@ -2079,108 +1712,91 @@ img {
 ========================================================= */
 
 .not-found {
-  min-height:
-    75vh;
+  width: 100%;
+  min-height: calc(100vh - 68px);
 
-  display:
-    flex;
+  display: flex;
 
-  flex-direction:
-    column;
+  flex-direction: column;
 
-  align-items:
-    center;
+  align-items: center;
+  justify-content: center;
 
-  justify-content:
-    center;
+  text-align: center;
 
-  text-align:
-    center;
-
-  color:
-    white;
+  color: white;
 
   padding:
     30px 20px;
-}
 
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.60),
+      rgba(15, 23, 42, 0.60)
+    ),
+    url("/404.jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
 
 .not-found-icon {
-  font-size:
-    45px;
+  font-size: 45px;
 
-  margin-bottom:
-    10px;
+  margin-bottom: 10px;
 }
-
 
 .not-found h1 {
   margin:
     0 0 10px;
 
-  font-size:
-    80px;
+  font-size: 80px;
 
-  line-height:
-    1;
+  line-height: 1;
 }
-
 
 .not-found p {
   margin:
     0 0 22px;
 
-  font-size:
-    18px;
+  font-size: 18px;
 
   color:
     rgba(255, 255, 255, 0.85);
 }
 
-
 .not-found-button {
-  display:
-    inline-flex;
+  display: inline-flex;
 
-  align-items:
-    center;
+  align-items: center;
+  justify-content: center;
 
-  justify-content:
-    center;
-
-  min-height:
-    42px;
+  min-height: 42px;
 
   padding:
     10px 17px;
 
-  border-radius:
-    8px;
+  border-radius: 8px;
 
-  background:
-    white;
+  background: white;
 
-  color:
-    #2563eb;
+  color: #2563eb;
 
-  text-decoration:
-    none;
+  text-decoration: none;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
   transition:
     transform 0.2s ease,
     background 0.2s ease;
 }
 
-
 .not-found-button:hover {
-  background:
-    #eff6ff;
+  background: #eff6ff;
 
   transform:
     translateY(-1px);
@@ -2194,17 +1810,13 @@ img {
 ========================================================= */
 
 .navbar {
-  position:
-    sticky;
+  position: sticky;
 
-  top:
-    0;
+  top: 0;
 
-  z-index:
-    1000;
+  z-index: 1000;
 
-  width:
-    100%;
+  width: 100%;
 
   background:
     rgba(15, 23, 42, 0.96);
@@ -2216,41 +1828,30 @@ img {
     0 4px 18px
     rgba(0, 0, 0, 0.15);
 
-  backdrop-filter:
-    blur(12px);
+  backdrop-filter: blur(12px);
 
-  -webkit-backdrop-filter:
-    blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-
 .navbar-container {
-  width:
-    100%;
+  width: 100%;
 
-  max-width:
-    1200px;
+  max-width: 1200px;
 
-  min-height:
-    68px;
+  min-height: 68px;
 
-  margin:
-    0 auto;
+  margin: 0 auto;
 
   padding:
     0 20px;
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
-  gap:
-    20px;
+  gap: 20px;
 }
 
 
@@ -2259,30 +1860,23 @@ img {
 ========================================================= */
 
 .navbar-logo {
-  color:
-    white;
+  color: white;
 
-  text-decoration:
-    none;
+  text-decoration: none;
 
-  font-size:
-    22px;
+  font-size: 22px;
 
-  font-weight:
-    800;
+  font-weight: 800;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 
   transition:
     opacity 0.2s ease,
     transform 0.2s ease;
 }
 
-
 .navbar-logo:hover {
-  opacity:
-    0.9;
+  opacity: 0.9;
 
   transform:
     translateY(-1px);
@@ -2294,51 +1888,38 @@ img {
 ========================================================= */
 
 .navbar-links {
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
 
-  justify-content:
-    flex-end;
+  justify-content: flex-end;
 
-  gap:
-    6px;
+  gap: 6px;
 
-  flex-wrap:
-    wrap;
+  flex-wrap: wrap;
 }
 
-
 .navbar-link {
-  color:
-    #e5e7eb;
+  color: #e5e7eb;
 
-  text-decoration:
-    none;
+  text-decoration: none;
 
   padding:
     9px 11px;
 
-  border-radius:
-    8px;
+  border-radius: 8px;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  font-weight:
-    600;
+  font-weight: 600;
 
   transition:
     background 0.2s ease,
     color 0.2s ease;
 }
 
-
 .navbar-link:hover {
-  color:
-    white;
+  color: white;
 
   background:
     rgba(255, 255, 255, 0.1);
@@ -2350,36 +1931,28 @@ img {
 ========================================================= */
 
 .navbar-register {
-  color:
-    white;
+  color: white;
 
-  background:
-    #2563eb;
+  background: #2563eb;
 
-  text-decoration:
-    none;
+  text-decoration: none;
 
   padding:
     9px 14px;
 
-  border-radius:
-    8px;
+  border-radius: 8px;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
   transition:
     background 0.2s ease,
     transform 0.2s ease;
 }
 
-
 .navbar-register:hover {
-  background:
-    #1d4ed8;
+  background: #1d4ed8;
 
   transform:
     translateY(-1px);
@@ -2391,42 +1964,32 @@ img {
 ========================================================= */
 
 .navbar-logout {
-  border:
-    none;
+  border: none;
 
-  color:
-    white;
+  color: white;
 
-  background:
-    #dc2626;
+  background: #dc2626;
 
   padding:
     9px 14px;
 
-  border-radius:
-    8px;
+  border-radius: 8px;
 
-  font-family:
-    inherit;
+  font-family: inherit;
 
-  font-size:
-    14px;
+  font-size: 14px;
 
-  font-weight:
-    700;
+  font-weight: 700;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
   transition:
     background 0.2s ease,
     transform 0.2s ease;
 }
 
-
 .navbar-logout:hover {
-  background:
-    #b91c1c;
+  background: #b91c1c;
 
   transform:
     translateY(-1px);
@@ -2438,26 +2001,19 @@ img {
 ========================================================= */
 
 .navbar-menu-button {
-  display:
-    none;
+  display: none;
 
-  border:
-    none;
+  border: none;
 
-  background:
-    transparent;
+  background: transparent;
 
-  color:
-    white;
+  color: white;
 
-  font-size:
-    25px;
+  font-size: 25px;
 
-  cursor:
-    pointer;
+  cursor: pointer;
 
-  padding:
-    6px;
+  padding: 6px;
 }
 
 
@@ -2466,11 +2022,9 @@ img {
 ========================================================= */
 
 ::selection {
-  background:
-    #2563eb;
+  background: #2563eb;
 
-  color:
-    white;
+  color: white;
 }
 
 
@@ -2479,25 +2033,20 @@ img {
 ========================================================= */
 
 ::-webkit-scrollbar {
-  width:
-    8px;
+  width: 8px;
 }
-
 
 ::-webkit-scrollbar-track {
   background:
     rgba(15, 23, 42, 0.15);
 }
 
-
 ::-webkit-scrollbar-thumb {
   background:
     rgba(100, 116, 139, 0.6);
 
-  border-radius:
-    10px;
+  border-radius: 10px;
 }
-
 
 ::-webkit-scrollbar-thumb:hover {
   background:
@@ -2506,89 +2055,337 @@ img {
 
 
 /* =========================================================
-   =========================================================
-   TABLET - 900px
-   =========================================================
+   TABLET
 ========================================================= */
 
 @media (max-width: 900px) {
 
   .navbar-container {
-    min-height:
-      64px;
+    min-height: 64px;
 
     padding:
       0 15px;
   }
 
-
   .navbar-links {
-    gap:
-      3px;
+    gap: 3px;
   }
-
 
   .navbar-link,
   .navbar-register,
   .navbar-logout {
-    font-size:
-      13px;
+    font-size: 13px;
 
     padding:
       8px 9px;
   }
-
 
   .admin-background {
     padding:
       15px 15px 55px;
   }
 
-
   .admin-news-card {
     grid-template-columns:
       200px minmax(0, 1fr);
   }
 
-
   .admin-news-image,
   .admin-news-image img {
-    min-height:
-      240px;
+    min-height: 240px;
   }
-
 
   .admin-news-content {
     padding:
       20px;
   }
 
-
   .admin-news-title {
-    font-size:
-      20px;
+    font-size: 20px;
   }
 }
 
 
 /* =========================================================
-   MOBILE - 700px
+   MOBILE
 ========================================================= */
 
 @media (max-width: 700px) {
 
   body {
-    background-attachment:
-      scroll;
+    background-attachment: scroll;
+  }
+
+  .page-background,
+  .news-page,
+  .newsfeed-page,
+  .news-feed-page,
+  .news-background,
+  .news-details-page,
+  .newsdetails-page,
+  .news-detail-page,
+  .news-details-background,
+  .profile-page,
+  .profile-background,
+  .create-post-page,
+  .createpost-page,
+  .create-news-page,
+  .create-background,
+  .notifications-page,
+  .notification-page,
+  .notifications-background,
+  .reports-page,
+  .report-page,
+  .reports-background,
+  .login-page,
+  .register-page,
+  .admin-background,
+  .not-found {
+    background-attachment: scroll;
 
     background-position:
       center center;
   }
 
 
-  /* =======================================================
-     NAVBAR
-  ======================================================= */
+  /* LOGIN */
+
+  .login-page {
+    min-height:
+      calc(100vh - 60px);
+
+    padding:
+      30px 15px 45px;
+  }
+
+  .login-card {
+    max-width: 430px;
+
+    padding:
+      30px 24px;
+
+    border-radius:
+      16px;
+  }
+
+  .login-header {
+    margin-bottom:
+      26px;
+  }
+
+  .login-header h1 {
+    font-size:
+      25px;
+  }
+
+
+  /* REGISTER */
+
+  .register-page {
+    min-height:
+      calc(100vh - 60px);
+
+    padding:
+      25px 12px 40px;
+  }
+
+  .register-card {
+    padding:
+      28px 20px;
+
+    border-radius:
+      15px;
+  }
+
+  .register-icon {
+    width: 50px;
+    height: 50px;
+
+    margin-bottom:
+      15px;
+
+    font-size:
+      24px;
+  }
+
+  .register-card h1 {
+    font-size:
+      24px;
+  }
+
+  .register-subtitle {
+    margin-bottom:
+      23px;
+
+    font-size:
+      13px;
+  }
+
+  .register-form {
+    gap:
+      15px;
+  }
+
+  .register-form-group input {
+    height:
+      44px;
+  }
+
+  .register-button {
+    min-height:
+      44px;
+  }
+
+
+  /* COMMON */
+
+  .page-background {
+    padding-bottom:
+      45px;
+  }
+
+  .page-container {
+    padding:
+      90px 15px 40px;
+  }
+
+
+  /* ADMIN */
+
+  .admin-background {
+    padding:
+      12px 12px 45px;
+  }
+
+  .admin-header {
+    padding:
+      20px;
+
+    border-radius:
+      15px;
+
+    align-items:
+      flex-start;
+  }
+
+  .admin-title-row {
+    gap:
+      12px;
+  }
+
+  .admin-icon {
+    width:
+      48px;
+
+    height:
+      48px;
+
+    min-width:
+      48px;
+
+    border-radius:
+      12px;
+
+    font-size:
+      24px;
+  }
+
+  .admin-header h1 {
+    font-size:
+      22px;
+  }
+
+  .admin-header p {
+    font-size:
+      12px;
+  }
+
+  .refresh-button {
+    min-width:
+      42px;
+
+    padding:
+      10px;
+  }
+
+  .refresh-button span {
+    display:
+      none;
+  }
+
+  .admin-stats {
+    grid-template-columns:
+      1fr;
+  }
+
+  .pending-header h2 {
+    font-size:
+      20px;
+  }
+
+  .admin-news-card {
+    grid-template-columns:
+      1fr;
+  }
+
+  .admin-news-image,
+  .admin-news-image img {
+    min-height:
+      210px;
+
+    height:
+      210px;
+  }
+
+  .admin-news-content {
+    padding:
+      18px;
+  }
+
+  .admin-news-title {
+    font-size:
+      20px;
+  }
+
+  .admin-news-description {
+    max-height:
+      none;
+  }
+
+  .admin-actions {
+    width:
+      100%;
+  }
+
+  .approve-button,
+  .reject-button {
+    flex:
+      1;
+
+    min-height:
+      44px;
+  }
+
+  .content-card {
+    padding:
+      20px;
+
+    border-radius:
+      16px;
+  }
+
+  .not-found h1 {
+    font-size:
+      70px;
+  }
+
+  .not-found p {
+    font-size:
+      17px;
+  }
+
+
+  /* NAVBAR */
 
   .navbar-container {
     position:
@@ -2598,18 +2395,15 @@ img {
       60px;
   }
 
-
   .navbar-logo {
     font-size:
       20px;
   }
 
-
   .navbar-menu-button {
     display:
       block;
   }
-
 
   .navbar-links {
     display:
@@ -2653,12 +2447,10 @@ img {
       rgba(0, 0, 0, 0.2);
   }
 
-
   .navbar-links-open {
     display:
       flex;
   }
-
 
   .navbar-link,
   .navbar-register,
@@ -2675,279 +2467,27 @@ img {
     font-size:
       14px;
   }
-
-
-  /* =======================================================
-     LOGIN
-  ======================================================= */
-
-  .login-page {
-    min-height:
-      calc(100vh - 60px);
-
-    padding:
-      35px 15px 50px;
-  }
-
-
-  .login-card {
-    max-width:
-      430px;
-
-    padding:
-      30px 25px;
-
-    border-radius:
-      16px;
-  }
-
-
-  .login-header {
-    margin-bottom:
-      26px;
-  }
-
-
-  .login-header h1 {
-    font-size:
-      25px;
-  }
-
-
-  /* =======================================================
-     REGISTER
-  ======================================================= */
-
-  .register-page {
-    min-height:
-      calc(100vh - 60px);
-
-    padding:
-      35px 15px 50px;
-  }
-
-
-  .register-card {
-    max-width:
-      440px;
-
-    padding:
-      30px 25px;
-
-    border-radius:
-      16px;
-  }
-
-
-  .register-card h1 {
-    font-size:
-      25px;
-  }
-
-
-  .register-subtitle {
-    margin-bottom:
-      24px;
-  }
-
-
-  /* =======================================================
-     COMMON
-  ======================================================= */
-
-  .page-background {
-    padding-bottom:
-      45px;
-  }
-
-
-  .page-container {
-    padding:
-      90px 15px 40px;
-  }
-
-
-  .content-card {
-    padding:
-      20px;
-
-    border-radius:
-      16px;
-  }
-
-
-  /* =======================================================
-     ADMIN
-  ======================================================= */
-
-  .admin-background {
-    padding:
-      12px 12px 45px;
-  }
-
-
-  .admin-header {
-    padding:
-      20px;
-
-    border-radius:
-      15px;
-
-    align-items:
-      flex-start;
-  }
-
-
-  .admin-title-row {
-    gap:
-      12px;
-  }
-
-
-  .admin-icon {
-    width:
-      48px;
-
-    height:
-      48px;
-
-    min-width:
-      48px;
-
-    border-radius:
-      12px;
-
-    font-size:
-      24px;
-  }
-
-
-  .admin-header h1 {
-    font-size:
-      22px;
-  }
-
-
-  .admin-header p {
-    font-size:
-      12px;
-  }
-
-
-  .refresh-button {
-    min-width:
-      42px;
-
-    padding:
-      10px;
-  }
-
-
-  .refresh-button span {
-    display:
-      none;
-  }
-
-
-  .admin-stats {
-    grid-template-columns:
-      1fr;
-  }
-
-
-  .pending-header h2 {
-    font-size:
-      20px;
-  }
-
-
-  .admin-news-card {
-    grid-template-columns:
-      1fr;
-  }
-
-
-  .admin-news-image,
-  .admin-news-image img {
-    min-height:
-      210px;
-
-    height:
-      210px;
-  }
-
-
-  .admin-news-content {
-    padding:
-      18px;
-  }
-
-
-  .admin-news-title {
-    font-size:
-      20px;
-  }
-
-
-  .admin-news-description {
-    max-height:
-      none;
-  }
-
-
-  .admin-actions {
-    width:
-      100%;
-  }
-
-
-  .approve-button,
-  .reject-button {
-    flex:
-      1;
-
-    min-height:
-      44px;
-  }
-
-
-  /* =======================================================
-     404
-  ======================================================= */
-
-  .not-found h1 {
-    font-size:
-      70px;
-  }
-
-
-  .not-found p {
-    font-size:
-      17px;
-  }
 }
 
 
 /* =========================================================
-   SMALL MOBILE - 480px
+   SMALL MOBILE
 ========================================================= */
 
 @media (max-width: 480px) {
 
   .login-page {
     padding:
-      25px 10px 40px;
+      20px 10px 35px;
   }
-
 
   .login-card {
     padding:
-      26px 18px;
+      25px 18px;
 
     border-radius:
       14px;
   }
-
 
   .login-icon {
     width:
@@ -2966,24 +2506,20 @@ img {
       24px;
   }
 
-
   .login-header h1 {
     font-size:
       23px;
   }
-
 
   .login-header p {
     font-size:
       13px;
   }
 
-
   .login-form-group {
     margin-bottom:
       18px;
   }
-
 
   .login-form-group input {
     height:
@@ -2991,100 +2527,28 @@ img {
   }
 
 
-  .login-button {
-    min-height:
-      45px;
-  }
-
-
-  /* =======================================================
-     REGISTER
-  ======================================================= */
+  /* REGISTER */
 
   .register-page {
     padding:
-      25px 10px 40px;
+      20px 10px 35px;
   }
-
 
   .register-card {
     padding:
-      26px 18px;
+      25px 18px;
 
     border-radius:
       14px;
   }
 
 
-  .register-icon {
-    width:
-      50px;
-
-    height:
-      50px;
-
-    margin-bottom:
-      13px;
-
-    border-radius:
-      13px;
-
-    font-size:
-      24px;
-  }
-
-
-  .register-card h1 {
-    font-size:
-      23px;
-  }
-
-
-  .register-subtitle {
-    margin-bottom:
-      22px;
-
-    font-size:
-      13px;
-  }
-
-
-  .register-form {
-    gap:
-      15px;
-  }
-
-
-  .register-form-group input {
-    height:
-      45px;
-  }
-
-
-  .register-button {
-    min-height:
-      45px;
-  }
-
-
-  .register-footer {
-    margin-top:
-      20px;
-
-    padding-top:
-      17px;
-  }
-
-
-  /* =======================================================
-     COMMON
-  ======================================================= */
+  /* COMMON */
 
   .page-container {
     padding:
       80px 10px 30px;
   }
-
 
   .content-card {
     padding:
@@ -3095,15 +2559,12 @@ img {
   }
 
 
-  /* =======================================================
-     ADMIN
-  ======================================================= */
+  /* ADMIN */
 
   .admin-background {
     padding:
       8px 10px 35px;
   }
-
 
   .admin-header {
     padding:
@@ -3116,12 +2577,10 @@ img {
       14px;
   }
 
-
   .admin-title-row {
     align-items:
       flex-start;
   }
-
 
   .admin-icon {
     width:
@@ -3137,18 +2596,15 @@ img {
       21px;
   }
 
-
   .admin-header h1 {
     font-size:
       19px;
   }
 
-
   .admin-header p {
     font-size:
       11px;
   }
-
 
   .admin-message {
     font-size:
@@ -3158,12 +2614,10 @@ img {
       11px 13px;
   }
 
-
   .stat-card {
     padding:
       16px;
   }
-
 
   .stat-icon {
     width:
@@ -3179,30 +2633,25 @@ img {
       20px;
   }
 
-
   .stat-number {
     font-size:
       22px;
   }
-
 
   .pending-header {
     margin-bottom:
       13px;
   }
 
-
   .pending-header h2 {
     font-size:
       18px;
   }
 
-
   .pending-header p {
     font-size:
       11px;
   }
-
 
   .pending-count {
     min-width:
@@ -3212,12 +2661,10 @@ img {
       34px;
   }
 
-
   .admin-news-card {
     border-radius:
       14px;
   }
-
 
   .admin-news-image,
   .admin-news-image img {
@@ -3228,18 +2675,15 @@ img {
       190px;
   }
 
-
   .admin-news-content {
     padding:
       16px;
   }
 
-
   .admin-news-top {
     margin-bottom:
       10px;
   }
-
 
   .admin-news-title {
     font-size:
@@ -3249,7 +2693,6 @@ img {
       12px;
   }
 
-
   .admin-news-description {
     font-size:
       13px;
@@ -3258,12 +2701,10 @@ img {
       1.65;
   }
 
-
   .admin-actions {
     flex-direction:
       column;
   }
-
 
   .approve-button,
   .reject-button {
@@ -3274,18 +2715,15 @@ img {
       none;
   }
 
-
   .empty-admin {
     padding:
       45px 15px;
   }
 
-
   .empty-admin h3 {
     font-size:
       19px;
   }
-
 
   .empty-admin p {
     font-size:
@@ -3293,9 +2731,7 @@ img {
   }
 
 
-  /* =======================================================
-     404
-  ======================================================= */
+  /* 404 */
 
   .not-found {
     min-height:
@@ -3305,12 +2741,10 @@ img {
       20px 15px;
   }
 
-
   .not-found h1 {
     font-size:
       60px;
   }
-
 
   .not-found p {
     font-size:
@@ -3320,118 +2754,35 @@ img {
 
 
 /* =========================================================
-   VERY SMALL PHONES - 360px
+   VERY SMALL PHONES
 ========================================================= */
 
 @media (max-width: 360px) {
-
-  .navbar-container {
-    padding:
-      0 10px;
-  }
-
-
-  .navbar-logo {
-    font-size:
-      18px;
-  }
-
-
-  .login-card {
-    padding:
-      22px 15px;
-  }
-
-
-  .login-header h1 {
-    font-size:
-      21px;
-  }
-
-
-  .login-header p {
-    font-size:
-      12px;
-  }
-
-
-  .login-form-group label {
-    font-size:
-      12px;
-  }
-
-
-  .login-form-group input {
-    font-size:
-      13px;
-  }
-
-
-  .register-card {
-    padding:
-      22px 15px;
-  }
-
-
-  .register-card h1 {
-    font-size:
-      21px;
-  }
-
-
-  .register-subtitle {
-    font-size:
-      12px;
-  }
-
-
-  .register-form-group label {
-    font-size:
-      12px;
-  }
-
-
-  .register-form-group input {
-    font-size:
-      13px;
-  }
-
-
-  .register-button {
-    min-height:
-      44px;
-  }
-
 
   .page-container {
     padding:
       75px 8px 25px;
   }
 
-
   .content-card {
     padding:
       14px;
   }
-
 
   .admin-background {
     padding:
       6px 8px 30px;
   }
 
-
   .admin-header {
     padding:
       14px;
   }
 
-
   .admin-title-row {
     gap:
       9px;
   }
-
 
   .admin-icon {
     width:
@@ -3447,18 +2798,15 @@ img {
       19px;
   }
 
-
   .admin-header h1 {
     font-size:
       17px;
   }
 
-
   .admin-header p {
     font-size:
       10px;
   }
-
 
   .admin-news-image,
   .admin-news-image img {
@@ -3469,28 +2817,34 @@ img {
       165px;
   }
 
-
   .admin-news-content {
     padding:
       14px;
   }
-
 
   .admin-news-title {
     font-size:
       17px;
   }
 
-
   .not-found h1 {
     font-size:
       52px;
   }
 
-
   .not-found p {
     font-size:
       14px;
+  }
+
+  .navbar-container {
+    padding:
+      0 10px;
+  }
+
+  .navbar-logo {
+    font-size:
+      18px;
   }
 }
 
@@ -3506,7 +2860,6 @@ img {
       auto;
   }
 
-
   *,
   *::before,
   *::after {
@@ -3520,12 +2873,4 @@ img {
       0.01ms !important;
   }
 
-
-  .navbar-logo,
-  .navbar-link,
-  .navbar-register,
-  .navbar-logout {
-    transition:
-      none;
-  }
 }
