@@ -1,9 +1,5 @@
 /* =========================================================
-   NEWS11 - NEWS FEED
-========================================================= */
-
-/* =========================================================
-   NEWS PAGE BACKGROUND
+   NEWS PAGE BACKGROUND IMAGE
 ========================================================= */
 
 .news-background {
@@ -11,11 +7,24 @@
   min-height: 100vh;
 
   /*
-   * IMPORTANT:
-   * Keep this transparent so the global
-   * body background image remains visible.
+   * NEWS FEED BACKGROUND IMAGE
+   * Image must be inside:
+   * frontend/public/news-background.jpg
    */
-  background: transparent;
+  background-image:
+    linear-gradient(
+      rgba(15, 23, 42, 0.35),
+      rgba(15, 23, 42, 0.35)
+    ),
+    url("/news-background.jpg");
+
+  background-size: cover;
+
+  background-position: center;
+
+  background-repeat: no-repeat;
+
+  background-attachment: fixed;
 
   padding:
     20px 20px 70px;

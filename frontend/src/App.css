@@ -879,27 +879,30 @@ img {
 
 
 /* =========================================================
-   =========================================================
-   ADMIN DASHBOARD
-   =========================================================
+   NEWS11 - ADMIN DASHBOARD BACKGROUND
 ========================================================= */
 
 .admin-background {
   width: 100%;
   min-height: 100vh;
 
-  padding:
-    20px 20px 70px;
+  padding: 30px 20px 70px;
 
+  /*
+   * ADMIN BACKGROUND IMAGE
+   *
+   * Put the image here:
+   * frontend/public/admin-bg.jfif
+   */
   background:
     linear-gradient(
-      rgba(15, 23, 42, 0.55),
-      rgba(15, 23, 42, 0.55)
+      rgba(15, 23, 42, 0.65),
+      rgba(15, 23, 42, 0.65)
     ),
     url("/images/images (8).jfif");
 
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
