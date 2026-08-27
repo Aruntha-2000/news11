@@ -164,6 +164,17 @@ img {
   padding: 40px 20px;
 
   box-sizing: border-box;
+   background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/images/images (2).jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
 }
 
 
@@ -462,6 +473,17 @@ img {
   padding: 40px 20px;
 
   box-sizing: border-box;
+  background:
+    linear-gradient(
+      rgba(15, 23, 42, 0.55),
+      rgba(15, 23, 42, 0.55)
+    ),
+    url("/images/images (3).jfif");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
 }
 
 
