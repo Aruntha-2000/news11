@@ -16,7 +16,10 @@ const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
+const cleanName = name?.trim();
+const cleanEmail = email?.trim().toLowerCase();
+
+if (!cleanName || !cleanEmail || !password) {
       return res.status(400).json({
         message: "Name, email and password are required"
       });
@@ -30,7 +33,7 @@ const register = async (req, res) => {
 
     const [existingUsers] = await db.promise().query(
       "SELECT id FROM users WHERE email = ?",
-      [email]
+      [cleanEmail]
     );
 
     if (existingUsers.length > 0) {
@@ -44,8 +47,8 @@ const register = async (req, res) => {
     const [result] = await db.promise().query(
       `INSERT INTO users
        (name, email, password_hash, role)
-       VALUES (?, ?, ?, 'reader')`,
-      [name, email, passwordHash]
+       VALUES (?, ?, ?, 'publisher')`,
+      [cleanName, cleanEmail, passwordHash]
     );
 
     res.status(201).json({
