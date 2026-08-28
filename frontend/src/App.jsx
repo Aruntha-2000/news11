@@ -13,6 +13,7 @@ import Reports from "./pages/report";
 import AdminDashboard from "./pages/admindashboard";
 import ForgotPassword from "./pages/forgotpassword";
 import ResetPassword from "./pages/resetpassword";
+import VerifyEmail from "./pages/verifyemail";
 
 // Components
 import Navbar from "./component/Navbar";
@@ -33,7 +34,7 @@ function App() {
             {/* AUTHENTICATION */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/Register" element={<Register />} />
+            <Route path="/verify-email/:token" element={<VerifyEmail />} />
 
             <Route
               path="/forgot-password"

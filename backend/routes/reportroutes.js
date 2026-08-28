@@ -8,7 +8,10 @@ const {
   updateReportStatus
 } = require("../controllers/reportcontroller");
 
-const authenticateToken = require("../middleware/authmiddleware");
+const {
+  authenticateToken,
+  adminOnly
+} = require("../middleware/authmiddleware");
 
 
 // CREATE REPORT
@@ -25,6 +28,7 @@ router.post(
 router.get(
   "/",
   authenticateToken,
+   adminOnly,
   getReports
 );
 
@@ -34,6 +38,7 @@ router.get(
 router.put(
   "/:id/status",
   authenticateToken,
+   adminOnly,
   updateReportStatus
 );
 

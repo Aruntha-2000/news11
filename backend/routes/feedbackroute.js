@@ -8,7 +8,9 @@ const {
   updateFeedbackStatus
 } = require("../controllers/feedbackcontroller");
 
-const authenticateToken = require("../middleware/authmiddleware");
+const {
+  authenticateToken
+} = require("../middleware/authmiddleware");
 
 
 

@@ -3,6 +3,7 @@ const express = require("express");
 const {
   register,
   login,
+  verifyEmail,
   forgotPassword,
   resetPassword
 } = require("../controllers/authcontroller");
@@ -16,6 +17,12 @@ router.post(
   register
 );
 
+// VERIFY EMAIL
+
+router.get(
+  "/verify-email/:token",
+  verifyEmail
+);
 
 // LOGIN
 router.post(

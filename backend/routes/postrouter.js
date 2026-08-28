@@ -4,7 +4,9 @@ const {
   createPost
 } = require("../controllers/postcontroller");
 
-const authenticateToken = require("../middleware/authmiddleware");
+const {
+  authenticateToken
+} = require("../middleware/authmiddleware");
 
 const router = express.Router();
 

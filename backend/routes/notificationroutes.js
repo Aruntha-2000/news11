@@ -2,7 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 
-const authenticateToken = require("../middleware/authmiddleware");
+const {
+  authenticateToken
+} = require("../middleware/authmiddleware");
 
 const {
   getNotifications,

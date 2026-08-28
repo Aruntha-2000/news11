@@ -6,7 +6,9 @@ const {
   deleteComment
 } = require("../controllers/commentcontroller");
 
-const authenticateToken = require("../middleware/authmiddleware");
+const {
+  authenticateToken
+} = require("../middleware/authmiddleware");
 
 const router = express.Router();
 

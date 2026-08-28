@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const API_URL =
   "https://news-11-production.up.railway.app";
 
 function Register() {
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -130,21 +128,21 @@ function Register() {
 
       setMessage(
         data.message ||
-          "Registration successful! You can now login."
+          "Registration successful! Please check your email and verify your account before logging in."
       );
 
       setMessageType("success");
 
+      // Clear form
       setFormData({
         name: "",
         email: "",
         password: "",
       });
 
-      // Redirect to login after short delay
-      setTimeout(() => {
-        navigate("/login");
-      }, 1200);
+      // IMPORTANT:
+      // Do NOT automatically redirect to login.
+      // The user must verify their email first.
 
     } catch (error) {
       console.error(
@@ -357,3 +355,4 @@ function Register() {
 }
 
 export default Register;
+

@@ -190,19 +190,11 @@ function Navbar() {
 
 
               {/* ADMIN */}
-
-              <Link
-                to="/admin"
-                className={`navbar-link ${
-                  isActive("/admin")
-                    ? "navbar-link-active"
-                    : ""
-                }`}
-                onClick={closeMenu}
-              >
-                🛡️ Admin
-              </Link>
-
+              {user?.role === "admin" && (
+                <Link to="/admin" className="navbar-link">
+                  🛡️Admin
+                </Link>
+              )}
 
               {/* LOGOUT */}
 

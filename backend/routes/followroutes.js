@@ -12,7 +12,9 @@ const {
   getFollowInfo
 } = require("../controllers/followcontroller");
 
-const authMiddleware = require("../middleware/authmiddleware");
+const {
+  authenticateToken
+} = require("../middleware/authmiddleware");
 
 
 // FOLLOW

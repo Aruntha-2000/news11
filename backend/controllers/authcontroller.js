@@ -6,8 +6,6 @@ const nodemailer = require("nodemailer");
 const db = require("../config/database");
 
 const JWT_SECRET = process.env.JWT_SECRET;
-
-
 // =====================================================
 // REGISTER
 // =====================================================
@@ -16,10 +14,10 @@ const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-const cleanName = name?.trim();
-const cleanEmail = email?.trim().toLowerCase();
+    const cleanName = name?.trim();
+    const cleanEmail = email?.trim().toLowerCase();
 
-if (!cleanName || !cleanEmail || !password) {
+    if (!cleanName || !cleanEmail || !password) {
       return res.status(400).json({
         message: "Name, email and password are required"
       });
@@ -31,8 +29,9 @@ if (!cleanName || !cleanEmail || !password) {
       });
     }
 
+    // Check whether email already exists
     const [existingUsers] = await db.promise().query(
-      "SELECT id FROM users WHERE email = ?",
+      "SELECT id, email_verified FROM users WHERE email = ?",
       [cleanEmail]
     );
 
@@ -42,17 +41,131 @@ if (!cleanName || !cleanEmail || !password) {
       });
     }
 
+    // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const [result] = await db.promise().query(
-      `INSERT INTO users
-       (name, email, password_hash, role)
-       VALUES (?, ?, ?, 'publisher')`,
-      [cleanName, cleanEmail, passwordHash]
+    // Generate verification token
+    const verificationToken = crypto
+      .randomBytes(32)
+      .toString("hex");
+
+    // Token valid for 24 hours
+    const verificationExpires = new Date(
+      Date.now() + 24 * 60 * 60 * 1000
     );
 
+    // Create account
+    // New users are publishers according to your current design.
+    // email_verified = 0 means they cannot log in yet.
+    const [result] = await db.promise().query(
+      `INSERT INTO users
+       (
+         name,
+         email,
+         password_hash,
+         role,
+         email_verified,
+         verification_token,
+         verification_token_expires
+       )
+       VALUES (?, ?, ?, 'publisher', 0, ?, ?)`,
+      [
+        cleanName,
+        cleanEmail,
+        passwordHash,
+        verificationToken,
+        verificationExpires
+      ]
+    );
+
+    // Verification link
+    const verificationLink =
+      `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
+
+    // Create email transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    // Send verification email
+    await transporter.sendMail({
+      from: `"News11" <${process.env.EMAIL_USER}>`,
+
+      to: cleanEmail,
+
+      subject: "Verify your News11 email address",
+
+      html: `
+        <div style="
+          font-family: Arial, sans-serif;
+          max-width: 600px;
+          margin: auto;
+          padding: 30px;
+          border: 1px solid #ddd;
+          border-radius: 10px;
+        ">
+
+          <h2>
+            Welcome to News11
+          </h2>
+
+          <p>
+            Hello ${cleanName},
+          </p>
+
+          <p>
+            Thank you for creating a News11 account.
+          </p>
+
+          <p>
+            Please verify your email address before
+            logging in to your account.
+          </p>
+
+          <p style="margin: 30px 0;">
+
+            <a
+              href="${verificationLink}"
+              style="
+                display: inline-block;
+                padding: 12px 22px;
+                background: #2563eb;
+                color: white;
+                text-decoration: none;
+                border-radius: 6px;
+                font-weight: bold;
+              "
+            >
+              Verify Email Address
+            </a>
+
+          </p>
+
+          <p>
+            This verification link will expire in
+            24 hours.
+          </p>
+
+          <p>
+            If you did not create this News11 account,
+            you can safely ignore this email.
+          </p>
+
+          <p>
+            News11 Team
+          </p>
+
+        </div>
+      `
+    });
+
     res.status(201).json({
-      message: "Registration successful",
+      message:
+        "Registration successful! Please check your email and click the verification link before logging in.",
       userId: result.insertId
     });
 
@@ -60,7 +173,7 @@ if (!cleanName || !cleanEmail || !password) {
     console.error("Registration error:", error);
 
     res.status(500).json({
-      message: "Server error"
+      message: "Unable to complete registration"
     });
   }
 };
@@ -74,7 +187,9 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    const cleanEmail = email?.trim().toLowerCase();
+
+    if (!cleanEmail || !password) {
       return res.status(400).json({
         message: "Email and password are required"
       });
@@ -82,7 +197,7 @@ const login = async (req, res) => {
 
     const [users] = await db.promise().query(
       "SELECT * FROM users WHERE email = ?",
-      [email]
+      [cleanEmail]
     );
 
     if (users.length === 0) {
@@ -92,7 +207,15 @@ const login = async (req, res) => {
     }
 
     const user = users[0];
+    // Check email verification
+if (Number(user.email_verified) !== 1) {
+  return res.status(403).json({
+    message:
+      "Please verify your email address before logging in."
+  });
+}
 
+    // Check password
     const passwordMatch = await bcrypt.compare(
       password,
       user.password_hash
@@ -104,6 +227,16 @@ const login = async (req, res) => {
       });
     }
 
+    // IMPORTANT:
+    // Do not allow unverified accounts to log in
+    if (Number(user.email_verified) !== 1) {
+      return res.status(403).json({
+        message:
+          "Please verify your email address before logging in."
+      });
+    }
+
+    // Create JWT
     const token = jwt.sign(
       {
         id: user.id,
@@ -137,6 +270,60 @@ const login = async (req, res) => {
   }
 };
 
+// =====================================================
+// VERIFY EMAIL
+// =====================================================
+
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    if (!token) {
+      return res.status(400).json({
+        message: "Invalid verification link"
+      });
+    }
+
+    const [users] = await db.promise().query(
+      `SELECT id, email_verified
+       FROM users
+       WHERE verification_token = ?
+       AND verification_token_expires > NOW()`,
+      [token]
+    );
+
+    if (users.length === 0) {
+      return res.status(400).json({
+        message:
+          "Verification link is invalid or expired"
+      });
+    }
+
+    const user = users[0];
+
+    // Verify email
+    await db.promise().query(
+      `UPDATE users
+       SET email_verified = 1,
+           verification_token = NULL,
+           verification_token_expires = NULL
+       WHERE id = ?`,
+      [user.id]
+    );
+
+    res.json({
+      message:
+        "Email verified successfully. You can now log in."
+    });
+
+  } catch (error) {
+    console.error("Email verification error:", error);
+
+    res.status(500).json({
+      message: "Unable to verify email"
+    });
+  }
+};
 
 // =====================================================
 // FORGOT PASSWORD
@@ -437,13 +624,9 @@ const resetPassword = async (req, res) => {
 // =====================================================
 
 module.exports = {
-
   register,
-
   login,
-
+  verifyEmail,
   forgotPassword,
-
   resetPassword
-
 };

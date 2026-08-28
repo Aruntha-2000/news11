@@ -6,7 +6,9 @@ const {
   deleteReply
 } = require("../controllers/replecontroller");
 
-const authenticateToken = require("../middleware/authmiddleware");
+const {
+  authenticateToken
+} = require("../middleware/authmiddleware");
 
 const router = express.Router();
 
