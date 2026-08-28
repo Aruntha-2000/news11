@@ -272,11 +272,6 @@ function Profile() {
                 user?.name || "User"
               }`}
             >
-              {user?.name
-                ? user.name
-                    .charAt(0)
-                    .toUpperCase()
-                : "U"}
             </div>
 
             <h1>
