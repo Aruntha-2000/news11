@@ -1,111 +1,194 @@
-const dns = require("dns");
-
-dns.setDefaultResultOrder("ipv4first");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 
 const db = require("../config/database");
 
 const JWT_SECRET = process.env.JWT_SECRET;
+
+// =====================================================
+// BREVO SEND EMAIL
+// =====================================================
+
+const sendEmail = async ({
+  to,
+  subject,
+  html
+}) => {
+  const response = await fetch(
+    "https://api.brevo.com/v3/smtp/email",
+    {
+      method: "POST",
+
+      headers: {
+        "accept": "application/json",
+        "api-key": process.env.BREVO_API_KEY,
+        "content-type": "application/json"
+      },
+
+      body: JSON.stringify({
+        sender: {
+          name:
+            process.env.EMAIL_FROM_NAME ||
+            "News11",
+
+          email:
+            process.env.EMAIL_FROM
+        },
+
+        to: [
+          {
+            email: to
+          }
+        ],
+
+        subject,
+        htmlContent: html
+      })
+    }
+  );
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    console.error("Brevo email error:", data);
+
+    throw new Error(
+      data.message ||
+      "Brevo email sending failed"
+    );
+  }
+
+  return data;
+};
+
+
 // =====================================================
 // REGISTER
 // =====================================================
 
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+
+    const {
+      name,
+      email,
+      password
+    } = req.body;
 
     const cleanName = name?.trim();
-    const cleanEmail = email?.trim().toLowerCase();
+    const cleanEmail =
+      email?.trim().toLowerCase();
 
-    if (!cleanName || !cleanEmail || !password) {
+    // -------------------------------------------------
+    // VALIDATION
+    // -------------------------------------------------
+
+    if (
+      !cleanName ||
+      !cleanEmail ||
+      !password
+    ) {
       return res.status(400).json({
-        message: "Name, email and password are required"
+        message:
+          "Name, email and password are required"
       });
     }
 
     if (password.length < 6) {
       return res.status(400).json({
-        message: "Password must be at least 6 characters"
+        message:
+          "Password must be at least 6 characters"
       });
     }
 
-    // Check whether email already exists
-    const [existingUsers] = await db.promise().query(
-      "SELECT id, email_verified FROM users WHERE email = ?",
-      [cleanEmail]
-    );
+    // -------------------------------------------------
+    // CHECK EXISTING USER
+    // -------------------------------------------------
+
+    const [existingUsers] =
+      await db.promise().query(
+        `SELECT id, email_verified
+         FROM users
+         WHERE email = ?`,
+        [cleanEmail]
+      );
 
     if (existingUsers.length > 0) {
       return res.status(409).json({
-        message: "Email already registered"
+        message:
+          "Email already registered"
       });
     }
 
-    // Hash password
-    const passwordHash = await bcrypt.hash(password, 10);
+    // -------------------------------------------------
+    // HASH PASSWORD
+    // -------------------------------------------------
 
-    // Generate verification token
-    const verificationToken = crypto
-      .randomBytes(32)
-      .toString("hex");
+    const passwordHash =
+      await bcrypt.hash(
+        password,
+        10
+      );
 
-    // Token valid for 24 hours
-    const verificationExpires = new Date(
-      Date.now() + 24 * 60 * 60 * 1000
-    );
+    // -------------------------------------------------
+    // EMAIL VERIFICATION TOKEN
+    // -------------------------------------------------
 
-    // Create account
-    // New users are publishers according to your current design.
-    // email_verified = 0 means they cannot log in yet.
-    const [result] = await db.promise().query(
-      `INSERT INTO users
-       (
-         name,
-         email,
-         password_hash,
-         role,
-         email_verified,
-         verification_token,
-         verification_token_expires
-       )
-       VALUES (?, ?, ?, 'publisher', 0, ?, ?)`,
-      [
-        cleanName,
-        cleanEmail,
-        passwordHash,
-        verificationToken,
-        verificationExpires
-      ]
-    );
+    const verificationToken =
+      crypto
+        .randomBytes(32)
+        .toString("hex");
 
-    // Verification link
+    const verificationExpires =
+      new Date(
+        Date.now() +
+        24 * 60 * 60 * 1000
+      );
+
+    // -------------------------------------------------
+    // CREATE USER
+    // -------------------------------------------------
+
+    const [result] =
+      await db.promise().query(
+        `INSERT INTO users
+        (
+          name,
+          email,
+          password_hash,
+          role,
+          email_verified,
+          verification_token,
+          verification_token_expires
+        )
+        VALUES
+        (?, ?, ?, 'publisher', 0, ?, ?)`,
+        [
+          cleanName,
+          cleanEmail,
+          passwordHash,
+          verificationToken,
+          verificationExpires
+        ]
+      );
+
+    // -------------------------------------------------
+    // VERIFICATION LINK
+    // -------------------------------------------------
+
     const verificationLink =
       `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
 
-     const transporter = nodemailer.createTransport({
-          host: "smtp.gmail.com",
-          port: 465,
-          secure: true,
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-          },
-          family: 4,
-          connectionTimeout: 30000,
-          greetingTimeout: 30000,
-          socketTimeout: 30000
-        });
+    // -------------------------------------------------
+    // SEND VERIFICATION EMAIL USING BREVO
+    // -------------------------------------------------
 
-    // Send verification email
-    await transporter.sendMail({
-      from: `"News11" <${process.env.EMAIL_USER}>`,
-
+    await sendEmail({
       to: cleanEmail,
 
-      subject: "Verify your News11 email address",
+      subject:
+        "Verify your News11 email address",
 
       html: `
         <div style="
@@ -171,17 +254,28 @@ const register = async (req, res) => {
       `
     });
 
+    // -------------------------------------------------
+    // SUCCESS
+    // -------------------------------------------------
+
     res.status(201).json({
       message:
         "Registration successful! Please check your email and click the verification link before logging in.",
-      userId: result.insertId
+
+      userId:
+        result.insertId
     });
 
   } catch (error) {
-    console.error("Registration error:", error);
+
+    console.error(
+      "Registration error:",
+      error
+    );
 
     res.status(500).json({
-      message: "Unable to complete registration"
+      message:
+        "Unable to complete registration"
     });
   }
 };
@@ -193,71 +287,100 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
 
-    const cleanEmail = email?.trim().toLowerCase();
+    const {
+      email,
+      password
+    } = req.body;
 
-    if (!cleanEmail || !password) {
+    const cleanEmail =
+      email?.trim().toLowerCase();
+
+    if (
+      !cleanEmail ||
+      !password
+    ) {
       return res.status(400).json({
-        message: "Email and password are required"
+        message:
+          "Email and password are required"
       });
     }
 
-    const [users] = await db.promise().query(
-      "SELECT * FROM users WHERE email = ?",
-      [cleanEmail]
-    );
+    // -------------------------------------------------
+    // FIND USER
+    // -------------------------------------------------
+
+    const [users] =
+      await db.promise().query(
+        "SELECT * FROM users WHERE email = ?",
+        [cleanEmail]
+      );
 
     if (users.length === 0) {
       return res.status(401).json({
-        message: "Invalid email or password"
+        message:
+          "Invalid email or password"
       });
     }
 
     const user = users[0];
-    // Check email verification
-if (Number(user.email_verified) !== 1) {
-  return res.status(403).json({
-    message:
-      "Please verify your email address before logging in."
-  });
-}
 
-    // Check password
-    const passwordMatch = await bcrypt.compare(
-      password,
-      user.password_hash
-    );
+    // -------------------------------------------------
+    // CHECK EMAIL VERIFICATION
+    // -------------------------------------------------
 
-    if (!passwordMatch) {
-      return res.status(401).json({
-        message: "Invalid email or password"
-      });
-    }
-
-    // IMPORTANT:
-    // Do not allow unverified accounts to log in
-    if (Number(user.email_verified) !== 1) {
+    if (
+      Number(user.email_verified) !== 1
+    ) {
       return res.status(403).json({
         message:
           "Please verify your email address before logging in."
       });
     }
 
-    // Create JWT
-    const token = jwt.sign(
-      {
-        id: user.id,
-        role: user.role
-      },
-      JWT_SECRET,
-      {
-        expiresIn: "1d"
-      }
-    );
+    // -------------------------------------------------
+    // CHECK PASSWORD
+    // -------------------------------------------------
+
+    const passwordMatch =
+      await bcrypt.compare(
+        password,
+        user.password_hash
+      );
+
+    if (!passwordMatch) {
+      return res.status(401).json({
+        message:
+          "Invalid email or password"
+      });
+    }
+
+    // -------------------------------------------------
+    // CREATE JWT
+    // -------------------------------------------------
+
+    const token =
+      jwt.sign(
+        {
+          id: user.id,
+          role: user.role
+        },
+
+        JWT_SECRET,
+
+        {
+          expiresIn: "1d"
+        }
+      );
+
+    // -------------------------------------------------
+    // RESPONSE
+    // -------------------------------------------------
 
     res.json({
-      message: "Login successful",
+
+      message:
+        "Login successful",
 
       token,
 
@@ -267,16 +390,23 @@ if (Number(user.email_verified) !== 1) {
         email: user.email,
         role: user.role
       }
+
     });
 
   } catch (error) {
-    console.error("Login error:", error);
+
+    console.error(
+      "Login error:",
+      error
+    );
 
     res.status(500).json({
-      message: "Server error"
+      message:
+        "Server error"
     });
   }
 };
+
 
 // =====================================================
 // VERIFY EMAIL
@@ -284,21 +414,30 @@ if (Number(user.email_verified) !== 1) {
 
 const verifyEmail = async (req, res) => {
   try {
-    const { token } = req.params;
+
+    const {
+      token
+    } = req.params;
 
     if (!token) {
       return res.status(400).json({
-        message: "Invalid verification link"
+        message:
+          "Invalid verification link"
       });
     }
 
-    const [users] = await db.promise().query(
-      `SELECT id, email_verified
-       FROM users
-       WHERE verification_token = ?
-       AND verification_token_expires > NOW()`,
-      [token]
-    );
+    // -------------------------------------------------
+    // FIND VALID TOKEN
+    // -------------------------------------------------
+
+    const [users] =
+      await db.promise().query(
+        `SELECT id, email_verified
+         FROM users
+         WHERE verification_token = ?
+         AND verification_token_expires > NOW()`,
+        [token]
+      );
 
     if (users.length === 0) {
       return res.status(400).json({
@@ -309,7 +448,10 @@ const verifyEmail = async (req, res) => {
 
     const user = users[0];
 
-    // Verify email
+    // -------------------------------------------------
+    // VERIFY USER
+    // -------------------------------------------------
+
     await db.promise().query(
       `UPDATE users
        SET email_verified = 1,
@@ -325,13 +467,19 @@ const verifyEmail = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Email verification error:", error);
+
+    console.error(
+      "Email verification error:",
+      error
+    );
 
     res.status(500).json({
-      message: "Unable to verify email"
+      message:
+        "Unable to verify email"
     });
   }
 };
+
 
 // =====================================================
 // FORGOT PASSWORD
@@ -340,22 +488,31 @@ const verifyEmail = async (req, res) => {
 const forgotPassword = async (req, res) => {
   try {
 
-    const { email } = req.body;
+    const {
+      email
+    } = req.body;
 
     if (!email) {
       return res.status(400).json({
-        message: "Email address is required"
+        message:
+          "Email address is required"
       });
     }
 
-    const cleanEmail = email.trim().toLowerCase();
+    const cleanEmail =
+      email.trim().toLowerCase();
 
-    const [users] = await db.promise().query(
-      `SELECT id, name, email
-       FROM users
-       WHERE email = ?`,
-      [cleanEmail]
-    );
+    // -------------------------------------------------
+    // FIND USER
+    // -------------------------------------------------
+
+    const [users] =
+      await db.promise().query(
+        `SELECT id, name, email
+         FROM users
+         WHERE email = ?`,
+        [cleanEmail]
+      );
 
     /*
       Always return the same message.
@@ -372,15 +529,25 @@ const forgotPassword = async (req, res) => {
 
     const user = users[0];
 
-    // Generate secure random token
-    const resetToken = crypto
-      .randomBytes(32)
-      .toString("hex");
+    // -------------------------------------------------
+    // CREATE RESET TOKEN
+    // -------------------------------------------------
 
-    // Token expires after 30 minutes
-    const expiresAt = new Date(
-      Date.now() + 30 * 60 * 1000
-    );
+    const resetToken =
+      crypto
+        .randomBytes(32)
+        .toString("hex");
+
+    // 30 minutes
+    const expiresAt =
+      new Date(
+        Date.now() +
+        30 * 60 * 1000
+      );
+
+    // -------------------------------------------------
+    // SAVE RESET TOKEN
+    // -------------------------------------------------
 
     await db.promise().query(
       `UPDATE users
@@ -394,31 +561,18 @@ const forgotPassword = async (req, res) => {
       ]
     );
 
-    // Reset link
+    // -------------------------------------------------
+    // RESET LINK
+    // -------------------------------------------------
+
     const resetLink =
       `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
+    // -------------------------------------------------
+    // SEND EMAIL USING BREVO
+    // -------------------------------------------------
 
-    // Email transporter
-   
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-        },
-        connectionTimeout: 10000,
-        greetingTimeout: 10000,
-        socketTimeout: 10000
-      });
-
-    // Send email
-    await transporter.sendMail({
-
-      from:
-        `"News11" <${process.env.EMAIL_USER}>`,
+    await sendEmail({
 
       to: user.email,
 
@@ -426,7 +580,6 @@ const forgotPassword = async (req, res) => {
         "News11 Password Reset",
 
       html: `
-
         <div style="
           font-family: Arial, sans-serif;
           max-width: 600px;
@@ -456,7 +609,6 @@ const forgotPassword = async (req, res) => {
 
             <a
               href="${resetLink}"
-
               style="
                 display: inline-block;
                 padding: 12px 20px;
@@ -464,6 +616,7 @@ const forgotPassword = async (req, res) => {
                 color: white;
                 text-decoration: none;
                 border-radius: 6px;
+                font-weight: bold;
               "
             >
               Reset Password
@@ -485,16 +638,17 @@ const forgotPassword = async (req, res) => {
           </p>
 
         </div>
-
       `
     });
 
+    // -------------------------------------------------
+    // RESPONSE
+    // -------------------------------------------------
 
     res.json({
       message:
         "If an account exists with this email, a password reset link has been sent."
     });
-
 
   } catch (error) {
 
@@ -507,7 +661,6 @@ const forgotPassword = async (req, res) => {
       message:
         "Unable to process password reset request"
     });
-
   }
 };
 
@@ -520,97 +673,91 @@ const resetPassword = async (req, res) => {
 
   try {
 
-    const { token } = req.params;
+    const {
+      token
+    } = req.params;
 
-    const { password } = req.body;
+    const {
+      password
+    } = req.body;
 
+    // -------------------------------------------------
+    // VALIDATION
+    // -------------------------------------------------
 
     if (!token) {
-
       return res.status(400).json({
-        message: "Invalid reset link"
+        message:
+          "Invalid reset link"
       });
-
     }
-
 
     if (!password) {
-
       return res.status(400).json({
-        message: "New password is required"
+        message:
+          "New password is required"
       });
-
     }
 
-
     if (password.length < 6) {
-
       return res.status(400).json({
         message:
           "Password must be at least 6 characters"
       });
-
     }
 
+    // -------------------------------------------------
+    // FIND VALID RESET TOKEN
+    // -------------------------------------------------
 
-    // Find valid token
-    const [users] = await db.promise().query(
-
-      `SELECT id
-       FROM users
-       WHERE reset_token = ?
-       AND reset_token_expires > NOW()`,
-
-      [token]
-
-    );
-
+    const [users] =
+      await db.promise().query(
+        `SELECT id
+         FROM users
+         WHERE reset_token = ?
+         AND reset_token_expires > NOW()`,
+        [token]
+      );
 
     if (users.length === 0) {
-
       return res.status(400).json({
-
         message:
           "Reset link is invalid or expired"
-
       });
-
     }
-
 
     const user = users[0];
 
+    // -------------------------------------------------
+    // HASH NEW PASSWORD
+    // -------------------------------------------------
 
-    // Hash new password
     const passwordHash =
-      await bcrypt.hash(password, 10);
+      await bcrypt.hash(
+        password,
+        10
+      );
 
+    // -------------------------------------------------
+    // UPDATE PASSWORD
+    // -------------------------------------------------
 
-    // Update password
-    // Remove reset token
     await db.promise().query(
-
       `UPDATE users
        SET password_hash = ?,
            reset_token = NULL,
            reset_token_expires = NULL
        WHERE id = ?`,
-
       [
         passwordHash,
         user.id
       ]
-
     );
 
-
     res.json({
-
       message:
         "Password reset successful"
-
     });
-
 
   } catch (error) {
 
@@ -620,14 +767,10 @@ const resetPassword = async (req, res) => {
     );
 
     res.status(500).json({
-
       message:
         "Unable to reset password"
-
     });
-
   }
-
 };
 
 
@@ -642,3 +785,4 @@ module.exports = {
   forgotPassword,
   resetPassword
 };
+
