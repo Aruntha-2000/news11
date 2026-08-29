@@ -10,56 +10,64 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // BREVO SEND EMAIL
 // =====================================================
 
-const sendEmail = async ({
-  to,
-  subject,
-  html
-}) => {
-  const response = await fetch(
-    "https://api.brevo.com/v3/smtp/email",
-    {
-      method: "POST",
+const sendEmail = async ({ to, subject, html }) => {
+  try {
+    if (!process.env.BREVO_API_KEY) {
+      throw new Error("BREVO_API_KEY is missing");
+    }
 
-      headers: {
-        "accept": "application/json",
-        "api-key": process.env.BREVO_API_KEY,
-        "content-type": "application/json"
-      },
+    if (!process.env.EMAIL_FROM) {
+      throw new Error("EMAIL_FROM is missing");
+    }
 
-      body: JSON.stringify({
-        sender: {
-          name:
-            process.env.EMAIL_FROM_NAME ||
-            "News11",
+    const response = await fetch(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        method: "POST",
 
-          email:
-            process.env.EMAIL_FROM
+        headers: {
+          accept: "application/json",
+          "api-key": process.env.BREVO_API_KEY,
+          "content-type": "application/json"
         },
 
-        to: [
-          {
-            email: to
-          }
-        ],
+        body: JSON.stringify({
+          sender: {
+            name: process.env.EMAIL_FROM_NAME || "News11",
+            email: process.env.EMAIL_FROM
+          },
 
-        subject,
-        htmlContent: html
-      })
-    }
-  );
+          to: [
+            {
+              email: to
+            }
+          ],
 
-  const data = await response.json().catch(() => ({}));
+          subject: subject,
 
-  if (!response.ok) {
-    console.error("Brevo email error:", data);
-
-    throw new Error(
-      data.message ||
-      "Brevo email sending failed"
+          htmlContent: html
+        })
+      }
     );
-  }
 
-  return data;
+    const data = await response.json().catch(() => ({}));
+
+    console.log("Brevo response:", data);
+
+    if (!response.ok) {
+      console.error("Brevo email error:", data);
+
+      throw new Error(
+        data.message || "Brevo email sending failed"
+      );
+    }
+
+    return data;
+
+  } catch (error) {
+    console.error("SEND EMAIL ERROR:", error);
+    throw error;
+  }
 };
 
 
@@ -77,6 +85,7 @@ const register = async (req, res) => {
     } = req.body;
 
     const cleanName = name?.trim();
+
     const cleanEmail =
       email?.trim().toLowerCase();
 
@@ -108,7 +117,7 @@ const register = async (req, res) => {
 
     const [existingUsers] =
       await db.promise().query(
-        `SELECT id, email_verified
+        `SELECT id
          FROM users
          WHERE email = ?`,
         [cleanEmail]
@@ -132,7 +141,7 @@ const register = async (req, res) => {
       );
 
     // -------------------------------------------------
-    // EMAIL VERIFICATION TOKEN
+    // CREATE VERIFICATION TOKEN
     // -------------------------------------------------
 
     const verificationToken =
@@ -181,10 +190,11 @@ const register = async (req, res) => {
       `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
 
     // -------------------------------------------------
-    // SEND VERIFICATION EMAIL USING BREVO
+    // SEND VERIFICATION EMAIL
     // -------------------------------------------------
 
     await sendEmail({
+
       to: cleanEmail,
 
       subject:
@@ -213,8 +223,8 @@ const register = async (req, res) => {
           </p>
 
           <p>
-            Please verify your email address before
-            logging in to your account.
+            Please verify your email address
+            before logging in.
           </p>
 
           <p style="margin: 30px 0;">
@@ -237,8 +247,8 @@ const register = async (req, res) => {
           </p>
 
           <p>
-            This verification link will expire in
-            24 hours.
+            This verification link will expire
+            in 24 hours.
           </p>
 
           <p>
@@ -259,11 +269,13 @@ const register = async (req, res) => {
     // -------------------------------------------------
 
     res.status(201).json({
+
       message:
         "Registration successful! Please check your email and click the verification link before logging in.",
 
       userId:
         result.insertId
+
     });
 
   } catch (error) {
@@ -515,12 +527,17 @@ const forgotPassword = async (req, res) => {
       );
 
     /*
-      Always return the same message.
-      This prevents people from checking
-      whether an email is registered.
+      Always return the same message
+      if the email does not exist.
     */
 
     if (users.length === 0) {
+
+      console.log(
+        "Forgot password: email not found:",
+        cleanEmail
+      );
+
       return res.json({
         message:
           "If an account exists with this email, a password reset link has been sent."
@@ -538,7 +555,6 @@ const forgotPassword = async (req, res) => {
         .randomBytes(32)
         .toString("hex");
 
-    // 30 minutes
     const expiresAt =
       new Date(
         Date.now() +
@@ -562,14 +578,19 @@ const forgotPassword = async (req, res) => {
     );
 
     // -------------------------------------------------
-    // RESET LINK
+    // CREATE RESET LINK
     // -------------------------------------------------
 
     const resetLink =
       `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
+    console.log(
+      "Password reset link created for:",
+      user.email
+    );
+
     // -------------------------------------------------
-    // SEND EMAIL USING BREVO
+    // SEND RESET EMAIL USING BREVO
     // -------------------------------------------------
 
     await sendEmail({
@@ -605,7 +626,7 @@ const forgotPassword = async (req, res) => {
             a new password.
           </p>
 
-          <p>
+          <p style="margin: 30px 0;">
 
             <a
               href="${resetLink}"
@@ -642,7 +663,7 @@ const forgotPassword = async (req, res) => {
     });
 
     // -------------------------------------------------
-    // RESPONSE
+    // SUCCESS
     // -------------------------------------------------
 
     res.json({
