@@ -85,14 +85,20 @@ const register = async (req, res) => {
     const verificationLink =
       `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
 
-    // Create email transporter
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
+          const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
+        requireTLS: true,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        },
+        family: 4,
+        connectionTimeout: 30000,
+        greetingTimeout: 30000,
+        socketTimeout: 30000
+      });
 
     // Send verification email
     await transporter.sendMail({
