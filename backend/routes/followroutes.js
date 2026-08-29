@@ -17,39 +17,73 @@ const {
 } = require("../middleware/authmiddleware");
 
 
+// =========================
 // FOLLOW
-router.post("/:userId", authmiddleware, followUser);
+// =========================
 
-router.get("/:userId", getFollowInfo);
+router.post(
+  "/:userId",
+  authenticateToken,
+  followUser
+);
 
 
+// =========================
+// FOLLOW INFO
+// =========================
+
+router.get(
+  "/:userId",
+  getFollowInfo
+);
+
+
+// =========================
 // UNFOLLOW
-router.delete("/:userId", authmiddleware, unfollowUser);
+// =========================
+
+router.delete(
+  "/:userId",
+  authenticateToken,
+  unfollowUser
+);
 
 
+// =========================
 // FOLLOW STATUS
+// =========================
+
 router.get(
   "/status/:userId",
-  authmiddleware,
+  authenticateToken,
   getFollowStatus
 );
 
 
+// =========================
 // FOLLOWERS
+// =========================
+
 router.get(
   "/:userId/followers",
   getFollowers
 );
 
 
+// =========================
 // FOLLOWING
+// =========================
+
 router.get(
   "/:userId/following",
   getFollowing
 );
 
 
-// COUNTS
+// =========================
+// FOLLOW COUNTS
+// =========================
+
 router.get(
   "/:userId/counts",
   getFollowCounts
@@ -57,3 +91,4 @@ router.get(
 
 
 module.exports = router;
+
