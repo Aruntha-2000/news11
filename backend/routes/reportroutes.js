@@ -14,8 +14,11 @@ const {
 } = require("../middleware/authmiddleware");
 
 
-// CREATE REPORT
+// =====================================================
+// USER: CREATE REPORT
 // Any logged-in user can report news
+// =====================================================
+
 router.post(
   "/:postId",
   authenticateToken,
@@ -23,22 +26,26 @@ router.post(
 );
 
 
-// GET REPORTS
-// Admin only
+// =====================================================
+// ADMIN: GET REPORTS
+// =====================================================
+
 router.get(
   "/",
   authenticateToken,
-   adminOnly,
+  adminOnly,
   getReports
 );
 
 
-// UPDATE REPORT STATUS
-// Admin only
+// =====================================================
+// ADMIN: UPDATE REPORT STATUS
+// =====================================================
+
 router.put(
   "/:id/status",
   authenticateToken,
-   adminOnly,
+  adminOnly,
   updateReportStatus
 );
 

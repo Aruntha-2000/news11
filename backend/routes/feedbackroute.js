@@ -9,12 +9,15 @@ const {
 } = require("../controllers/feedbackcontroller");
 
 const {
-  authenticateToken
+  authenticateToken,
+  adminOnly
 } = require("../middleware/authmiddleware");
 
 
-
+// =====================================================
 // USER: SUBMIT FEEDBACK
+// =====================================================
+
 router.post(
   "/",
   authenticateToken,
@@ -22,19 +25,27 @@ router.post(
 );
 
 
+// =====================================================
 // ADMIN: GET ALL FEEDBACK
+// =====================================================
+
 router.get(
   "/",
   authenticateToken,
+  adminOnly,
   getFeedback
 );
 
 
+// =====================================================
 // ADMIN: UPDATE FEEDBACK STATUS
+// =====================================================
+
 router.put(
   "/:id/status",
   authenticateToken,
-   updateFeedbackStatus
+  adminOnly,
+  updateFeedbackStatus
 );
 
 

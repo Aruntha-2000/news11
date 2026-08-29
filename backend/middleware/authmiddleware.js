@@ -6,11 +6,12 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 
 // =====================================================
-// AUTHENTICATE USER
+// AUTHENTICATE TOKEN
 // =====================================================
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
+
+  const authHeader = req.headers.authorization;
 
   const token =
     authHeader && authHeader.split(" ")[1];
@@ -44,7 +45,7 @@ const authenticateToken = (req, res, next) => {
 // ADMIN ONLY
 // =====================================================
 
-const requireAdmin = (req, res, next) => {
+const adminOnly = (req, res, next) => {
 
   if (!req.user) {
     return res.status(401).json({
@@ -68,5 +69,5 @@ const requireAdmin = (req, res, next) => {
 
 module.exports = {
   authenticateToken,
-  requireAdmin
+  adminOnly
 };

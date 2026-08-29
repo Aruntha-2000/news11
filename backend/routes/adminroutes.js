@@ -10,7 +10,7 @@ const {
 
 const {
   authenticateToken,
-  requireAdmin
+  adminOnly
 } = require("../middleware/authmiddleware");
 
 
@@ -26,15 +26,16 @@ router.post(
 router.get(
   "/",
   authenticateToken,
-  requireAdmin,
+  adminOnly,
   getReports
 );
 
 
+// ADMIN: UPDATE REPORT STATUS
 router.put(
   "/:id/status",
   authenticateToken,
-  requireAdmin,
+  adminOnly,
   updateReportStatus
 );
 
