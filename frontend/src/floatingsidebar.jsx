@@ -7,9 +7,18 @@ export default function FloatingSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+const token = localStorage.getItem("token");
 
+let user = null;
+
+try {
+  user = JSON.parse(
+    localStorage.getItem("user") || "null"
+  );
+} catch (error) {
+  console.error("Invalid user data:", error);
+  localStorage.removeItem("user");
+}
   const closeMenu = () => {
     setOpen(false);
   };

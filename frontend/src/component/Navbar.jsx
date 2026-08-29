@@ -7,16 +7,37 @@ function Navbar() {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [token, setToken] = useState(
-    () => localStorage.getItem("token")
-  );
+  () => localStorage.getItem("token")
+);
 
+const [user, setUser] = useState(() => {
+  try {
+    return JSON.parse(
+      localStorage.getItem("user") || "null"
+    );
+  } catch (error) {
+    console.error("Invalid user data:", error);
+    return null;
+  }
+});
   // ==========================================
   // UPDATE LOGIN STATE WHEN ROUTE CHANGES
   // ==========================================
 
   useEffect(() => {
-    setToken(localStorage.getItem("token"));
-  }, [location]);
+  setToken(localStorage.getItem("token"));
+
+  try {
+    setUser(
+      JSON.parse(
+        localStorage.getItem("user") || "null"
+      )
+    );
+  } catch (error) {
+    console.error("Invalid user data:", error);
+    setUser(null);
+  }
+}, [location]);
 
   // ==========================================
   // LOGOUT
