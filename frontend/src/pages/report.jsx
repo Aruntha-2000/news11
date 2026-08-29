@@ -16,6 +16,12 @@ function Reports() {
   const getReports = async (showLoading = true) => {
     const token = localStorage.getItem("token");
 
+
+        if (!user || user.role !== "admin") {
+          return <Navigate to="/" replace />;
+        }
+
+
     if (!token) {
       setError("Please login.");
       setLoading(false);

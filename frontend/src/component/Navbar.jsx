@@ -196,19 +196,9 @@ const [user, setUser] = useState(() => {
 
 
               {/* REPORTS */}
-
-              <Link
-                to="/reports"
-                className={`navbar-link ${
-                  isActive("/reports")
-                    ? "navbar-link-active"
-                    : ""
-                }`}
-                onClick={closeMenu}
-              >
-                📊 Reports
-              </Link>
-
+              {user?.role === "admin" && (
+                <Link to="/reports">📊 Reports</Link>
+              )}
 
               {/* ADMIN */}
               {user?.role === "admin" && (
