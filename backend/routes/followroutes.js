@@ -18,19 +18,19 @@ const {
 
 
 // FOLLOW
-router.post("/:userId", authMiddleware, followUser);
+router.post("/:userId", authmiddleware, followUser);
 
 router.get("/:userId", getFollowInfo);
 
 
 // UNFOLLOW
-router.delete("/:userId", authMiddleware, unfollowUser);
+router.delete("/:userId", authmiddleware, unfollowUser);
 
 
 // FOLLOW STATUS
 router.get(
   "/status/:userId",
-  authMiddleware,
+  authmiddleware,
   getFollowStatus
 );
 
